@@ -1,0 +1,25 @@
+# ─── Dataset ──────────────────────────────────────────────────────────────────
+dataset: pog_dense                 # pog | pog_dense | spotify | spotify_sparse
+data_path: ./datasets
+
+# ─── Evaluation ───────────────────────────────────────────────────────────────
+num_cans: 10        # number of candidates including the answer
+num_token: 5       # max input items per bundle (-1 = no limit)
+toy_eval: 250     # -1 = full test set | N = first N samples
+seed: 45           # seed for candidate items (A-J)
+shuffle_seed: 41   # seed for input items shuffling
+use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.json
+
+# ─── LLM ──────────────────────────────────────────────────────────────────────
+
+model: gemini-3.1-flash-lite-preview
+temperature: 0.0
+
+# ─── Execution Mode ───────────────────────────────────────────────────────────
+mode: sync        # sync | batch
+max_concurrent: 10  # async concurrent limit for sync mode
+batch_display_name: bundle-zeroshot
+poll_interval: 60
+
+# ─── Output ───────────────────────────────────────────────────────────────────
+output_dir: ./results

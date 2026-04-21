@@ -1,0 +1,38 @@
+# API Keys and Environment Variables
+.env
+
+# Python Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Local evaluation results (Large and frequently updated)
+
+#results/**
+#!results/.gitkeep
+#*.csv
+#*_analyzed.csv
+#*difficulty_meta.csv
+
+
+# Dataset files (if you want to keep data separate from code)
+datasets/**
+!datasets/.gitkeep
+
+# IDE Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
