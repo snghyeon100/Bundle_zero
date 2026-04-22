@@ -87,11 +87,13 @@ def main():
     parser = argparse.ArgumentParser(description="Zero-shot 문제 난이도 측정기 (Batch 모드)")
     parser.add_argument("--batch_size", type=int, default=None, help="한 번에 분석할 문항 수 (지정 시 quota 무시)")
     parser.add_argument("--quota", type=int, default=20, help="사용할 최대 API 호출 횟수 (기본 20)")
+    parser.add_argument("--path", type=str, default=None, help="기준으로 사용할 결과 CSV 파일 경로 (미지정 시 최신 파일 자동 선택)")
     args = parser.parse_args()
 
     # config 설정 로드
     with open("config.yaml", "r", encoding="utf-8") as f:
         conf = yaml.safe_load(f)
+
 
     dataset_name = conf.get("dataset", "").lower()
     actual_output_dir = os.path.join(conf.get("output_dir", "./results"), dataset_name)
@@ -100,15 +102,20 @@ def main():
         print(f">>> [오류] {actual_output_dir} 폴더가 존재하지 않습니다.")
         return
 
-    # 기준 파일 찾기 (기존 결과 CSV 중 아무거나 최신 것 선택)
-    csv_files = [os.path.join(actual_output_dir, f) for f in os.listdir(actual_output_dir) if f.endswith(".csv") and "meta" not in f]
-    if not csv_files:
-        print(f">>> [오류] 기준 데이터로 사용할 CSV 파일을 찾을 수 없습니다.")
-        return
+    # --path 인자가 있으면 직접 지정, 없으면 최신 CSV 자동 선택
+    if args.path:
+        if not os.path.exists(args.path):
+            print(f">>> [오류] 지정한 파일을 찾을 수 없습니다: {args.path}")
+            return
+        base_csv_path = args.path
+    else:
+        csv_files = [os.path.join(actual_output_dir, f) for f in os.listdir(actual_output_dir) if f.endswith(".csv") and "meta" not in f]
+        if not csv_files:
+            print(f">>> [오류] 기준 데이터로 사용할 CSV 파일을 찾을 수 없습니다.")
+            return
+        base_csv_path = max(csv_files, key=os.path.getctime)
     
-    base_csv_path = max(csv_files, key=os.path.getctime)
     print(f">>> 기준 데이터 로드 중: {os.path.basename(base_csv_path)}")
-    
     df = pd.read_csv(base_csv_path)
     
     # 평가 메타데이터 저장 경로
