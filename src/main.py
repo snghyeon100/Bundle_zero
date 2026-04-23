@@ -31,7 +31,7 @@ def generate_prompt(dataset_name, input_str, target_str):
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
         #f"{extra_instruction}"
-        f"Your answer should indicate your choi ce with a single letter (e.g., “A,” “B,” “C,” etc.).\nChoice: "
+        f"Your answer should indicate your choice with a single letter (e.g., “A,” “B,” “C,” etc.).\nChoice: "
     )
     return prompt
 
@@ -65,8 +65,8 @@ async def process_sync_samples(client, model, samples, conf):
         # Gemini 2.5 Flash / Pro -> 5 requests / min = 12s interval. (Using 13s)
         # Gemini 1.5 Flash / 3.x Lite -> 15 requests / min = 4s interval. (Using 4.5s)
         sleep_time = 15.0
-        if "1.5" in model or "lite" in model.lower():
-            sleep_time = 4.5
+        if "gemma" in model or "lite" in model.lower():
+            sleep_time = 5
             
         if idx < len(samples) - 1:
             await asyncio.sleep(sleep_time)
