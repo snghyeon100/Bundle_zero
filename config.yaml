@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: pog_dense                 # pog | pog_dense | spotify | spotify_sparse
+dataset: pog_dense                  # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────
@@ -12,7 +12,7 @@ use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.j
 
 # ─── LLM ──────────────────────────────────────────────────────────────────────
 
-model: gemma-4-31b-it
+model: gemini-3.1-flash-lite-preview
 temperature: 0.0
 
 # ─── Execution Mode ───────────────────────────────────────────────────────────

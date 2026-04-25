@@ -1,4 +1,5 @@
 import os
+import re
 import yaml
 import json
 import time
@@ -12,6 +13,15 @@ from dataset import BundleZeroShotDataset, set_seed
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
 load_dotenv(dotenv_path=env_path, encoding='utf-8-sig')
 
+def parse_model_response(raw_text):
+    if not raw_text:
+        return "ERR_EM"
+    # Remove common prefixes like 'Choice:', 'Option:', 'Answer:' (case-insensitive)
+    clean_text = re.sub(r'(?i)\b(choice|option|answer)\b[\s]*[:=]*[\s]*', '', raw_text.strip())
+    # Extract the first uppercase letter (A-Z)
+    match = re.search(r'([A-Z])', clean_text.upper())
+    return match.group(1) if match else raw_text.strip()[0].upper()
+
 def generate_prompt(dataset_name, input_str, target_str):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
@@ -22,7 +32,11 @@ def generate_prompt(dataset_name, input_str, target_str):
         b_name = "fashion outfit"
         i_name = "fashion item"
 
-    extra_instruction = f"First infer the intent of the given {b_name}, and then choose the candidate {i_name} that fits that intent.\n"
+    extra_instruction = (
+        f"First infer the intent of the given {b_name}. Then, use the process of elimination: "
+        f"evaluate each option, identify why the incorrect options do not fit the intent, "
+        f"and eliminate them one by one until you find the best candidate {i_name}.\n"
+    )
 
     prompt = (
         f"You are a helpful and honest assistant. The following are multiple choice questions about {t_name}. "
@@ -30,8 +44,8 @@ def generate_prompt(dataset_name, input_str, target_str):
         f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
-        #f"{extra_instruction}"
-        f"Your answer should indicate your choice with a single letter (e.g., “A,” “B,” “C,” etc.).\nChoice: "
+        f"{extra_instruction}"
+        f"Output MUST be exactly one uppercase letter (e.g., A, B, C).\nAnswer: "
     )
     return prompt
 
@@ -42,17 +56,31 @@ async def process_sync_samples(client, model, samples, conf):
 
     for idx, sample in enumerate(samples):
         prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"])
-        try:
-            res = await client.aio.models.generate_content(
-                model=model, 
-                contents=prompt,
-                config={"temperature": conf["temperature"], "max_output_tokens": 10}
-            )
-            raw_text = res.text if res.text else ""
-            pred_text = raw_text.strip()[0].upper() if raw_text else "ERR_EM" # Get first valid char
-        except Exception as e:
-            raw_text = str(e)
-            pred_text = "ERR_EX"
+        max_retries = 10
+        base_delay = 20
+        
+        for attempt in range(max_retries):
+            try:
+                res = await client.aio.models.generate_content(
+                    model=model, 
+                    contents=prompt,
+                    config={"temperature": conf["temperature"], "max_output_tokens": 10}
+                )
+                raw_text = res.text if res.text else ""
+                pred_text = parse_model_response(raw_text)
+                break  # Success! Break out of the retry loop
+            except Exception as e:
+                err_str = str(e).lower()
+                # Check for rate limits (429) or high demand/server errors (503)
+                if "429" in err_str or "503" in err_str or "quota" in err_str or "demand" in err_str or "overloaded" in err_str:
+                    if attempt < max_retries - 1:
+                        wait_time = base_delay * (attempt + 1)
+                        print(f"[{idx+1}/{len(samples)}] API Error/High Demand. Retrying in {wait_time}s... (Attempt {attempt+1}/{max_retries})")
+                        await asyncio.sleep(wait_time)
+                        continue
+                raw_text = str(e)
+                pred_text = "ERR_EX"
+                break
         
         sample['prediction'] = pred_text
         sample['raw_response'] = raw_text # Save verbatim output or error trace
@@ -134,7 +162,7 @@ def process_batch_samples(client, model, samples, conf):
                 # Try to extract the generated text
                 if "response" in resp_obj:
                     raw_text = resp_obj["response"].get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-                    pred_text = raw_text.strip()[0].upper() if raw_text else "ERR_EM"
+                    pred_text = parse_model_response(raw_text)
                 elif "error" in resp_obj:
                     raw_text = str(resp_obj["error"])
                     pred_text = "ERR_API"
@@ -159,22 +187,36 @@ def process_batch_samples(client, model, samples, conf):
         timestamp = time.strftime('%Y%m%d_%H%M%S')
         hit_rate = df['hit'].mean()
         valid_options = [chr(ord('A')+i) for i in range(conf["num_cans"])]
-        valid_ratio = df['prediction'].isin(valid_options).mean()
+        valid_mask = df['prediction'].isin(valid_options)
+        valid_ratio = valid_mask.mean()
+        
+        valid_only_hit_rate = df.loc[valid_mask, 'hit'].mean() if valid_mask.sum() > 0 else 0.0
         
         df['overall_hit_rate'] = hit_rate
         df['overall_valid_ratio'] = valid_ratio
+        df['valid_only_hit_rate'] = valid_only_hit_rate
+        
+        # Insert experiment configurations
+        df['cfg_num_cans'] = conf.get("num_cans", "")
+        df['cfg_num_token'] = conf.get("num_token", "")
+        df['cfg_toy_eval'] = conf.get("toy_eval", "")
+        df['cfg_seed'] = conf.get("seed", "")
+        df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
+        df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
 
         # Save results in dataset-specific subfolder
         actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
         os.makedirs(actual_output_dir, exist_ok=True)
         
-        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{timestamp}.csv")
+        hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
+        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
         df.to_csv(save_path, index=False)
         
         print("-" * 30)
         print(f"Batch Dataset: {conf['dataset']}")
         print(f"Saved to: {save_path}")
-        print(f"Hit Rate: {hit_rate:.4f}")
+        print(f"Overall Hit Rate: {hit_rate:.4f}")
+        print(f"Valid-Only Hit Rate: {valid_only_hit_rate:.4f} (from {valid_mask.sum()} samples without errors)")
         print(f"Valid Ratio: {valid_ratio:.4f}")
         print("-" * 30)
         
@@ -262,22 +304,37 @@ if __name__ == "__main__":
         timestamp = time.strftime('%Y%m%d_%H%M%S')
         
         hit_rate = df['hit'].mean()
-        valid_ratio = df['prediction'].isin([chr(ord('A')+i) for i in range(conf["num_cans"])]).mean()
+        valid_options = [chr(ord('A')+i) for i in range(conf["num_cans"])]
+        valid_mask = df['prediction'].isin(valid_options)
+        valid_ratio = valid_mask.mean()
+        
+        valid_only_hit_rate = df.loc[valid_mask, 'hit'].mean() if valid_mask.sum() > 0 else 0.0
         
         df['overall_hit_rate'] = hit_rate
         df['overall_valid_ratio'] = valid_ratio
+        df['valid_only_hit_rate'] = valid_only_hit_rate
+        
+        # Insert experiment configurations
+        df['cfg_num_cans'] = conf.get("num_cans", "")
+        df['cfg_num_token'] = conf.get("num_token", "")
+        df['cfg_toy_eval'] = conf.get("toy_eval", "")
+        df['cfg_seed'] = conf.get("seed", "")
+        df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
+        df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
         
         # Save results in dataset-specific subfolder
         actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
         os.makedirs(actual_output_dir, exist_ok=True)
         
-        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{timestamp}.csv")
+        hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
+        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
         df.to_csv(save_path, index=False)
         
         print("-" * 30)
         print(f"Dataset: {conf['dataset']}")
         print(f"Saved to: {save_path}")
-        print(f"Hit Rate: {hit_rate:.4f}")
+        print(f"Overall Hit Rate: {hit_rate:.4f}")
+        print(f"Valid-Only Hit Rate: {valid_only_hit_rate:.4f} (from {valid_mask.sum()} samples without errors)")
         print(f"Valid Ratio: {valid_ratio:.4f}")
         print("-" * 30)
         
