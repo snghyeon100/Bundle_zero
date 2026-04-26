@@ -49,7 +49,33 @@ def generate_prompt(dataset_name, input_str, target_str):
     )
     return prompt
 
-async def process_sync_samples(client, model, samples, conf):
+def save_intermediate_results(results, conf, timestamp, is_final=False):
+    df = pd.DataFrame(results)
+    hit_rate = df['hit'].mean() if not df.empty else 0.0
+    valid_options = [chr(ord('A')+i) for i in range(conf.get("num_cans", 10))]
+    valid_mask = df['prediction'].isin(valid_options)
+    valid_ratio = valid_mask.mean() if not df.empty else 0.0
+    valid_only_hit_rate = df.loc[valid_mask, 'hit'].mean() if valid_mask.sum() > 0 else 0.0
+    
+    df['overall_hit_rate'] = hit_rate
+    df['overall_valid_ratio'] = valid_ratio
+    df['valid_only_hit_rate'] = valid_only_hit_rate
+    df['cfg_num_cans'] = conf.get("num_cans", "")
+    df['cfg_num_token'] = conf.get("num_token", "")
+    df['cfg_toy_eval'] = conf.get("toy_eval", "")
+    df['cfg_seed'] = conf.get("seed", "")
+    df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
+    df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
+    
+    actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
+    os.makedirs(actual_output_dir, exist_ok=True)
+    hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
+    partial_str = "" if is_final else "_partial"
+    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
+    df.to_csv(save_path, index=False)
+    return save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_mask.sum()
+
+async def process_sync_samples(client, model, samples, conf, timestamp):
     results = []
     
     print(f">>> Processing {len(samples)} samples sequentially to avoid rate limits (13s sleep per item)...")
@@ -86,6 +112,9 @@ async def process_sync_samples(client, model, samples, conf):
         sample['raw_response'] = raw_text # Save verbatim output or error trace
         sample['hit'] = int(pred_text == sample['true_option_char'])
         results.append(sample)
+        
+        # 중간 저장 (한 문제 처리할 때마다 바로 덮어쓰기로 저장)
+        save_intermediate_results(results, conf, timestamp, is_final=False)
         
         print(f"[{idx+1}/{len(samples)}] True: {sample['true_option_char']} | Pred: {pred_text}")
         
@@ -268,6 +297,11 @@ def save_translated_csv(df, conf, base_timestamp, mode_suffix="", actual_output_
         print("[경고] deep-translator 모듈이 필요합니다.")
         
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Run LLM Zero-Shot Bundle Evaluation")
+    parser.add_argument("--start_idx", type=int, default=0, help="Start from a specific sample index (0-based)")
+    args = parser.parse_args()
+
     with open("config.yaml", "r", encoding="utf-8") as f:
         conf = yaml.safe_load(f)
 
@@ -285,6 +319,10 @@ if __name__ == "__main__":
     else:
         samples = dataset.get_eval_samples()
         
+    if args.start_idx > 0:
+        print(f">>> Slicing samples: Starting from index {args.start_idx} (Total before: {len(samples)})")
+        samples = samples[args.start_idx:]
+        
     print(f"Total test samples prepared: {len(samples)}")
     
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
@@ -297,47 +335,26 @@ if __name__ == "__main__":
     if conf["mode"] == "sync":
         print(">>> Running in Sync mode...")
         import asyncio
-        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf))
-        
-        # Save results
-        df = pd.DataFrame(results)
         timestamp = time.strftime('%Y%m%d_%H%M%S')
+        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp))
         
-        hit_rate = df['hit'].mean()
-        valid_options = [chr(ord('A')+i) for i in range(conf["num_cans"])]
-        valid_mask = df['prediction'].isin(valid_options)
-        valid_ratio = valid_mask.mean()
+        # Final save
+        save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_sum = save_intermediate_results(results, conf, timestamp, is_final=True)
         
-        valid_only_hit_rate = df.loc[valid_mask, 'hit'].mean() if valid_mask.sum() > 0 else 0.0
-        
-        df['overall_hit_rate'] = hit_rate
-        df['overall_valid_ratio'] = valid_ratio
-        df['valid_only_hit_rate'] = valid_only_hit_rate
-        
-        # Insert experiment configurations
-        df['cfg_num_cans'] = conf.get("num_cans", "")
-        df['cfg_num_token'] = conf.get("num_token", "")
-        df['cfg_toy_eval'] = conf.get("toy_eval", "")
-        df['cfg_seed'] = conf.get("seed", "")
-        df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
-        df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
-        
-        # Save results in dataset-specific subfolder
-        actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
-        os.makedirs(actual_output_dir, exist_ok=True)
-        
-        hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
-        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
-        df.to_csv(save_path, index=False)
-        
+        # Remove partial file
+        partial_path = save_path.replace(".csv", "_partial.csv")
+        if os.path.exists(partial_path):
+            os.remove(partial_path)
+            
         print("-" * 30)
         print(f"Dataset: {conf['dataset']}")
         print(f"Saved to: {save_path}")
         print(f"Overall Hit Rate: {hit_rate:.4f}")
-        print(f"Valid-Only Hit Rate: {valid_only_hit_rate:.4f} (from {valid_mask.sum()} samples without errors)")
+        print(f"Valid-Only Hit Rate: {valid_only_hit_rate:.4f} (from {valid_sum} samples without errors)")
         print(f"Valid Ratio: {valid_ratio:.4f}")
         print("-" * 30)
         
+        actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
         save_translated_csv(df, conf, timestamp, mode_suffix="", actual_output_dir=actual_output_dir)
 
     elif conf["mode"] == "batch":
