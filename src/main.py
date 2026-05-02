@@ -8,6 +8,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from google import genai
 from dataset import BundleZeroShotDataset, set_seed
+from PIL import Image
 
 # Load Env 
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
@@ -45,7 +46,7 @@ def generate_prompt(dataset_name, input_str, target_str):
         f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
-        f"{extra_instruction}"
+        #f"{extra_instruction}"
         f"Your answer should indicate your choice with a single letter (e.g., “A,” “B,” “C,” etc.).\nChoice: "
     )
     return prompt
@@ -84,7 +85,34 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
 
     for idx, sample in enumerate(samples):
         current_idx = start_idx + idx
-        prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"])
+        text_prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"])
+        
+        contents = text_prompt
+        if conf.get("use_multimodal", False):
+            contents = []
+            img_dir = os.path.join(conf.get("data_path", "./datasets"), conf["dataset"], "images")
+            
+            contents.append("Images for the items currently in the bundle:")
+            for i, item_id in enumerate(sample.get("input_indices", [])):
+                img_path = os.path.join(img_dir, f"{item_id}.jpg")
+                if os.path.exists(img_path):
+                    try:
+                        contents.append(f"[Input Item {i+1}]")
+                        contents.append(Image.open(img_path))
+                    except: pass
+                    
+            contents.append("Images for the candidate items:")
+            for i, item_id in enumerate(sample.get("candidate_indices", [])):
+                opt_char = chr(ord('A') + i)
+                img_path = os.path.join(img_dir, f"{item_id}.jpg")
+                if os.path.exists(img_path):
+                    try:
+                        contents.append(f"[Candidate {opt_char}]")
+                        contents.append(Image.open(img_path))
+                    except: pass
+                    
+            contents.append(text_prompt)
+
         max_retries = 10
         base_delay = 20
         
@@ -92,7 +120,7 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             try:
                 res = await client.aio.models.generate_content(
                     model=model, 
-                    contents=prompt,
+                    contents=contents,
                     config={"temperature": conf["temperature"], "max_output_tokens": 10}
                 )
                 raw_text = res.text if res.text else ""

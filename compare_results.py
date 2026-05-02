@@ -1,57 +1,86 @@
 import pandas as pd
 import os
-
+import json
 
 file1 = r"results\pog_dense\results_pog_dense_20260420_203840.csv"
 file2 = r"results\pog_dense\results_pog_dense_HN_C10_T5_20260426_194737.csv"
+
 # Load dataframes
 df1 = pd.read_csv(file1)
 df2 = pd.read_csv(file2)
 
-# Assuming bundle_id is consistent. If not, use index since it's the exact same test set
-df_merged = pd.merge(df1[['bundle_id', 'hit']], df2[['bundle_id', 'hit']], on='bundle_id', suffixes=('_file1', '_file2'))
+# Create a sample index since problem_difficulty_meta.csv uses row index
+df1['sample_idx'] = df1.index
+df2['sample_idx'] = df2.index
 
-print("="*40)
-print("📊 PROMPT COMPARISON ANALYSIS")
-print(f"File 1   vs   File 2")
-print("="*40)
+# Define columns to keep from file1 (base information)
+base_cols = [
+    'bundle_id', 'sample_idx', 'true_option_char', 'input_indices', 'candidate_indices', 
+    'input_str', 'target_str'
+]
 
-# Calculate overlap masks
-both_hit_mask = (df_merged['hit_file1'] == 1) & (df_merged['hit_file2'] == 1)
-both_miss_mask = (df_merged['hit_file1'] == 0) & (df_merged['hit_file2'] == 0)
-only_file1_hit_mask = (df_merged['hit_file1'] == 1) & (df_merged['hit_file2'] == 0)
-only_file2_hit_mask = (df_merged['hit_file1'] == 0) & (df_merged['hit_file2'] == 1)
+# Select and rename columns for A (file1) and B (file2)
+df1_sub = df1[base_cols + ['prediction', 'raw_response', 'hit']].rename(
+    columns={'prediction': 'prediction_A', 'raw_response': 'raw_response_A', 'hit': 'hit_A'}
+)
+df2_sub = df2[['bundle_id', 'prediction', 'raw_response', 'hit']].rename(
+    columns={'prediction': 'prediction_B', 'raw_response': 'raw_response_B', 'hit': 'hit_B'}
+)
 
-both_hit = both_hit_mask.sum()
-both_miss = both_miss_mask.sum()
-only_file1_hit = only_file1_hit_mask.sum()
-only_file2_hit = only_file2_hit_mask.sum()
+# Merge predictions
+df_merged = pd.merge(df1_sub, df2_sub, on='bundle_id')
+
+# Load difficulty metadata if exists
+# Assuming the difficulty file is in the same dataset folder or a known path
+# If file1 is from pog, check pog folder
+dataset_folder = os.path.dirname(file1)
+# Just in case we are in pog_dense but the meta is in pog
+diff_file = os.path.join("results", "pog", "problem_difficulty_meta.csv")
+if os.path.exists(diff_file):
+    print(f">>> Loading difficulty metadata from {diff_file}")
+    df_diff = pd.read_csv(diff_file)
+    if 'index' in df_diff.columns:
+        df_diff = df_diff.rename(columns={'index': 'sample_idx'})
+    df_merged = pd.merge(df_merged, df_diff[['sample_idx', 'difficulty', 'reason']], on='sample_idx', how='left')
+
+# Categorize into groups
+def categorize(row):
+    if row['hit_A'] == 1 and row['hit_B'] == 1:
+        return 'Both_Hit'
+    elif row['hit_A'] == 0 and row['hit_B'] == 0:
+        return 'Both_Fail'
+    elif row['hit_A'] == 1 and row['hit_B'] == 0:
+        return 'A_Hit_Only'
+    else:
+        return 'B_Hit_Only'
+
+df_merged['group'] = df_merged.apply(categorize, axis=1)
+
+# Summary Stats
 total = len(df_merged)
+both_hit = len(df_merged[df_merged['group'] == 'Both_Hit'])
+both_miss = len(df_merged[df_merged['group'] == 'Both_Fail'])
+a_hit_only = len(df_merged[df_merged['group'] == 'A_Hit_Only'])
+b_hit_only = len(df_merged[df_merged['group'] == 'B_Hit_Only'])
 
+print("="*50)
+print("📊 PROMPT COMPARISON & ERROR ANALYSIS PREP")
+print("="*50)
 print(f"Total Evaluated Bundles : {total}")
-print(f"File 1 Hits             : {df_merged['hit_file1'].sum()} / {total} ({(df_merged['hit_file1'].sum()/total)*100:.2f}%)")
-print(f"File 2 Hits             : {df_merged['hit_file2'].sum()} / {total} ({(df_merged['hit_file2'].sum()/total)*100:.2f}%)")
-print("-"*40)
+print(f"File A Hits             : {df_merged['hit_A'].sum()} / {total} ({(df_merged['hit_A'].sum()/total)*100:.2f}%)")
+print(f"File B Hits             : {df_merged['hit_B'].sum()} / {total} ({(df_merged['hit_B'].sum()/total)*100:.2f}%)")
+print("-" * 50)
 print(f"✅ Both Correct       : {both_hit} ({(both_hit/total)*100:.2f}%)")
 print(f"❌ Both Incorrect     : {both_miss} ({(both_miss/total)*100:.2f}%)")
-print(f"⬆️ File 1 Only Correct: {only_file1_hit} ({(only_file1_hit/total)*100:.2f}%)")
-print(f"⭐ File 2 Only Correct: {only_file2_hit} ({(only_file2_hit/total)*100:.2f}%)")
-print("="*40)
+print(f"⬆️ File A Only Correct: {a_hit_only} ({(a_hit_only/total)*100:.2f}%)")
+print(f"⭐ File B Only Correct: {b_hit_only} ({(b_hit_only/total)*100:.2f}%)")
+print("="*50)
 
-# Save bundle_ids for case study
-import json
+# Save rich dataset for LLM Analysis
 out_dir = "analysis"
 os.makedirs(out_dir, exist_ok=True)
 
-# Convert int64 to native int for JSON serialization
-case_study_dict = {
-    "both_hit_ids": [int(x) for x in df_merged[both_hit_mask]['bundle_id'].tolist()],
-    "both_miss_ids": [int(x) for x in df_merged[both_miss_mask]['bundle_id'].tolist()],
-    "only_file1_hit_ids": [int(x) for x in df_merged[only_file1_hit_mask]['bundle_id'].tolist()],
-    "only_file2_hit_ids": [int(x) for x in df_merged[only_file2_hit_mask]['bundle_id'].tolist()]
-}
-
-out_file = os.path.join(out_dir, "case_study_ids.json")
-with open(out_file, "w", encoding="utf-8") as f:
-    json.dump(case_study_dict, f, indent=4)
-print(f"💾 Case study bundle_ids successfully saved to: {out_file}")
+out_csv = os.path.join(out_dir, "analysis_ready_data.csv")
+df_merged.to_csv(out_csv, index=False)
+print(f"💾 Comprehensive analysis dataset saved to: {out_csv}")
+print("   -> Now ready for 'analyze_error_patterns.py' to process!")
