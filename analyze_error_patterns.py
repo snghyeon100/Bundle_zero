@@ -7,7 +7,13 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+import argparse
+
 def generate_full_report():
+    parser = argparse.ArgumentParser(description="에러 패턴 메타 분석기")
+    parser.add_argument("--data", required=True, help="비교 병합이 완료된 CSV 파일 경로 (compare_results.py 의 결과물)")
+    args = parser.parse_args()
+
     # Load env for API key
     env_path = os.path.join(os.path.dirname(__file__), ".env")
     load_dotenv(dotenv_path=env_path, encoding='utf-8-sig')
@@ -19,12 +25,12 @@ def generate_full_report():
 
     client = genai.Client(api_key=api_key)
     
-    csv_path = os.path.join("analysis", "analysis_ready_data.csv")
+    csv_path = args.data
     if not os.path.exists(csv_path):
-        print(f"[Error] Data file not found: {csv_path}. Please run compare_results.py first.")
+        print(f"[Error] Data file not found: {csv_path}")
         return
 
-    print(">>> Loading analysis_ready_data.csv...")
+    print(f">>> Loading {csv_path}...")
     df = pd.read_csv(csv_path)
 
     # 1. 전체 250문제를 그룹(섹터)별로 나누어 분석합니다.
@@ -48,10 +54,13 @@ def generate_full_report():
         for c in sub_chunks:
             chunks_with_meta.append({'group': g, 'data': c})
     
-    out_file = os.path.join("analysis", "meta_analysis_full_report.md")
+    # 동적 출력 파일명 생성 (입력 파일명 기반)
+    base_name = os.path.basename(csv_path).replace("_analysis_ready.csv", "")
+    out_file = os.path.join("analysis", f"{base_name}_meta_report.md")
+    
     os.makedirs("analysis", exist_ok=True)
     with open(out_file, "w", encoding="utf-8") as f:
-        f.write("# Full Meta-Analysis Report (Sector-based)\n\n")
+        f.write(f"# Meta-Analysis Report: {base_name}\n\n")
 
     model_name = 'gemini-2.5-flash'
     print(f">>> 총 {len(df)}개의 케이스를 {len(chunks_with_meta)}번의 API 호출로 나누어 섹터별로 분석합니다 (모델: {model_name})...")
