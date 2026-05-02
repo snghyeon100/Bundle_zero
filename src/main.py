@@ -37,6 +37,7 @@ def generate_prompt(dataset_name, input_str, target_str):
         f"evaluate each option, identify why the incorrect options do not fit the intent, "
         f"and eliminate them one by one until you find the best candidate {i_name}.\n"
     )
+    #extra_instruction = f"First infer the intent of the given {b_name}, and then choose the candidate {i_name} that fits that intent.\n"
 
     prompt = (
         f"You are a helpful and honest assistant. The following are multiple choice questions about {t_name}. "
@@ -45,7 +46,7 @@ def generate_prompt(dataset_name, input_str, target_str):
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
         f"{extra_instruction}"
-        f"Output MUST be exactly one uppercase letter (e.g., A, B, C).\nAnswer: "
+        f"Your answer should indicate your choice with a single letter (e.g., “A,” “B,” “C,” etc.).\nChoice: "
     )
     return prompt
 
@@ -75,12 +76,14 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df.to_csv(save_path, index=False)
     return save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_mask.sum()
 
-async def process_sync_samples(client, model, samples, conf, timestamp):
-    results = []
+async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0):
+    results = initial_results if initial_results is not None else []
     
-    print(f">>> Processing {len(samples)} samples sequentially to avoid rate limits (13s sleep per item)...")
+    print(f">>> Processing {len(samples)} remaining samples sequentially to avoid rate limits...")
+    total_samples_len = start_idx + len(samples)
 
     for idx, sample in enumerate(samples):
+        current_idx = start_idx + idx
         prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"])
         max_retries = 10
         base_delay = 20
@@ -101,7 +104,9 @@ async def process_sync_samples(client, model, samples, conf, timestamp):
                 if "429" in err_str or "503" in err_str or "quota" in err_str or "demand" in err_str or "overloaded" in err_str:
                     if attempt < max_retries - 1:
                         wait_time = base_delay * (attempt + 1)
-                        print(f"[{idx+1}/{len(samples)}] API Error/High Demand. Retrying in {wait_time}s... (Attempt {attempt+1}/{max_retries})")
+                        # 에러의 원인(Quota, 503 등)을 터미널에서 바로 확인할 수 있도록 원본 에러 메시지를 함께 출력합니다.
+                        short_err = str(e).replace('\n', ' ')[:150] 
+                        print(f"[{current_idx+1}/{total_samples_len}] API Error: {short_err}... | Retrying in {wait_time}s... (Attempt {attempt+1}/{max_retries})")
                         await asyncio.sleep(wait_time)
                         continue
                 raw_text = str(e)
@@ -116,7 +121,7 @@ async def process_sync_samples(client, model, samples, conf, timestamp):
         # 중간 저장 (한 문제 처리할 때마다 바로 덮어쓰기로 저장)
         save_intermediate_results(results, conf, timestamp, is_final=False)
         
-        print(f"[{idx+1}/{len(samples)}] True: {sample['true_option_char']} | Pred: {pred_text}")
+        print(f"[{current_idx+1}/{total_samples_len}] True: {sample['true_option_char']} | Pred: {pred_text}")
         
         # Enforce rate limit (Dynamic based on model Free Tier limits)
         # Gemini 2.5 Flash / Pro -> 5 requests / min = 12s interval. (Using 13s)
@@ -300,6 +305,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Run LLM Zero-Shot Bundle Evaluation")
     parser.add_argument("--start_idx", type=int, default=0, help="Start from a specific sample index (0-based)")
+    parser.add_argument("--resume", type=str, default="", help="Path to a _partial.csv file to resume from")
     args = parser.parse_args()
 
     with open("config.yaml", "r", encoding="utf-8") as f:
@@ -319,11 +325,25 @@ if __name__ == "__main__":
     else:
         samples = dataset.get_eval_samples()
         
+    initial_results = None
+    timestamp = time.strftime('%Y%m%d_%H%M%S')
+    
+    if args.resume and os.path.exists(args.resume):
+        print(f">>> Resuming from {args.resume}")
+        df_prev = pd.read_csv(args.resume)
+        initial_results = df_prev.to_dict('records')
+        args.start_idx = len(initial_results)
+        
+        match = re.search(r'_(\d{8}_\d{6})(_partial)?\.csv$', args.resume)
+        if match:
+            timestamp = match.group(1)
+            print(f">>> Reusing timestamp: {timestamp}")
+
     if args.start_idx > 0:
         print(f">>> Slicing samples: Starting from index {args.start_idx} (Total before: {len(samples)})")
         samples = samples[args.start_idx:]
         
-    print(f"Total test samples prepared: {len(samples)}")
+    print(f"Total test samples prepared: {len(samples)} (Start Idx: {args.start_idx})")
     
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
@@ -335,8 +355,7 @@ if __name__ == "__main__":
     if conf["mode"] == "sync":
         print(">>> Running in Sync mode...")
         import asyncio
-        timestamp = time.strftime('%Y%m%d_%H%M%S')
-        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp))
+        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx))
         
         # Final save
         save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_sum = save_intermediate_results(results, conf, timestamp, is_final=True)
