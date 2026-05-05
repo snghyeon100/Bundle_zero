@@ -6,13 +6,27 @@ import time
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-
+'''
+python analyze_error_patterns.py --data analysis/pog_base_vs_hn_analysis_ready.csv
+'''
+import yaml
 import argparse
 
 def generate_full_report():
     parser = argparse.ArgumentParser(description="에러 패턴 메타 분석기")
-    parser.add_argument("--data", required=True, help="비교 병합이 완료된 CSV 파일 경로 (compare_results.py 의 결과물)")
+    parser.add_argument("--config", type=str, default="config.yaml", help="설정 파일 경로")
     args = parser.parse_args()
+
+    with open(args.config, 'r', encoding='utf-8') as f:
+        conf = yaml.safe_load(f)
+
+    csv_path = conf.get('analysis_data')
+    descA = conf.get('descA', 'Base instruction')
+    descB = conf.get('descB', 'Process-of-elimination instruction')
+
+    if not csv_path:
+        print("[Error] 'analysis_data' not defined in config file.")
+        return
 
     # Load env for API key
     env_path = os.path.join(os.path.dirname(__file__), ".env")
@@ -25,7 +39,6 @@ def generate_full_report():
 
     client = genai.Client(api_key=api_key)
     
-    csv_path = args.data
     if not os.path.exists(csv_path):
         print(f"[Error] Data file not found: {csv_path}")
         return
@@ -62,7 +75,7 @@ def generate_full_report():
     with open(out_file, "w", encoding="utf-8") as f:
         f.write(f"# Meta-Analysis Report: {base_name}\n\n")
 
-    model_name = 'gemini-2.5-flash'
+    model_name = 'gemini-3-flash-preview'
     print(f">>> 총 {len(df)}개의 케이스를 {len(chunks_with_meta)}번의 API 호출로 나누어 섹터별로 분석합니다 (모델: {model_name})...")
     
     for idx, chunk_meta in enumerate(chunks_with_meta):
@@ -73,7 +86,7 @@ def generate_full_report():
         
         prompt = f"You are a Senior AI Recommendation System Researcher. This is Batch {idx+1} of our analysis.\n"
         prompt += f"We are currently analyzing the sector: **{g_name}**.\n"
-        prompt += "Method A: Base instruction. Method B: Process-of-elimination instruction.\n\n"
+        prompt += f"Method A: {descA}\nMethod B: {descB}\n\n"
         
         if g_name == 'Both_Hit':
             prompt += "Task: Analyze why BOTH models succeeded here. What makes these items easier? Are there strong obvious signals? What is the LLM doing well?\n\n"

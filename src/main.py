@@ -23,7 +23,7 @@ def parse_model_response(raw_text):
     match = re.search(r'([A-Z])', clean_text.upper())
     return match.group(1) if match else raw_text.strip()[0].upper()
 
-def generate_prompt(dataset_name, input_str, target_str):
+def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -33,11 +33,19 @@ def generate_prompt(dataset_name, input_str, target_str):
         b_name = "fashion outfit"
         i_name = "fashion item"
 
-    extra_instruction = (
-        f"First infer the intent of the given {b_name}. Then, use the process of elimination: "
-        f"evaluate each option, identify why the incorrect options do not fit the intent, "
-        f"and eliminate them one by one until you find the best candidate {i_name}.\n"
-    )
+    if use_multimodal:
+        extra_instruction = (
+            f"You are provided with images for the current items and the candidate options. "
+            f"Carefully analyze the visual features (such as color, texture, pattern, and style) of the images. "
+            f"First infer the visual theme, vibe, and intent of the given {b_name}, "
+            f"and then choose the candidate {i_name} that best harmonizes with the overall aesthetic.\n"
+        )
+    else:
+        extra_instruction = (
+            f"First infer the intent of the given {b_name}. Then, use the process of elimination: "
+            f"evaluate each option, identify why the incorrect options do not fit the intent, "
+            f"and eliminate them one by one until you find the best candidate {i_name}.\n"
+        )
     #extra_instruction = f"First infer the intent of the given {b_name}, and then choose the candidate {i_name} that fits that intent.\n"
 
     prompt = (
@@ -46,7 +54,7 @@ def generate_prompt(dataset_name, input_str, target_str):
         f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
-        #f"{extra_instruction}"
+        f"{extra_instruction}"
         f"Your answer should indicate your choice with a single letter (e.g., “A,” “B,” “C,” etc.).\nChoice: "
     )
     return prompt
@@ -85,7 +93,7 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
 
     for idx, sample in enumerate(samples):
         current_idx = start_idx + idx
-        text_prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"])
+        text_prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"], conf.get("use_multimodal", False))
         
         contents = text_prompt
         if conf.get("use_multimodal", False):
@@ -112,6 +120,15 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
                     except: pass
                     
             contents.append(text_prompt)
+
+        if idx == 0 and conf.get("use_multimodal", False):
+            print("\n[DEBUG] Multimodal Input Check (First Sample):")
+            for c in contents:
+                if isinstance(c, str):
+                    print(f"  [Text] {c[:60]}..." if len(c) > 60 else f"  [Text] {c}")
+                else:
+                    print(f"  [Image] {getattr(c, 'filename', 'Unknown')} | Size: {c.size}")
+            print("-" * 50 + "\n")
 
         max_retries = 10
         base_delay = 20
@@ -169,7 +186,7 @@ def process_batch_samples(client, model, samples, conf):
     
     with open(jsonl_path, "w", encoding="utf-8") as f:
         for idx, sample in enumerate(samples):
-            prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"])
+            prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"], conf.get("use_multimodal", False))
             req_obj = {
                 "id": str(idx),
                 "request": {

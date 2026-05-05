@@ -8,13 +8,13 @@ num_token: 5       # max input items per bundle (-1 = no limit)
 toy_eval: 250     # -1 = full test set | N = first N samples
 seed: 45           # seed for candidate items (A-J)
 shuffle_seed: 41   # seed for input items shuffling
-use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.json
+use_hard_negative: false  # If true, loads from hard_negative_samples_<dataset>.json
 
 # ─── LLM ──────────────────────────────────────────────────────────────────────
 
 model: gemini-3.1-flash-lite-preview
 temperature: 0.0
-use_multimodal: true  # If true, loads images and sends them to Gemini along with text
+use_multimodal: false  # If true, loads images and sends them to Gemini along with text
 
 # ─── Execution Mode ───────────────────────────────────────────────────────────
 mode: sync        # sync | batch
@@ -24,3 +24,13 @@ poll_interval: 60
 
 # ─── Output ───────────────────────────────────────────────────────────────────
 output_dir: ./results
+
+# ─── Compare Results ──────────────────────────────────────────────────────────
+fileA: "results/pog/results_pog_20260416_142034.csv"
+fileB: "results/pog/results_pog_HN_C10_T5_20260503_002458.csv"
+compare_name: "pog_base_vs_with_image"
+
+# ─── Meta Analysis ────────────────────────────────────────────────────────────
+analysis_data: analysis\pog_base_vs_with_image_analysis_ready.csv
+descA: "기본 지시어 (Base instruction with only text information)"
+descB: "기본 지시어 + image (Base instruction with text and image information)"
