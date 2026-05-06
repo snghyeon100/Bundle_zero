@@ -107,12 +107,18 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
     partial_str = "" if is_final else "_partial"
     save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
-    df.to_csv(save_path, index=False)
+    df.to_csv(save_path, index=False, encoding='utf-8-sig')
     return save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_mask.sum()
 
-async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None):
+async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None, cf_cache=None):
     results = initial_results if initial_results is not None else []
     
+    use_cf = conf.get("use_cooccurrence", False) or conf.get("use_user_pref", False)
+    if cf_cache:
+        print(f">>> Using pre-computed CF score cache ({len(cf_cache)} entries).")
+    elif use_cf and dataset:
+        print(">>> CF cache not found — will compute scores on-the-fly per sample.")
+
     print(f">>> Processing {len(samples)} remaining samples sequentially to avoid rate limits...")
     total_samples_len = start_idx + len(samples)
 
@@ -121,15 +127,26 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
         
         # Build enriched target_str with inline CF tags if enabled
         enriched_target_str = sample["target_str"]
-        if dataset and (conf.get("use_cooccurrence", False) or conf.get("use_user_pref", False)):
-            input_ids = sample.get("input_indices", [])
-            cand_ids = sample.get("candidate_indices", [])
+        if use_cf:
             cooc_scores = None
             upref_scores = None
-            if conf.get("use_cooccurrence", False) and hasattr(dataset, 'get_cooccurrence_scores'):
-                cooc_scores = dataset.get_cooccurrence_scores(input_ids, cand_ids)
-            if conf.get("use_user_pref", False) and hasattr(dataset, 'get_user_pref_scores'):
-                upref_scores = dataset.get_user_pref_scores(input_ids, cand_ids)
+
+            # 1. Try cache lookup first (O(1))
+            cache_key = f"{sample['bundle_id']}_{sample['true_indice']}"
+            if cf_cache and cache_key in cf_cache:
+                entry = cf_cache[cache_key]
+                if conf.get("use_cooccurrence", False):
+                    cooc_scores = entry.get("cooccurrence")
+                if conf.get("use_user_pref", False):
+                    upref_scores = entry.get("user_pref")
+            # 2. Fallback: compute on-the-fly
+            elif dataset:
+                input_ids = sample.get("input_indices", [])
+                cand_ids  = sample.get("candidate_indices", [])
+                if conf.get("use_cooccurrence", False) and hasattr(dataset, 'get_cooccurrence_scores'):
+                    cooc_scores = dataset.get_cooccurrence_scores(input_ids, cand_ids)
+                if conf.get("use_user_pref", False) and hasattr(dataset, 'get_user_pref_scores'):
+                    upref_scores = dataset.get_user_pref_scores(input_ids, cand_ids)
             
             # Append inline tags to each option
             options = enriched_target_str.split("; ")
@@ -346,7 +363,7 @@ def process_batch_samples(client, model, samples, conf):
         
         hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
         save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
-        df.to_csv(save_path, index=False)
+        df.to_csv(save_path, index=False, encoding='utf-8-sig')
         
         print("-" * 30)
         print(f"Batch Dataset: {conf['dataset']}")
@@ -356,7 +373,7 @@ def process_batch_samples(client, model, samples, conf):
         print(f"Valid Ratio: {valid_ratio:.4f}")
         print("-" * 30)
         
-        save_translated_csv(df, conf, timestamp, mode_suffix="_batch", actual_output_dir=actual_output_dir)
+        # save_translated_csv(df, conf, timestamp, mode_suffix="_batch", actual_output_dir=actual_output_dir)
     else:
         print(">>> Batch job did not succeed.")
 
@@ -432,7 +449,11 @@ if __name__ == "__main__":
     
     if args.resume and os.path.exists(args.resume):
         print(f">>> Resuming from {args.resume}")
-        df_prev = pd.read_csv(args.resume)
+        try:
+            df_prev = pd.read_csv(args.resume, encoding='utf-8-sig')
+        except UnicodeDecodeError:
+            # Fallback for files saved with system default encoding (e.g. cp949 on Windows)
+            df_prev = pd.read_csv(args.resume, encoding='cp949')
         initial_results = df_prev.to_dict('records')
         args.start_idx = len(initial_results)
         
@@ -454,10 +475,25 @@ if __name__ == "__main__":
         
     client = genai.Client(api_key=api_key)
     
+    # Load pre-computed CF score cache if available
+    cf_cache = None
+    if conf.get("use_cooccurrence", False) or conf.get("use_user_pref", False):
+        cf_cache_path = os.path.join(
+            conf.get("data_path", "./datasets"),
+            conf["dataset"],
+            f"cf_scores_{conf['dataset']}.json"
+        )
+        if os.path.exists(cf_cache_path):
+            print(f">>> Loading pre-computed CF scores from {cf_cache_path}")
+            with open(cf_cache_path, "r", encoding="utf-8") as f:
+                cf_cache = json.load(f)
+        else:
+            print(f"[Warning] CF cache not found at {cf_cache_path}. Run src/precompute_cf_scores.py first for faster evaluation.")
+
     if conf["mode"] == "sync":
         print(">>> Running in Sync mode...")
         import asyncio
-        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset))
+        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset, cf_cache=cf_cache))
         
         # Final save
         save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_sum = save_intermediate_results(results, conf, timestamp, is_final=True)
@@ -476,7 +512,7 @@ if __name__ == "__main__":
         print("-" * 30)
         
         actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
-        save_translated_csv(df, conf, timestamp, mode_suffix="", actual_output_dir=actual_output_dir)
+        # save_translated_csv(df, conf, timestamp, mode_suffix="", actual_output_dir=actual_output_dir)
 
     elif conf["mode"] == "batch":
         print(">>> Running in Batch API mode...")

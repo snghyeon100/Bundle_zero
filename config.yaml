@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: spotify_sparse                  # pog | pog_dense | spotify | spotify_sparse
+dataset: spotify                  # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────
@@ -15,7 +15,7 @@ use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.j
 model: gemini-3.1-flash-lite-preview
 temperature: 0.0
 use_multimodal: false  # If true, loads images and sends them to Gemini along with text
-use_cooccurrence: false  # If true, adds co-occurrence stats (how often candidate appeared in same bundle as input items) to prompt
+use_cooccurrence: true  # If true, adds co-occurrence stats (how often candidate appeared in same bundle as input items) to prompt
 use_user_pref: false     # If true, adds user preference overlap (% of users who liked input items also liked candidate) to prompt
 
 # ─── Execution Mode ───────────────────────────────────────────────────────────
