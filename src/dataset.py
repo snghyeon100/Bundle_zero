@@ -3,6 +3,7 @@ import json
 import random
 import numpy as np
 import scipy.sparse as sp
+from collections import defaultdict
 
 def set_seed(seed):
     random.seed(seed)
@@ -57,9 +58,86 @@ class BundleZeroShotDataset:
         if self.num_token > 0 and self.len_max > self.num_token:
             self.len_max = self.num_token
 
+        # Precompute co-occurrence data (item -> set of bundles)
+        self.use_cooccurrence = conf.get("use_cooccurrence", False)
+        if self.use_cooccurrence:
+            self.item_to_bundles = self._build_item_to_bundles()
+            print(f"[Co-occurrence] Loaded {len(self.item_to_bundles)} items from bi_train.txt")
+
+        # Precompute user preference data (item -> set of users)
+        self.use_user_pref = conf.get("use_user_pref", False)
+        if self.use_user_pref:
+            self.item_to_users = self._build_item_to_users()
+            print(f"[User Pref] Loaded {len(self.item_to_users)} items from ui_full.txt")
+
         # Apply toy_eval truncating
         if self.toy_eval > 0:
             self.b_i_pairs_gt = self.b_i_pairs_gt[:self.toy_eval]
+
+    def _build_item_to_bundles(self):
+        """Build mapping: item_id -> set of bundle_ids from bi_train.txt"""
+        item_to_bundles = defaultdict(set)
+        train_path = os.path.join(self.path, self.name, 'bi_train.txt')
+        if not os.path.exists(train_path):
+            print(f"[Warning] bi_train.txt not found: {train_path}")
+            return item_to_bundles
+        with open(train_path, "r", encoding="utf-8") as f:
+            for line in f:
+                vals = [int(v) for v in line.strip().split(", ") if v]
+                if not vals:
+                    continue
+                bundle_id = vals[0]
+                for item_id in vals[1:]:
+                    item_to_bundles[item_id].add(bundle_id)
+        return item_to_bundles
+
+    def _build_item_to_users(self):
+        """Build mapping: item_id -> set of user_ids from ui_full.txt"""
+        item_to_users = defaultdict(set)
+        ui_path = os.path.join(self.path, self.name, 'ui_full.txt')
+        if not os.path.exists(ui_path):
+            print(f"[Warning] ui_full.txt not found: {ui_path}")
+            return item_to_users
+        with open(ui_path, "r", encoding="utf-8") as f:
+            for line in f:
+                vals = [int(v) for v in line.strip().split(", ") if v]
+                if not vals:
+                    continue
+                user_id = vals[0]
+                for item_id in vals[1:]:
+                    item_to_users[item_id].add(user_id)
+        return item_to_users
+
+    def get_cooccurrence_scores(self, input_indices, candidate_indices):
+        """Calculate co-occurrence score for each candidate with input items."""
+        scores = []
+        for cand_id in candidate_indices:
+            cand_bundles = self.item_to_bundles.get(int(cand_id), set())
+            score = 0
+            for inp_id in input_indices:
+                inp_bundles = self.item_to_bundles.get(int(inp_id), set())
+                score += len(cand_bundles & inp_bundles)
+            scores.append(score)
+        return scores
+
+    def get_user_pref_scores(self, input_indices, candidate_indices):
+        """Calculate user preference overlap ratio for each candidate."""
+        # Step 1: Find all users who liked any input item
+        relevant_users = set()
+        for inp_id in input_indices:
+            relevant_users |= self.item_to_users.get(int(inp_id), set())
+        
+        if not relevant_users:
+            return [0.0] * len(candidate_indices)
+        
+        # Step 2: For each candidate, compute overlap ratio
+        scores = []
+        total_users = len(relevant_users)
+        for cand_id in candidate_indices:
+            cand_users = self.item_to_users.get(int(cand_id), set())
+            overlap = len(relevant_users & cand_users)
+            scores.append(round(overlap / total_users * 100, 1))
+        return scores
 
     def get_item_text(self, item_id):
         item_id_str = str(int(item_id))

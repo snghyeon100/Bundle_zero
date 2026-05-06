@@ -23,7 +23,8 @@ def parse_model_response(raw_text):
     match = re.search(r'([A-Z])', clean_text.upper())
     return match.group(1) if match else raw_text.strip()[0].upper()
 
-def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False):
+def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
+                    use_cooccurrence=False, use_user_pref=False):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -48,14 +49,38 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False):
         )
     #extra_instruction = f"First infer the intent of the given {b_name}, and then choose the candidate {i_name} that fits that intent.\n"
 
+    # Build CF legend explanation if any CF signal is enabled
+    cf_legend = ""
+    if use_cooccurrence or use_user_pref:
+        legend_lines = [
+            "Note: Each option is annotated with collaborative filtering signals derived from historical user behavior data:"
+        ]
+        if use_cooccurrence:
+            legend_lines.append(
+                f"  - Co-bundled: the number of times this candidate {i_name} appeared together "
+                f"with the input {i_name}s in the same {b_name} in past data. "
+                f"A higher count suggests a historically strong co-occurrence relationship."
+            )
+        if use_user_pref:
+            legend_lines.append(
+                f"  - User overlap: the percentage of users who interacted with the input {i_name}s "
+                f"and also interacted with this candidate {i_name}. "
+                f"A higher percentage suggests this candidate is preferred by users with similar taste."
+            )
+        legend_lines.append(
+            "Use these signals as supplementary evidence alongside the content of each option."
+        )
+        cf_legend = "\n".join(legend_lines) + "\n"
+
     prompt = (
         f"You are a helpful and honest assistant. The following are multiple choice questions about {t_name}. "
         f"You should directly answer the question by choosing the letter of the correct option. "
         f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
+        f"{cf_legend}"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
-        f"{extra_instruction}"
-        f"Your answer should indicate your choice with a single letter (e.g., “A,” “B,” “C,” etc.).\nChoice: "
+        #f"{extra_instruction}"
+        f"Your answer should indicate your choice with a single letter (e.g., \u201cA,\u201d \u201cB,\u201d \u201cC,\u201d etc.).\nChoice: "
     )
     return prompt
 
@@ -85,7 +110,7 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df.to_csv(save_path, index=False)
     return save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_mask.sum()
 
-async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0):
+async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None):
     results = initial_results if initial_results is not None else []
     
     print(f">>> Processing {len(samples)} remaining samples sequentially to avoid rate limits...")
@@ -93,7 +118,39 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
 
     for idx, sample in enumerate(samples):
         current_idx = start_idx + idx
-        text_prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"], conf.get("use_multimodal", False))
+        
+        # Build enriched target_str with inline CF tags if enabled
+        enriched_target_str = sample["target_str"]
+        if dataset and (conf.get("use_cooccurrence", False) or conf.get("use_user_pref", False)):
+            input_ids = sample.get("input_indices", [])
+            cand_ids = sample.get("candidate_indices", [])
+            cooc_scores = None
+            upref_scores = None
+            if conf.get("use_cooccurrence", False) and hasattr(dataset, 'get_cooccurrence_scores'):
+                cooc_scores = dataset.get_cooccurrence_scores(input_ids, cand_ids)
+            if conf.get("use_user_pref", False) and hasattr(dataset, 'get_user_pref_scores'):
+                upref_scores = dataset.get_user_pref_scores(input_ids, cand_ids)
+            
+            # Append inline tags to each option
+            options = enriched_target_str.split("; ")
+            enriched_options = []
+            for i, opt in enumerate(options):
+                tags = []
+                if cooc_scores and i < len(cooc_scores):
+                    tags.append(f"Co-bundled: {cooc_scores[i]}")
+                if upref_scores and i < len(upref_scores):
+                    tags.append(f"User overlap: {upref_scores[i]}%")
+                if tags:
+                    opt = f"{opt} [{' | '.join(tags)}]"
+                enriched_options.append(opt)
+            enriched_target_str = "; ".join(enriched_options)
+        
+        text_prompt = generate_prompt(
+            conf["dataset"], sample["input_str"], enriched_target_str,
+            use_multimodal=conf.get("use_multimodal", False),
+            use_cooccurrence=conf.get("use_cooccurrence", False),
+            use_user_pref=conf.get("use_user_pref", False)
+        )
         
         contents = text_prompt
         if conf.get("use_multimodal", False):
@@ -400,7 +457,7 @@ if __name__ == "__main__":
     if conf["mode"] == "sync":
         print(">>> Running in Sync mode...")
         import asyncio
-        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx))
+        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset))
         
         # Final save
         save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_sum = save_intermediate_results(results, conf, timestamp, is_final=True)
