@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: spotify                  # pog | pog_dense | spotify | spotify_sparse
+dataset: spotify_sparse                  # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────

@@ -58,6 +58,16 @@ def short_text(value, limit=1600):
     return value[: limit - 3] + "..."
 
 
+def extract_true_item_str(target_str, true_option_char):
+    char = re.escape(str(true_option_char).strip().upper())
+    text = str(target_str)
+    pattern = rf"(?:^|;\s*){char}\.\s*(.*?)(?=;\s*[A-Z]\.|$)"
+    match = re.search(pattern, text, flags=re.DOTALL)
+    if match:
+        return re.sub(r"\s+", " ", match.group(1)).strip()
+    return ""
+
+
 def load_config(config_path):
     if not os.path.exists(config_path):
         return {}
@@ -202,6 +212,10 @@ def build_base_meta(df):
 
     meta = df[BASE_COLUMNS].copy()
     meta.insert(0, "index", df.index)
+    meta["true_item_str"] = meta.apply(
+        lambda row: extract_true_item_str(row["target_str"], row["true_option_char"]),
+        axis=1,
+    )
     return meta
 
 
