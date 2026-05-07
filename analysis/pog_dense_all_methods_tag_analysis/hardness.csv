@@ -1,0 +1,4 @@
+﻿distractor_hardness,n,hit_baseline_n,hit_baseline_acc,hit_intent_prompt_n,hit_intent_prompt_acc,hit_delete_prompt_n,hit_delete_prompt_acc,hit_image_text_n,hit_image_text_acc,hit_delete_image_text_n,hit_delete_image_text_acc,hit_intent_image_text_n,hit_intent_image_text_acc,hit_co_occer_cf_n,hit_co_occer_cf_acc,hit_user_prefer_cf_n,hit_user_prefer_cf_acc
+2.0,221,221,0.3574660633484163,221,0.3574660633484163,221,0.38461538461538464,221,0.3393665158371041,221,0.3393665158371041,221,0.3076923076923077,221,0.5701357466063348,221,0.3936651583710407
+3.0,28,28,0.14285714285714285,28,0.17857142857142858,28,0.2857142857142857,28,0.17857142857142858,28,0.21428571428571427,28,0.21428571428571427,28,0.42857142857142855,28,0.25
+1.0,1,1,1.0,1,1.0,1,1.0,1,1.0,1,1.0,1,1.0,1,1.0,1,1.0

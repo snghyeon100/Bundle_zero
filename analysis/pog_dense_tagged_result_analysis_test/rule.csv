@@ -1,0 +1,5 @@
+﻿primary_rule_tag,n,hit_base_n,hit_base_acc
+cooccurrence_shortcut,114,114,0.34210526315789475
+weak_or_no_rule_signal,88,88,0.3068181818181818
+popularity_shortcut,37,37,0.24324324324324326
+hard_negative_like,11,11,0.0

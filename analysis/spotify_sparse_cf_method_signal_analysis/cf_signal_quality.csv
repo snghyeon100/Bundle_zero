@@ -1,0 +1,3 @@
+﻿signal,n,gt_in_top_tie_rate,gt_unique_top1_rate,gt_mean_min_rank,gt_mean_avg_rank,gt_mean_score,mean_top_score,mean_top_tie_size,all_zero_rate,all_tied_rate,positive_signal_rate,mean_top_second_margin
+cooccurrence,250,0.744,0.196,1.5,4.286,2.752,3.212,5.332,0.444,0.444,0.556,2.132
+user_pref,250,0.38,0.168,3.004,5.064,4.330400000000001,10.3952,2.912,0.208,0.208,0.792,4.6468

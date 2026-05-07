@@ -1,0 +1,7 @@
+﻿signal,left_method,right_method,n,left_accuracy,right_accuracy,left_only,right_only,both_hit,both_fail,right_only_gt_in_top_tie_rate,right_only_gt_unique_top1_rate,right_only_pred_in_top_tie_rate,right_only_pred_unique_top1_rate,right_only_mean_gt_avg_rank,right_only_mean_pred_avg_rank
+cooccurrence,base,co_occur,249,0.3293172690763052,0.3534136546184739,23,29,59,138,1.0,0.3103448275862069,1.0,0.3103448275862069,4.103448275862069,4.103448275862069
+cooccurrence,base,user_prefer,250,0.328,0.324,19,18,63,150,1.0,0.0,1.0,0.0,5.5,5.5
+cooccurrence,co_occur,user_prefer,249,0.3534136546184739,0.3253012048192771,21,14,67,147,1.0,0.0,1.0,0.0,5.5,5.5
+user_pref,base,co_occur,249,0.3293172690763052,0.3534136546184739,23,29,59,138,1.0,0.0,1.0,0.0,5.5,5.5
+user_pref,base,user_prefer,250,0.328,0.324,19,18,63,150,1.0,0.1111111111111111,1.0,0.1111111111111111,5.0,5.0
+user_pref,co_occur,user_prefer,249,0.3534136546184739,0.3253012048192771,21,14,67,147,1.0,0.21428571428571427,1.0,0.21428571428571427,4.535714285714286,4.535714285714286

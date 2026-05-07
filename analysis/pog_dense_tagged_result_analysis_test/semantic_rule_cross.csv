@@ -1,0 +1,19 @@
+﻿semantic_rule,n,hit_base_n,hit_base_acc
+category_completion / cooccurrence_shortcut,36,36,0.2777777777777778
+category_completion / weak_or_no_rule_signal,35,35,0.2857142857142857
+season_match / cooccurrence_shortcut,35,35,0.3142857142857143
+style_theme_match / cooccurrence_shortcut,33,33,0.3333333333333333
+style_theme_match / weak_or_no_rule_signal,27,27,0.25925925925925924
+season_match / weak_or_no_rule_signal,22,22,0.3181818181818182
+category_completion / popularity_shortcut,17,17,0.29411764705882354
+style_theme_match / popularity_shortcut,15,15,0.13333333333333333
+gender_or_age_filtering / cooccurrence_shortcut,6,6,0.8333333333333334
+season_match / popularity_shortcut,5,5,0.4
+category_completion / hard_negative_like,5,5,0.0
+brand_or_collection_match / weak_or_no_rule_signal,4,4,0.75
+style_theme_match / hard_negative_like,4,4,0.0
+brand_or_collection_match / cooccurrence_shortcut,2,2,1.0
+ambiguous_or_counterintuitive_gt / cooccurrence_shortcut,1,1,0.0
+brand_or_collection_match / hard_negative_like,1,1,0.0
+color_material_pattern_match / cooccurrence_shortcut,1,1,0.0
+season_match / hard_negative_like,1,1,0.0

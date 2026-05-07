@@ -1,0 +1,14 @@
+﻿method,signal,gt_cf_group,pred_cf_group,n,accuracy,mean_gt_avg_rank,mean_pred_avg_rank,mean_top_tie_size
+base,cooccurrence,gt_top,pred_not_top,9,0.0,1.0,6.0,1.0
+base,cooccurrence,gt_top,pred_top,241,0.34024896265560167,5.443983402489627,5.443983402489627,9.887966804979254
+co_occur,cooccurrence,gt_top,pred_top,249,0.3534136546184739,5.283132530120482,5.283132530120482,9.566265060240964
+user_prefer,cooccurrence,gt_top,pred_not_top,9,0.0,1.0,6.0,1.0
+user_prefer,cooccurrence,gt_top,pred_top,241,0.3360995850622407,5.443983402489627,5.443983402489627,9.887966804979254
+base,user_pref,gt_not_top,pred_not_top,1,0.0,6.0,6.0,1.0
+base,user_pref,gt_top,pred_not_top,2,0.0,1.0,6.0,1.0
+base,user_pref,gt_top,pred_top,247,0.3319838056680162,5.445344129554656,5.445344129554656,9.890688259109313
+co_occur,user_pref,gt_not_top,pred_not_top,1,0.0,6.0,6.0,1.0
+co_occur,user_pref,gt_top,pred_not_top,3,0.0,1.0,6.0,1.0
+co_occur,user_pref,gt_top,pred_top,245,0.35918367346938773,5.463265306122449,5.463265306122449,9.926530612244898
+user_prefer,user_pref,gt_not_top,pred_not_top,1,0.0,6.0,6.0,1.0
+user_prefer,user_pref,gt_top,pred_top,249,0.3253012048192771,5.409638554216867,5.409638554216867,9.819277108433734

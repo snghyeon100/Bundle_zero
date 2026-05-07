@@ -4,7 +4,7 @@ import ast
 import pandas as pd
 import argparse
 
-def analyze_artist_bias(csv_path, dataset="spotify_sparse"):
+def analyze_artist_bias(csv_path, dataset="spotify"):
     print(f"Loading results from: {csv_path}")
     df = pd.read_csv(csv_path)
     
@@ -81,7 +81,7 @@ def analyze_artist_bias(csv_path, dataset="spotify_sparse"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyze Artist Match Bias")
     parser.add_argument("--csv", type=str, required=True, help="Path to the results CSV file")
-    parser.add_argument("--dataset", type=str, default="spotify_sparse", help="Dataset name")
+    parser.add_argument("--dataset", type=str, default="spotify", help="Dataset name")
     args = parser.parse_args()
     
     analyze_artist_bias(args.csv, args.dataset)

@@ -1,0 +1,8 @@
+﻿primary_tag,n,hit_base_n,hit_base_acc
+category_completion,93,93,0.26881720430107525
+style_theme_match,79,79,0.25316455696202533
+season_match,63,63,0.31746031746031744
+brand_or_collection_match,7,7,0.7142857142857143
+gender_or_age_filtering,6,6,0.8333333333333334
+ambiguous_or_counterintuitive_gt,1,1,0.0
+color_material_pattern_match,1,1,0.0

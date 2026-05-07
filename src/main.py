@@ -36,10 +36,9 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
 
     if use_multimodal:
         extra_instruction = (
-            f"You are provided with images for the current items and the candidate options. "
-            f"Carefully analyze the visual features (such as color, texture, pattern, and style) of the images. "
-            f"First infer the visual theme, vibe, and intent of the given {b_name}, "
-            f"and then choose the candidate {i_name} that best harmonizes with the overall aesthetic.\n"
+            f"First infer the intent of the given {b_name}. Then, use the process of elimination: "
+            f"evaluate each option, identify why the incorrect options do not fit the intent, "
+            f"and eliminate them one by one until you find the best candidate {i_name}.\n"
         )
     else:
         extra_instruction = (
@@ -79,7 +78,8 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"{cf_legend}"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
-        #f"{extra_instruction}"
+        #f"First, analyze the overall combination and coherence of the items in the {b_name}. Then, choose the candidate {i_name} that best completes the set."
+        f"{extra_instruction}"
         f"Your answer should indicate your choice with a single letter (e.g., \u201cA,\u201d \u201cB,\u201d \u201cC,\u201d etc.).\nChoice: "
     )
     return prompt

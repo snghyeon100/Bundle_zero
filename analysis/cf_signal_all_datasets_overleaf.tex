@@ -1,0 +1,146 @@
+% Required packages: booktabs, graphicx, placeins
+
+% Suggested preamble:
+
+% \usepackage{booktabs}
+
+% \usepackage{graphicx}
+
+% \usepackage{placeins}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Quality of collaborative-filtering signals across datasets. Top-tie allows ties for the highest score, while unique top-1 requires the ground-truth item to be the single highest-scoring candidate.}
+\label{tab:cf_signal_quality_all}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrr}
+\toprule
+Dataset & Signal & $n$ & GT top-tie & GT unique top-1 & Positive signal & All-zero & Mean top-tie size \\
+\midrule
+POG & Co-occurrence & 250 & 100.0\% & 4.8\% & 4.8\% & 95.2\% & 9.57 \\
+POG & User preference & 250 & 99.6\% & 2.0\% & 2.4\% & 97.6\% & 9.78 \\
+POG-Dense & Co-occurrence & 250 & 84.0\% & 44.0\% & 65.6\% & 34.4\% & 4.24 \\
+POG-Dense & User preference & 250 & 74.8\% & 12.8\% & 41.6\% & 58.4\% & 6.34 \\
+Spotify & Co-occurrence & 250 & 66.4\% & 46.0\% & 85.6\% & 14.4\% & 2.45 \\
+Spotify & User preference & 250 & 36.8\% & 22.0\% & 86.4\% & 13.6\% & 2.26 \\
+Spotify-Sparse & Co-occurrence & 250 & 74.4\% & 19.6\% & 55.6\% & 44.4\% & 5.33 \\
+Spotify-Sparse & User preference & 250 & 38.0\% & 16.8\% & 79.2\% & 20.8\% & 2.91 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\FloatBarrier
+
+\begin{table}[t]
+\centering
+\small
+\caption{Targeted CF-method behavior. CoCF is evaluated against co-occurrence scores and UserCF against user-preference scores; Base is shown with co-occurrence as the stronger baseline signal.}
+\label{tab:cf_targeted_methods_all}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllrrrr}
+\toprule
+Dataset & Method & Inspected signal & Acc. & Pred top-tie & Pred unique top-1 & Mean pred avg-rank \\
+\midrule
+POG & Base & Co-occurrence & 32.8\% & 96.4\% & 1.2\% & 5.46 \\
+POG & CoCF & Co-occurrence & 35.3\% & 100.0\% & 4.8\% & 5.28 \\
+POG & UserCF & User preference & 32.4\% & 99.6\% & 2.0\% & 5.41 \\
+POG-Dense & Base & Co-occurrence & 33.6\% & 58.8\% & 19.6\% & 4.61 \\
+POG-Dense & CoCF & Co-occurrence & 55.6\% & 99.6\% & 54.8\% & 2.64 \\
+POG-Dense & UserCF & User preference & 38.0\% & 87.6\% & 24.0\% & 4.21 \\
+Spotify & Base & Co-occurrence & 52.0\% & 64.8\% & 44.4\% & 2.98 \\
+Spotify & CoCF & Co-occurrence & 56.4\% & 99.2\% & 74.4\% & 1.73 \\
+Spotify & UserCF & User preference & 30.8\% & 97.2\% & 80.4\% & 1.72 \\
+Spotify-Sparse & Base & Co-occurrence & 46.0\% & 70.0\% & 17.2\% & 4.58 \\
+Spotify-Sparse & CoCF & Co-occurrence & 46.4\% & 99.6\% & 38.4\% & 3.17 \\
+Spotify-Sparse & UserCF & User preference & 32.8\% & 92.8\% & 68.8\% & 2.26 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\FloatBarrier
+
+\begin{table}[t]
+\centering
+\small
+\caption{LLM reliance on the Co-occurrence signal. Pred top-tie measures whether the model selected a candidate tied for the highest CF score.}
+\label{tab:cf_reliance_cooccurrence}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrr}
+\toprule
+Dataset & Method & $n$ & Acc. & Pred top-tie & Pred unique top-1 & Hit if pred top & Hit if pred not top \\
+\midrule
+POG & Base & 250 & 32.8\% & 96.4\% & 1.2\% & 34.0\% & 0.0\% \\
+POG & CoCF & 249 & 35.3\% & 100.0\% & 4.8\% & 35.3\% & -- \\
+POG & UserCF & 250 & 32.4\% & 96.4\% & 1.2\% & 33.6\% & 0.0\% \\
+POG-Dense & Base & 250 & 33.6\% & 58.8\% & 19.6\% & 52.4\% & 6.8\% \\
+POG-Dense & CoCF & 250 & 55.6\% & 99.6\% & 54.8\% & 55.8\% & 0.0\% \\
+POG-Dense & UserCF & 250 & 38.0\% & 61.2\% & 23.6\% & 56.2\% & 9.3\% \\
+Spotify & Base & 250 & 52.0\% & 64.8\% & 44.4\% & 68.5\% & 21.6\% \\
+Spotify & CoCF & 250 & 56.4\% & 99.2\% & 74.4\% & 56.5\% & 50.0\% \\
+Spotify & UserCF & 250 & 30.8\% & 46.0\% & 26.8\% & 57.4\% & 8.1\% \\
+Spotify-Sparse & Base & 250 & 46.0\% & 70.0\% & 17.2\% & 50.9\% & 34.7\% \\
+Spotify-Sparse & CoCF & 250 & 46.4\% & 99.6\% & 38.4\% & 46.6\% & 0.0\% \\
+Spotify-Sparse & UserCF & 250 & 32.8\% & 62.8\% & 11.2\% & 43.9\% & 14.0\% \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\FloatBarrier
+
+\begin{table}[t]
+\centering
+\small
+\caption{LLM reliance on the User preference signal. Pred top-tie measures whether the model selected a candidate tied for the highest CF score.}
+\label{tab:cf_reliance_userpref}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrr}
+\toprule
+Dataset & Method & $n$ & Acc. & Pred top-tie & Pred unique top-1 & Hit if pred top & Hit if pred not top \\
+\midrule
+POG & Base & 250 & 32.8\% & 98.8\% & 1.2\% & 33.2\% & 0.0\% \\
+POG & CoCF & 249 & 35.3\% & 98.4\% & 0.8\% & 35.9\% & 0.0\% \\
+POG & UserCF & 250 & 32.4\% & 99.6\% & 2.0\% & 32.5\% & 0.0\% \\
+POG-Dense & Base & 250 & 33.6\% & 70.4\% & 8.4\% & 37.5\% & 24.3\% \\
+POG-Dense & CoCF & 250 & 55.6\% & 74.8\% & 12.0\% & 59.4\% & 44.4\% \\
+POG-Dense & UserCF & 250 & 38.0\% & 87.6\% & 24.0\% & 37.9\% & 38.7\% \\
+Spotify & Base & 250 & 52.0\% & 32.8\% & 18.4\% & 63.4\% & 46.4\% \\
+Spotify & CoCF & 250 & 56.4\% & 39.6\% & 24.8\% & 58.6\% & 55.0\% \\
+Spotify & UserCF & 250 & 30.8\% & 97.2\% & 80.4\% & 30.0\% & 57.1\% \\
+Spotify-Sparse & Base & 250 & 46.0\% & 33.6\% & 12.4\% & 53.6\% & 42.2\% \\
+Spotify-Sparse & CoCF & 250 & 46.4\% & 39.2\% & 17.6\% & 48.0\% & 45.4\% \\
+Spotify-Sparse & UserCF & 250 & 32.8\% & 92.8\% & 68.8\% & 29.3\% & 77.8\% \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\FloatBarrier
+
+\begin{table}[t]
+\centering
+\small
+\caption{Pairwise method deltas under the intended CF signal. Right-only cases are problems solved only by the CF method, and the last column asks whether those gains occur when the ground-truth item is a unique top-1 under the same CF score.}
+\label{tab:cf_pairwise_delta_all}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllrrrrrrrr}
+\toprule
+Dataset & Comparison & Signal & $n$ & Left acc. & Right acc. & Left only & Right only & Both hit & Both fail & Right-only GT unique top-1 \\
+\midrule
+POG & Base vs. CoCF & Co-occurrence & 249 & 32.9\% & 35.3\% & 23 & 29 & 59 & 138 & 31.0\% \\
+POG & Base vs. UserCF & User preference & 250 & 32.8\% & 32.4\% & 19 & 18 & 63 & 150 & 11.1\% \\
+POG-Dense & Base vs. CoCF & Co-occurrence & 250 & 33.6\% & 55.6\% & 19 & 74 & 65 & 92 & 89.2\% \\
+POG-Dense & Base vs. UserCF & User preference & 250 & 33.6\% & 38.0\% & 23 & 34 & 61 & 132 & 50.0\% \\
+Spotify & Base vs. CoCF & Co-occurrence & 250 & 52.0\% & 56.4\% & 23 & 34 & 107 & 86 & 73.5\% \\
+Spotify & Base vs. UserCF & User preference & 250 & 52.0\% & 30.8\% & 77 & 24 & 53 & 96 & 87.5\% \\
+Spotify-Sparse & Base vs. CoCF & Co-occurrence & 250 & 46.0\% & 46.4\% & 35 & 36 & 80 & 99 & 47.2\% \\
+Spotify-Sparse & Base vs. UserCF & User preference & 250 & 46.0\% & 32.8\% & 61 & 28 & 54 & 107 & 82.1\% \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\FloatBarrier
