@@ -1,0 +1,4 @@
+﻿left_method,right_method,n,left_acc,right_acc,both_hit,both_fail,left_only,right_only
+base,co_occur,250,0.336,0.556,65,92,19,74
+base,user_prefer,250,0.336,0.38,61,132,23,34
+co_occur,user_prefer,250,0.556,0.38,78,94,61,17

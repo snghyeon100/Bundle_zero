@@ -1,0 +1,4 @@
+﻿joint_outcome,n,rate,base_acc,co_occur_acc,user_prefer_acc
+mixed,114,0.456,0.2894736842105263,0.7719298245614035,0.38596491228070173
+all_fail,85,0.34,0.0,0.0,0.0
+all_hit,51,0.204,1.0,1.0,1.0

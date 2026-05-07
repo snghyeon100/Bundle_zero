@@ -4,6 +4,7 @@ import yaml
 import json
 import time
 import asyncio
+import glob
 import pandas as pd
 from dotenv import load_dotenv
 from google import genai
@@ -79,10 +80,20 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
         #f"First, analyze the overall combination and coherence of the items in the {b_name}. Then, choose the candidate {i_name} that best completes the set."
-        f"{extra_instruction}"
+        #f"{extra_instruction}"
         f"Your answer should indicate your choice with a single letter (e.g., \u201cA,\u201d \u201cB,\u201d \u201cC,\u201d etc.).\nChoice: "
     )
     return prompt
+
+def find_item_image(img_dir, item_id):
+    for ext in (".jpg", ".jpeg", ".png", ".webp", ".gif"):
+        img_path = os.path.join(img_dir, f"{item_id}{ext}")
+        if os.path.exists(img_path):
+            return img_path
+    matches = glob.glob(os.path.join(img_dir, f"{item_id}.*"))
+    if matches:
+        return matches[0]
+    return None
 
 def save_intermediate_results(results, conf, timestamp, is_final=False):
     df = pd.DataFrame(results)
@@ -170,33 +181,60 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
         )
         
         contents = text_prompt
+        loaded_image_count = 0
+        requested_image_ids = []
+        found_image_paths = []
+        missing_image_ids = []
+        failed_image_paths = []
         if conf.get("use_multimodal", False):
             contents = []
             img_dir = os.path.join(conf.get("data_path", "./datasets"), conf["dataset"], "images")
             
             contents.append("Images for the items currently in the bundle:")
             for i, item_id in enumerate(sample.get("input_indices", [])):
-                img_path = os.path.join(img_dir, f"{item_id}.jpg")
-                if os.path.exists(img_path):
+                requested_image_ids.append(int(item_id))
+                img_path = find_item_image(img_dir, item_id)
+                if img_path:
                     try:
                         contents.append(f"[Input Item {i+1}]")
                         contents.append(Image.open(img_path))
-                    except: pass
+                        loaded_image_count += 1
+                        found_image_paths.append(img_path)
+                    except Exception as e:
+                        failed_image_paths.append(f"{img_path} ({e})")
+                else:
+                    missing_image_ids.append(int(item_id))
                     
             contents.append("Images for the candidate items:")
             for i, item_id in enumerate(sample.get("candidate_indices", [])):
                 opt_char = chr(ord('A') + i)
-                img_path = os.path.join(img_dir, f"{item_id}.jpg")
-                if os.path.exists(img_path):
+                requested_image_ids.append(int(item_id))
+                img_path = find_item_image(img_dir, item_id)
+                if img_path:
                     try:
                         contents.append(f"[Candidate {opt_char}]")
                         contents.append(Image.open(img_path))
-                    except: pass
+                        loaded_image_count += 1
+                        found_image_paths.append(img_path)
+                    except Exception as e:
+                        failed_image_paths.append(f"{img_path} ({e})")
+                else:
+                    missing_image_ids.append(int(item_id))
                     
             contents.append(text_prompt)
 
         if idx == 0 and conf.get("use_multimodal", False):
             print("\n[DEBUG] Multimodal Input Check (First Sample):")
+            print(f"  [Image Count] {loaded_image_count}")
+            print(f"  [Image Dir] {img_dir}")
+            print(f"  [Requested Item IDs] {requested_image_ids}")
+            if missing_image_ids:
+                print(f"  [Missing Image IDs] {missing_image_ids}")
+            if failed_image_paths:
+                print(f"  [Failed Image Opens] {failed_image_paths[:5]}")
+            if found_image_paths:
+                preview_paths = [os.path.basename(p) for p in found_image_paths[:10]]
+                print(f"  [Found Image Files] {preview_paths}")
             for c in contents:
                 if isinstance(c, str):
                     print(f"  [Text] {c[:60]}..." if len(c) > 60 else f"  [Text] {c}")

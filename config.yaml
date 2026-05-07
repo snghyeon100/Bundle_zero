@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: pog                  # pog | pog_dense | spotify | spotify_sparse
+dataset: pog_dense                  # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────
@@ -8,7 +8,7 @@ num_token: 5       # max input items per bundle (-1 = no limit)
 toy_eval: 250     # -1 = full test set | N = first N samples
 seed: 45           # seed for candidate items (A-J)
 shuffle_seed: 41   # seed for input items shuffling
-use_hard_negative: false  # If true, loads from hard_negative_samples_<dataset>.json
+use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.json
 
 # ─── LLM ──────────────────────────────────────────────────────────────────────
 
