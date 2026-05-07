@@ -1,67 +1,113 @@
 # LLM-ZeroShot Context
 
+Last updated: 2026-05-08
+
 ## 1. Project Purpose
 
-This repository evaluates bundle construction and playlist continuation as zero-shot multiple-choice tasks for LLMs.
+This repository studies zero-shot LLM performance on bundle construction and playlist continuation.
 
 Task format:
 
-- Given partial bundle or playlist input items.
+- Given a partial bundle or playlist.
 - Choose the ground-truth item from candidates A-J.
 - `pog` and `pog_dense`: fashion outfit bundle completion.
 - `spotify` and `spotify_sparse`: playlist continuation.
 
-Current research goal:
+Current research question:
 
-- Understand what LLMs do well and poorly in zero-shot bundle construction.
-- Check whether high Spotify accuracy is caused by shortcut signals from random negatives.
-- Compare model success/failure rates by hard negatives, rule-based shortcuts, and problem-level semantic tags.
-- Build a research story such as: LLMs are strong at broad semantic filtering but weak at fine-grained compatibility and collaborative preference modeling.
+- What does an LLM solve well in zero-shot bundle construction?
+- What does it consistently fail on?
+- Are high scores caused by dataset shortcuts such as popularity, co-occurrence, artist/album overlap, or candidate construction?
+- Does adding collaborative filtering signals help reasoning, or does the LLM simply follow numeric shortcuts?
+
+Current narrative:
+
+- Spotify's earlier high accuracy was likely inflated by candidate shortcuts.
+- Hard negatives reduce obvious shortcuts and lower Spotify accuracy.
+- Co-occurrence can help when it aligns with the ground truth, but the LLM tends to over-follow the score.
+- User preference often hurts because the signal is not reliably aligned with bundle/playlist completion.
+- For POG/POG-dense, semantic tags plus empirical difficulty are the most useful way to explain what the LLM can and cannot do.
 
 ## 2. Main Folder Structure
 
 - `src/`
-  - `main.py`: Runs Gemini zero-shot evaluation.
-  - `dataset.py`: Loads datasets and creates evaluation samples.
-  - `generate_hard_negatives.py`: Generates Spotify hard negative samples.
-  - `analyze_artist_bias.py`: Analyzes Spotify artist-overlap bias.
-  - `analyze_rule_based_baselines.py`: Computes rule-based baseline accuracies for result CSVs.
-  - `create_tag_meta.py`: Creates reusable problem meta and rule-based tag meta from result CSVs.
-  - `tag_fashion_problem_meta.py`: Uses an LLM to tag POG/POG-dense fashion problems.
+  - `main.py`: Runs Gemini evaluation. Now supports multimodal images and optional CF prompt signals.
+  - `dataset.py`: Loads datasets, builds eval samples, computes co-occurrence/user-preference scores.
+  - `precompute_cf_scores.py`: Precomputes `cf_scores_<dataset>.json`.
+  - `generate_hard_negatives.py`: Generates hard negative samples.
+  - `analyze_rule_based_baselines.py`: Rule-based baselines for shortcut analysis.
+  - `create_tag_meta.py`: Builds reusable problem metadata and optional rule tags.
+  - `tag_fashion_problem_meta.py`: LLM semantic tagging for fashion problems.
+  - `analyze_tagged_results.py`: Merges semantic/rule tags with result CSVs.
+  - `analyze_cf_signal.py`: CF signal quality and LLM reliance analysis.
+  - `make_cf_overleaf_tables.py`: Builds Overleaf tables for CF analysis across datasets.
+  - `analyze_joint_success_failure.py`: Analyzes all-hit/all-fail/mixed patterns across methods.
+  - `deduplicate_dataset.py`: Builds deduplicated dataset copy, especially for POG user-item data.
 
 - `datasets/`
-  - `pog/`, `pog_dense/`, `spotify/`, `spotify_sparse/`
-  - Each dataset contains files such as `item_info.json`, `bi_train.txt`, `bi_test_input.txt`, and `bi_test_gt.txt`.
+  - `pog/`, `pog_dense/`, `pog_dedup/`, `spotify/`, `spotify_sparse/`
+  - Important files include `item_info.json`, `bi_train.txt`, `bi_test_input.txt`, `bi_test_gt.txt`, `ui_full.txt`, and `images/`.
+  - CF caches are stored as `datasets/<dataset>/cf_scores_<dataset>.json`.
 
 - `results/`
   - Dataset-specific result CSVs.
   - `problem_meta_clean.csv`: Reusable problem definition metadata.
-  - `problem_tag_meta.csv`: Problem metadata plus deterministic rule-based tags/features.
-  - `problem_fashion_semantic_tags*.csv`: LLM semantic tags for POG-style fashion problems.
+  - `problem_tag_meta.csv`: Rule-based problem metadata.
+  - `problem_fashion_semantic_tags*.csv`: LLM semantic tag outputs.
 
 - `analysis/`
-  - Comparison-ready CSVs and LLM-generated meta-analysis markdown reports.
+  - Generated analysis outputs and Overleaf table files.
 
-## 3. Files Modified Or Created So Far
+## 3. Files Modified Or Created
 
-### Main scripts
+### Core evaluation and image handling
+
+- `src/main.py`
+  - Supports `use_cooccurrence` and `use_user_pref`.
+  - Adds CF signals inline to candidate options:
+    - `Co-bundled: <score>`
+    - `User overlap: <score>%`
+  - Loads precomputed CF cache when available.
+  - Multimodal image lookup was fixed:
+    - Previously only searched `<item_id>.jpg`.
+    - Now searches `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`, and falls back to `<item_id>.*`.
+  - Debug output now prints:
+    - image count
+    - image directory
+    - requested item ids
+    - missing ids
+    - failed image opens
+    - found image filenames
+
+- `download_images.py`
+  - Rewritten to support result-CSV-based downloading:
+    - `--csv <result.csv>` reads `input_indices` and `candidate_indices` directly from the result file.
+    - This avoids config/seed/HN mismatch.
+  - Still supports config-based downloading when `--csv` is omitted.
+  - Skips existing `<item_id>.*` regardless of extension.
+  - Uses `https:` for protocol-relative image URLs.
+  - Checks `Content-Type` contains `image`.
+  - Saves reports:
+    - `results/<dataset>/image_download_failed.csv`
+    - `results/<dataset>/image_download_no_url.csv`
+    - `results/<dataset>/image_required_missing_after_download.csv`
+
+### Rule and semantic metadata
 
 - `src/analyze_rule_based_baselines.py`
-  - Added to compute popularity, artist/album overlap, and co-occurrence baselines.
-  - Used to show that Spotify accuracy can be strongly affected by candidate-set shortcuts.
+  - Added to compute popularity, artist/album overlap, category/album/artist overlap, and co-occurrence baselines.
 
 - `src/create_tag_meta.py`
-  - Added/updated to extract reusable problem-level metadata from any result CSV.
-  - Adds `true_item_str` by using `true_option_char` to extract the matching option text from `target_str`.
-  - With `--no_rule`, saves clean problem metadata only.
-  - Without `--no_rule`, also adds rule-based tags/features.
+  - Creates `problem_meta_clean.csv`.
+  - Adds `true_item_str` by reading `true_option_char` from `target_str`.
+  - With `--no_rule`, outputs pure problem metadata.
+  - Without `--no_rule`, also creates deterministic rule tags/features.
 
 - `src/tag_fashion_problem_meta.py`
-  - Added for POG/POG-dense fashion semantic tagging.
-  - Reads `problem_meta_clean.csv`.
-  - Sends exactly one problem per API call.
-  - Saves after every tagged problem, so it can resume after interruption.
-  - Does not use `prediction`, `hit`, `raw_response`, `difficulty`, or `reason`.
+  - One API call per problem.
+  - Saves after every row and resumes by skipping already-tagged rows.
+  - Does not use result prediction/hit/raw_response.
+  - Uses `true_item_str` if available.
   - Current taxonomy:
     - `category_completion`
     - `season_match`
@@ -71,20 +117,60 @@ Current research goal:
     - `gender_or_age_filtering`
     - `fine_grained_hard_choice`
     - `ambiguous_or_counterintuitive_gt`
+  - Prompt was tightened because early runs overused `category_completion`.
 
-### Generated or updated metadata CSVs
+- `src/analyze_tagged_results.py`
+  - Merges multiple result CSVs with semantic and rule tags.
+  - Outputs accuracy by:
+    - primary semantic tag
+    - primary or secondary semantic tag
+    - distractor hardness
+    - GT plausibility
+    - rule tag
+    - semantic x rule cross-tab
+    - pairwise method comparison
 
-- `results/pog/problem_meta_clean.csv`
-- `results/pog/problem_tag_meta.csv`
-- `results/pog/problem_fashion_semantic_tags.csv`
-- `results/pog_dense/problem_meta_clean.csv`
-- `results/pog_dense/problem_tag_meta.csv`
-- `results/pog_dense/problem_fashion_semantic_tags.csv`
-- `results/pog_dense/problem_fashion_semantic_tags_v2.csv`
-- `results/spotify/problem_meta_clean.csv`
-- `results/spotify/problem_tag_meta.csv`
-- `results/spotify_sparse/problem_meta_clean.csv`
-- `results/spotify_sparse/problem_tag_meta.csv`
+### CF and joint success/failure analysis
+
+- `src/analyze_cf_signal.py`
+  - Reads result CSVs and `cf_scores_<dataset>.json`.
+  - Computes per-sample CF rank statistics for GT and LLM prediction:
+    - `min_rank`
+    - `avg_rank`
+    - `in_top_tie`
+    - `unique_top1`
+    - `all_zero`
+    - `all_tied`
+    - `top_tie_size`
+  - Outputs:
+    - `cf_detailed.csv`
+    - `cf_signal_quality.csv`
+    - `cf_method_reliance.csv`
+    - `cf_quadrants.csv`
+    - `cf_pairwise.csv`
+    - `summary.md`
+
+- `src/make_cf_overleaf_tables.py`
+  - Creates one Overleaf file for CF statistics across four datasets:
+    - `analysis/cf_signal_all_datasets_overleaf.tex`
+
+- `src/analyze_joint_success_failure.py`
+  - Compares multiple methods problem-by-problem.
+  - Labels each problem as:
+    - `all_hit`
+    - `all_fail`
+    - `mixed`
+  - Optional merge with semantic tags, rule tags, and CF details.
+  - Outputs examples and summary tables.
+
+- `src/deduplicate_dataset.py`
+  - Created `datasets/pog_dedup`.
+  - Deduplicates repeated user-item entries in `ui_full.txt`.
+  - Copies/dedupes dataset files and links/copies images.
+
+## 4. Generated Metadata And Analysis Outputs
+
+### Problem metadata
 
 Clean problem metadata columns:
 
@@ -92,109 +178,374 @@ Clean problem metadata columns:
 index,bundle_id,true_indice,true_option_idx,true_option_char,input_indices,candidate_indices,input_str,target_str,true_item_str
 ```
 
-## 4. Current Issues Or Notes
+Generated files include:
 
-- Early `tag_fashion_problem_meta.py` prompt overused `category_completion`.
-  - Reason: almost every fashion bundle can be described as completing a category.
-  - Fixed by tightening the prompt:
-    - Use `category_completion` as primary only when the functional category gap is the strongest signal.
-    - Prefer season, brand, gender, color/material/pattern, or style when those are more decisive.
-  - Test output with the updated prompt: `results/pog_dense/problem_fashion_semantic_tags_v2.csv`.
+- `results/pog/problem_meta_clean.csv`
+- `results/pog/problem_tag_meta.csv`
+- `results/pog_dense/problem_meta_clean.csv`
+- `results/pog_dense/problem_tag_meta.csv`
+- `results/spotify/problem_meta_clean.csv`
+- `results/spotify/problem_tag_meta.csv`
+- `results/spotify_sparse/problem_meta_clean.csv`
+- `results/spotify_sparse/problem_tag_meta.csv`
 
-- `true_item_str` was missing from the original clean metadata.
-  - Fixed in `create_tag_meta.py`.
-  - `tag_fashion_problem_meta.py` now uses `true_item_str` first, and falls back to parsing `target_str` if needed.
+Fashion semantic tag files:
 
-- POG text is not actually corrupted in the source data.
-  - `item_info.json` contains valid Chinese product titles.
-  - Some console output can look broken because of Windows/PowerShell encoding.
+- `results/pog/problem_fashion_semantic_tags.csv`
+- `results/pog_dense/problem_fashion_semantic_tags.csv`
+- `results/pog_dense/problem_fashion_semantic_tags_v2.csv`
 
-- Git working tree is dirty.
-  - There are user/generated result files and new scripts mixed together.
-  - Do not revert unrelated changes.
+### Main analysis folders
 
-## 5. Next Steps
+- `analysis/pog_dense_all_methods_tag_analysis/`
+  - Main POG-dense semantic/rule analysis across all methods.
+  - Important files:
+    - `summary.md`
+    - `overleaf_tables.tex`
+    - `overleaf_tables_safe.tex`
+    - `tagged_results_merged.csv`
+    - `primary_semantic.csv`
+    - `multi_semantic.csv`
+    - `hardness.csv`
+    - `plausibility.csv`
+    - `rule.csv`
+    - `semantic_rule_cross.csv`
+    - `pairwise.csv`
 
-1. Inspect the tag distribution of `results/pog_dense/problem_fashion_semantic_tags_v2.csv`.
-   - Confirm that `category_completion` is no longer over-dominant.
+- `analysis/pog_dense_cf_signal_analysis/`
+  - CF signal analysis for POG-dense.
 
-2. If the v2 prompt distribution looks good, rerun POG semantic tagging with the same prompt.
-   - Suggested output: `results/pog/problem_fashion_semantic_tags_v2.csv`.
+- `analysis/pog_cf_method_signal_analysis/`
+  - CF method signal analysis for POG.
 
-3. Merge semantic tags with result CSVs by `index`.
-   - Compute hit rate by `primary_tag`.
-   - Compute hit rate by `distractor_hardness`.
-   - Compare text-only vs multimodal if both results are available.
+- `analysis/spotify_cf_method_signal_analysis/`
+  - CF method signal analysis for Spotify.
 
-4. Merge rule-based tags with result CSVs by `index`.
-   - Use `problem_tag_meta.csv`.
-   - Check whether shortcut-heavy cases have higher accuracy.
-   - Check whether `weak_or_no_rule_signal` and `fine_grained_hard_choice` have lower accuracy.
+- `analysis/spotify_sparse_cf_method_signal_analysis/`
+  - CF method signal analysis for Spotify Sparse.
 
-5. Build the research interpretation:
-   - LLMs are strong at explicit semantic filtering: season, gender, brand, style, easy outlier removal.
-   - LLMs are weaker at fine-grained hard choices, ambiguous ground truth cases, and cases requiring collaborative preference signals.
+- `analysis/pog_dense_text_cf_joint_success_failure/`
+  - Joint success/failure analysis for POG-dense using `base`, `co_occur`, and `user_prefer`.
 
-## 6. Important Commands
+- `analysis/cf_signal_all_datasets_overleaf.tex`
+  - Overleaf tables for CF signal statistics across POG, POG-dense, Spotify, and Spotify-Sparse.
 
-### Create clean problem metadata from the selected 250-row result CSVs
+## 5. Important Result CSV Mapping
+
+### POG-dense method mapping
+
+- `Base`: `results/pog_dense/results_pog_dense_HN_C10_T5_20260430_172343.csv`
+- `Intent`: `results/pog_dense/results_pog_dense_20260420_203840.csv`
+- `Del`: `results/pog_dense/results_pog_dense_HN_C10_T5_20260426_194737.csv`
+- `Img`: `results/pog_dense/results_pog_dense_HN_C10_T5_20260502_154223.csv`
+- `Del+Img`: `results/pog_dense/results_pog_dense_C10_T5_20260504_151523.csv`
+- `Int+Img`: `results/pog_dense/results_pog_dense_C10_T5_20260505_112706.csv`
+- `CoCF`: `results/pog_dense/results_pog_dense_HN_C10_T5_20260506_133202.csv`
+- `UserCF`: `results/pog_dense/results_pog_dense_HN_C10_T5_20260506_163507.csv`
+
+Current overall POG-dense accuracies:
+
+- Base: 33.6%
+- Intent: 34.0%
+- Del: 37.6%
+- Img: 32.4%
+- Del+Img: 32.8%
+- Int+Img: 30.0%
+- CoCF: 55.6%
+- UserCF: 38.0%
+
+Note: image-related result CSVs were produced before the image-loading bug was fixed, so they should be treated cautiously until rerun.
+
+### Other dataset method mapping
+
+POG:
+
+- Base: `results/pog/results_pog_20260416_142034.csv`
+- CoCF: `results/pog/results_pog_HN_C10_T5_20260506_172746.csv`
+- UserCF: `results/pog_dedup/results_pog_dedup_C10_T5_20260507_194302.csv`
+
+Spotify:
+
+- HN Base: `results/spotify/results_spotify_20260416_172608.csv`
+- HN CoCF: `results/spotify/results_spotify_HN_C10_T5_20260506_195749.csv`
+- HN UserCF: `results/spotify/results_spotify_HN_C10_T5_20260507_181903.csv`
+
+Spotify Sparse:
+
+- HN Base: `results/spotify_sparse/results_spotify_sparse_HN_C10_T5_20260506_115545.csv`
+- HN CoCF: `results/spotify_sparse/results_spotify_sparse_HN_C10_T5_20260507_153017.csv`
+- HN UserCF: `results/spotify_sparse/results_spotify_sparse_HN_C10_T5_20260507_164806.csv`
+
+## 6. Key Findings So Far
+
+### Spotify shortcut analysis
+
+Early Spotify/Sparse result files showed high accuracy around 82%. Rule-based baselines suggested this was partly due to candidate shortcuts.
+
+Examples from rule baseline analysis:
+
+- Spotify random negatives:
+  - popularity baseline around 55.2%
+  - co-occurrence fallback around 66.4%
+- Spotify Sparse random negatives:
+  - popularity baseline around 43.6%
+  - co-occurrence fallback around 52.8%
+- Spotify hard negative version dropped to around 52%.
+
+Interpretation:
+
+- The high random-negative Spotify score likely reflected dataset/candidate shortcuts rather than pure LLM playlist reasoning.
+- Hard negatives reduce these shortcuts.
+
+### CF signal analysis
+
+Main conclusion:
+
+- The LLM can use collaborative signals, but tends to over-follow them.
+- Good signals help; bad signals hurt.
+- The LLM does not reliably judge signal trustworthiness.
+
+Important CF findings:
+
+- POG:
+  - CF signals are mostly all-zero/all-tied.
+  - Co-occurrence all-zero: 95.2%.
+  - User preference all-zero: 97.6%.
+  - CF is not very discriminative.
+
+- POG-dense:
+  - CoCF strongly improves Base: 33.6% to 55.6%.
+  - CoCF prediction follows co-occurrence top-tie around 99.6%.
+  - Base vs CoCF right-only cases often have GT as co-occurrence unique top-1.
+
+- Spotify:
+  - CoCF improves HN Base: 52.0% to 56.4%.
+  - UserCF hurts badly: 52.0% to 30.8%.
+  - UserCF prediction follows user-preference top-tie around 97.2%, showing over-reliance on a bad/misaligned signal.
+
+- Spotify Sparse:
+  - CoCF barely improves: 46.0% to 46.4%.
+  - Co-occurrence exists but is sparse/tie-heavy.
+  - UserCF hurts: 46.0% to 32.8%.
+
+### Semantic/rule tag findings for POG-dense
+
+From `analysis/pog_dense_all_methods_tag_analysis/overleaf_tables_safe.tex`:
+
+LLM tends to do well when the answer is explicit or textually obvious:
+
+- `brand_or_collection_match`: around 71.4% for most methods.
+- `gender_or_age_filtering`: Base 66.7%, CoCF/UserCF 100%.
+- `gt_plausibility=5`: Base 65.3%, CoCF 79.6%, UserCF 75.5%.
+
+LLM struggles when the problem requires subtle compatibility:
+
+- `style_theme_match`: Base 21.5%.
+- `distractor_hardness=3`: Base 14.3%.
+- `gt_plausibility=3`: Base 16.0%.
+- `hard_negative_like`: Base 0.0%.
+- `weak_or_no_rule_signal`: Base 28.4%, CoCF 14.8%.
+
+Rule analysis:
+
+- `cooccurrence_shortcut`: CoCF 98.2%.
+- `weak_or_no_rule_signal`: CoCF 14.8%.
+- `hard_negative_like`: CoCF 9.1%.
+
+Interpretation:
+
+- CoCF's gain is largely from strong co-occurrence shortcuts, not necessarily deeper reasoning.
+- Without rule/CF shortcut signals, LLM performance remains weak.
+- Delete/elimination prompting gives small but meaningful gains, especially in hard negative-like cases.
+
+### Joint success/failure findings
+
+For POG-dense text/CF methods (`base`, `co_occur`, `user_prefer`):
+
+- `all_hit`: 51/250 (20.4%)
+- `all_fail`: 85/250 (34.0%)
+- `mixed`: 114/250 (45.6%)
+
+High all-hit / stable success:
+
+- `brand_or_collection_match`
+- `gender_or_age_filtering`
+- high GT plausibility
+
+High all-fail / stable failure:
+
+- `style_theme_match`
+- `category_completion` with hard distractors
+- low GT plausibility
+- `weak_or_no_rule_signal`
+- `hard_negative_like`
+
+Interpretation:
+
+- Stable successes are often explicit lexical or strong-cue problems.
+- Stable failures are fine-grained compatibility or weak-signal problems.
+- Mixed cases are intervention-sensitive and are good targets for prompt/CF/image analysis.
+
+### POG deduplication
+
+POG `ui_full.txt` had massive duplicate user-item entries:
+
+- raw pairs: 237,519
+- unique pairs: 61,987
+- removed duplicates: 175,532
+- rows with duplicates: 14,744
+
+Created `datasets/pog_dedup`.
+
+For `pog_dedup`:
+
+- Run `src/precompute_cf_scores.py` after setting `dataset: pog_dedup`.
+- Then run `main.py` with `use_user_pref: true`.
+
+## 7. Current Issues Or Cautions
+
+- Existing image/multimodal result CSVs should be treated cautiously.
+  - Earlier `main.py` only loaded `.jpg`, while most downloaded images were `.png`.
+  - This was fixed, but old image-result files should be rerun if used in the paper/PPT.
+
+- `download_images.py` should be run with `--csv` when matching images to an existing result file.
+  - This avoids mismatch from changed `config.yaml`, seed, HN, or dataset.
+
+- POG/POG-dense HN naming can be confusing.
+  - HN matters mainly for Spotify experiments.
+  - POG/POG-dense result names may contain `HN`, but if no hard-negative JSON exists, `main.py` falls back to `dataset.get_eval_samples()`.
+
+- Running multiple experiments simultaneously is OK if:
+  - output/partial files do not collide,
+  - CF cache is not being written at the same time,
+  - already-running processes are restarted after code changes.
+
+- Windows console encoding can make some Korean comments or Chinese text look broken.
+  - Source item text itself is generally fine.
+
+- Git worktree is dirty with user/generated files. Do not revert unrelated changes.
+
+## 8. Important Commands
+
+### Run main evaluation
 
 ```powershell
-python src/create_tag_meta.py --csv results/pog/results_pog_HN_C10_T5_20260503_002458.csv --output results/pog/problem_meta_clean.csv --no_rule
-python src/create_tag_meta.py --csv results/pog_dense/results_pog_dense_C10_T5_20260505_112706.csv --output results/pog_dense/problem_meta_clean.csv --no_rule
-python src/create_tag_meta.py --csv results/spotify/results_spotify_C10_T5_20260504_133400.csv --output results/spotify/problem_meta_clean.csv --no_rule
-python src/create_tag_meta.py --csv results/spotify_sparse/results_spotify_sparse_20260417_210146.csv --output results/spotify_sparse/problem_meta_clean.csv --no_rule
+python src\main.py
 ```
 
-### Create rule-based tag metadata
+Resume:
 
 ```powershell
-python src/create_tag_meta.py --csv results/pog/results_pog_HN_C10_T5_20260503_002458.csv --output results/pog/problem_tag_meta.csv
-python src/create_tag_meta.py --csv results/pog_dense/results_pog_dense_C10_T5_20260505_112706.csv --output results/pog_dense/problem_tag_meta.csv
-python src/create_tag_meta.py --csv results/spotify/results_spotify_C10_T5_20260504_133400.csv --output results/spotify/problem_tag_meta.csv
-python src/create_tag_meta.py --csv results/spotify_sparse/results_spotify_sparse_20260417_210146.csv --output results/spotify_sparse/problem_tag_meta.csv
+python src\main.py --resume results\<dataset>\<partial_file>.csv
 ```
 
-### Run fashion semantic tagging for POG/POG-dense
+### Download images
 
-Small test:
+Best for existing result CSV:
 
 ```powershell
-python src/tag_fashion_problem_meta.py --input results/pog_dense/problem_meta_clean.csv --dataset pog_dense --limit 5
+python download_images.py --csv results\pog_dense\results_pog_dense_HN_C10_T5_20260430_172343.csv
 ```
 
-Full run:
+Config-based:
 
 ```powershell
-python src/tag_fashion_problem_meta.py --input results/pog_dense/problem_meta_clean.csv --dataset pog_dense
-python src/tag_fashion_problem_meta.py --input results/pog/problem_meta_clean.csv --dataset pog
+python download_images.py
 ```
 
-Run updated prompt into a separate output file:
+### Precompute CF scores
+
+Edit `config.yaml` dataset first, then:
 
 ```powershell
-python src/tag_fashion_problem_meta.py --input results/pog_dense/problem_meta_clean.csv --dataset pog_dense --limit 20 --output results/pog_dense/problem_fashion_semantic_tags_v2.csv
+python src\precompute_cf_scores.py
 ```
 
-Resume after interruption:
+### Analyze CF signal
+
+POG-dense:
 
 ```powershell
-python src/tag_fashion_problem_meta.py --input results/pog_dense/problem_meta_clean.csv --dataset pog_dense --output results/pog_dense/problem_fashion_semantic_tags_v2.csv
+python src\analyze_cf_signal.py --results results\pog_dense\results_pog_dense_HN_C10_T5_20260430_172343.csv results\pog_dense\results_pog_dense_HN_C10_T5_20260506_133202.csv results\pog_dense\results_pog_dense_HN_C10_T5_20260506_163507.csv --names base co_occur user_prefer --dataset pog_dense --output_dir analysis\pog_dense_cf_signal_analysis
 ```
 
-### Check rule-based baseline accuracy
+All-dataset Overleaf CF tables:
 
 ```powershell
-python src/analyze_rule_based_baselines.py --csv results/spotify/results_spotify_20260411_191411.csv
-python src/analyze_rule_based_baselines.py --csv results/spotify_sparse/results_spotify_sparse_20260411_195706.csv
-python src/analyze_rule_based_baselines.py --csv results/spotify/results_spotify_20260416_172608.csv
+python src\make_cf_overleaf_tables.py --output analysis\cf_signal_all_datasets_overleaf.tex
 ```
 
-### Selected latest 250-row result CSVs
+### Analyze POG-dense tags across all methods
+
+The output already exists at `analysis/pog_dense_all_methods_tag_analysis/`.
+
+It was produced with `src/analyze_tagged_results.py` using:
+
+- all POG-dense method CSVs
+- `results/pog_dense/problem_fashion_semantic_tags_v2.csv`
+- `results/pog_dense/problem_tag_meta.csv`
+
+Overleaf file to use:
 
 ```text
-pog:            results/pog/results_pog_HN_C10_T5_20260503_002458.csv
-pog_dense:      results/pog_dense/results_pog_dense_C10_T5_20260505_112706.csv
-spotify:        results/spotify/results_spotify_C10_T5_20260504_133400.csv
-spotify_sparse: results/spotify_sparse/results_spotify_sparse_20260417_210146.csv
+analysis/pog_dense_all_methods_tag_analysis/overleaf_tables_safe.tex
 ```
+
+### Joint success/failure analysis
+
+```powershell
+python src\analyze_joint_success_failure.py --results results\pog_dense\results_pog_dense_HN_C10_T5_20260430_172343.csv results\pog_dense\results_pog_dense_HN_C10_T5_20260506_133202.csv results\pog_dense\results_pog_dense_HN_C10_T5_20260506_163507.csv --names base co_occur user_prefer --semantic results\pog_dense\problem_fashion_semantic_tags_v2.csv --rule results\pog_dense\problem_tag_meta.csv --output_dir analysis\pog_dense_text_cf_joint_success_failure
+```
+
+### Create clean problem metadata
+
+```powershell
+python src\create_tag_meta.py --csv <result_csv> --output results\<dataset>\problem_meta_clean.csv --no_rule
+```
+
+### Create rule metadata
+
+```powershell
+python src\create_tag_meta.py --csv <result_csv> --output results\<dataset>\problem_tag_meta.csv
+```
+
+### Fashion semantic tagging
+
+```powershell
+python src\tag_fashion_problem_meta.py --input results\pog_dense\problem_meta_clean.csv --dataset pog_dense --output results\pog_dense\problem_fashion_semantic_tags_v2.csv
+```
+
+Resume uses the same command; completed rows are skipped.
+
+### Rule-based baselines
+
+```powershell
+python src\analyze_rule_based_baselines.py --csv results\spotify\results_spotify_20260411_191411.csv
+python src\analyze_rule_based_baselines.py --csv results\spotify_sparse\results_spotify_sparse_20260411_195706.csv
+python src\analyze_rule_based_baselines.py --csv results\spotify\results_spotify_20260416_172608.csv
+```
+
+## 9. Suggested Next Work
+
+1. Rerun multimodal POG/POG-dense after image loading fix.
+   - First run `download_images.py --csv <target result csv>` if using existing sample ids.
+   - Confirm first debug prints `[Image Count]` equal to input items plus candidates.
+
+2. Decide whether PPT main body separates:
+   - method analysis: Base, Image, CoCF, UserCF
+   - prompt engineering: Intent, Delete, Intent+Image, Delete+Image
+
+3. Use semantic tags + difficulty for the main "what LLM does well/poorly" story.
+   - Show accuracy by semantic tag.
+   - Show accuracy by hardness and GT plausibility.
+   - Show rule shortcut table to explain CoCF.
+   - Use joint all-hit/all-fail/mixed to identify stable strengths and failures.
+
+4. Keep CF signal analysis as a separate section:
+   - It explains whether external collaborative numbers help.
+   - Main conclusion: LLM over-follows CF scores and needs reliability-aware fusion.
+
+5. Add case studies:
+   - all-hit examples: clear brand/gender/plausibility.
+   - all-fail examples: style/theme, low plausibility, weak rule signal.
+   - CoCF-only examples: GT is co-occurrence unique top-1.
