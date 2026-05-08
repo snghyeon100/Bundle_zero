@@ -1,0 +1,21 @@
+{
+  "dataset": "pog",
+  "feature": "item_cf",
+  "feature_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\item_cf_feature.pt",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\pog\\results_pog_20260416_142034.csv",
+  "shape": [
+    48676,
+    64
+  ],
+  "stride": [
+    64,
+    1
+  ],
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "zero_norm_rows": 0,
+  "norm_min": 0.13649658858776093,
+  "norm_mean": 0.8522531390190125,
+  "norm_max": 4.419215679168701
+}

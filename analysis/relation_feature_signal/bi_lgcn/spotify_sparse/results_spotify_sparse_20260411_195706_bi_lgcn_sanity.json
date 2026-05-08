@@ -1,0 +1,21 @@
+{
+  "dataset": "spotify_sparse",
+  "feature": "bi_lgcn",
+  "feature_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\spotify_sparse\\spotify_sparse_LightGCN_bi_feature.pt",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\spotify_sparse\\results_spotify_sparse_20260411_195706.csv",
+  "shape": [
+    213325,
+    64
+  ],
+  "stride": [
+    64,
+    1
+  ],
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "zero_norm_rows": 0,
+  "norm_min": 6.623149294629482e-13,
+  "norm_mean": 0.20496512949466705,
+  "norm_max": 2.485894203186035
+}

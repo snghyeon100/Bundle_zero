@@ -1,0 +1,28 @@
+{
+  "shape": [
+    254155,
+    512
+  ],
+  "stride": [
+    512,
+    1
+  ],
+  "finite_ratio": 1.0,
+  "zero_norm_rows": 0,
+  "zero_norm_first_ids": [],
+  "norm_quantiles_0_1_5_50_95_99_100": [
+    0.9999991655349731,
+    0.9999995827674866,
+    0.9999997019767761,
+    1.0,
+    1.000000238418579,
+    1.0000003576278687,
+    1.0000007152557373
+  ],
+  "adjacent_exact_duplicate_pairs": 0,
+  "adjacent_exact_duplicate_ratio": 0.0,
+  "same_storage_as_content_feature": false,
+  "dataset": "spotify",
+  "count_num_items": 254155,
+  "results_path": "results\\spotify\\results_spotify_HN_C10_T5_20260507_181903.csv"
+}

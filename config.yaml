@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: pog_dense                  # pog | pog_dense | spotify | spotify_sparse
+dataset: spotify_sparse                  # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────
@@ -14,9 +14,29 @@ use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.j
 
 model: gemini-3.1-flash-lite-preview
 temperature: 0.0
-use_multimodal: true  # If true, loads images and sends them to Gemini along with text
+use_multimodal: false  # If true, loads images and sends them to Gemini along with text
 use_cooccurrence: false  # If true, adds co-occurrence stats (how often candidate appeared in same bundle as input items) to prompt
-use_user_pref: false     # If true, adds user preference overlap (% of users who liked input items also liked candidate) to prompt
+use_user_pref: false   
+  # If true, adds user preference overlap (% of users who liked input items also liked candidate) to prompt
+use_icl_retrieval: false # If true, prepends one retrieved solved example from bi_train.txt
+icl_retrieval_method: input_embedding
+icl_embedding_model: text-embedding-3-large
+icl_embedding_dtype: float16
+icl_embedding_cache_root: ./analysis/openai_embedding_cache/text-embedding-3-large/all_items
+icl_example_num_cans: 10
+icl_example_num_token: 5
+icl_example_seed: 45
+icl_max_train_examples: -1
+icl_exclude_query_candidate_items: true
+use_user_context: false # If true, prepends a selected user's related item history
+user_context_selection: max_input_overlap_random_user_text_topk_items
+user_context_embedding_model: text-embedding-3-large
+user_context_embedding_dtype: float16
+user_context_embedding_cache_root: ./analysis/openai_embedding_cache/text-embedding-3-large/all_items
+user_context_top_k: 5
+user_context_seed: 45
+user_context_min_input_overlap: 1
+user_context_exclude_candidate_items: true
 
 # ─── Execution Mode ───────────────────────────────────────────────────────────
 mode: sync        # sync | batch

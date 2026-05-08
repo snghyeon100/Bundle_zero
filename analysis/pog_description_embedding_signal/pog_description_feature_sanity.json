@@ -1,0 +1,40 @@
+{
+  "shape": [
+    48676,
+    768
+  ],
+  "stride": [
+    768,
+    1
+  ],
+  "finite_ratio": 1.0,
+  "zero_norm_rows": 11,
+  "zero_norm_first_ids": [
+    601,
+    604,
+    614,
+    616,
+    768,
+    769,
+    770,
+    774,
+    778,
+    779,
+    782
+  ],
+  "norm_quantiles_0_1_5_50_95_99_100": [
+    0.0,
+    1.9934484958648682,
+    2.0571428537368774,
+    2.195628046989441,
+    2.3197338581085205,
+    2.375892996788025,
+    2.5743818283081055
+  ],
+  "adjacent_exact_duplicate_pairs": 3,
+  "adjacent_exact_duplicate_ratio": 6.163328197226502e-05,
+  "same_storage_as_content_feature": false,
+  "dataset": "pog",
+  "count_num_items": 48676,
+  "results_path": "results\\pog\\results_pog_HN_C10_T5_20260506_185939.csv"
+}

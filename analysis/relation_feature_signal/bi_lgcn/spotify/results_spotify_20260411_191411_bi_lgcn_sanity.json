@@ -1,0 +1,21 @@
+{
+  "dataset": "spotify",
+  "feature": "bi_lgcn",
+  "feature_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\spotify\\spotify_LightGCN_bi_feature.pt",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\spotify\\results_spotify_20260411_191411.csv",
+  "shape": [
+    254155,
+    64
+  ],
+  "stride": [
+    64,
+    1
+  ],
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "zero_norm_rows": 6,
+  "norm_min": 0.0,
+  "norm_mean": 0.1221885085105896,
+  "norm_max": 3.296947717666626
+}

@@ -36,3 +36,5 @@ datasets/**
 # OS generated files
 .DS_Store
 Thumbs.db
+
+analysis/openai_embedding_cache

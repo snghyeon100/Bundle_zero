@@ -1,0 +1,21 @@
+{
+  "dataset": "pog_dense",
+  "feature": "item_cf",
+  "feature_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\item_cf_feature.pt",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\pog_dense\\results_pog_dense_HN_C10_T5_20260430_172343.csv",
+  "shape": [
+    31217,
+    64
+  ],
+  "stride": [
+    64,
+    1
+  ],
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "zero_norm_rows": 0,
+  "norm_min": 0.00039669981924816966,
+  "norm_mean": 0.38688772916793823,
+  "norm_max": 0.6771736145019531
+}

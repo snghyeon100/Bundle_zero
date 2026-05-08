@@ -25,7 +25,8 @@ def parse_model_response(raw_text):
     return match.group(1) if match else raw_text.strip()[0].upper()
 
 def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
-                    use_cooccurrence=False, use_user_pref=False):
+                    use_cooccurrence=False, use_user_pref=False, icl_example=None,
+                    user_context_block=""):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -72,11 +73,24 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         )
         cf_legend = "\n".join(legend_lines) + "\n"
 
+    icl_block = ""
+    if icl_example:
+        icl_block = (
+            "Here is one solved example from historical training bundles:\n"
+            f"Example question: Given the partial {b_name}: {icl_example['input_str']}, "
+            f"which candidate {i_name} should be included into this {b_name}?\n"
+            f"Example options: {icl_example['target_str']}\n"
+            f"Correct answer: {icl_example['true_option_char']}. {icl_example['true_item_text']}\n\n"
+            "Now solve the target question.\n"
+        )
+
     prompt = (
         f"You are a helpful and honest assistant. The following are multiple choice questions about {t_name}. "
         f"You should directly answer the question by choosing the letter of the correct option. "
         f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
         f"{cf_legend}"
+        f"{icl_block}"
+        f"{user_context_block}"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
         #f"First, analyze the overall combination and coherence of the items in the {b_name}. Then, choose the candidate {i_name} that best completes the set."
@@ -112,16 +126,22 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df['cfg_seed'] = conf.get("seed", "")
     df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
     df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
+    df['cfg_use_icl_retrieval'] = conf.get("use_icl_retrieval", False)
+    df['cfg_icl_retrieval_method'] = conf.get("icl_retrieval_method", "")
+    df['cfg_use_user_context'] = conf.get("use_user_context", False)
+    df['cfg_user_context_selection'] = conf.get("user_context_selection", "")
     
     actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
     os.makedirs(actual_output_dir, exist_ok=True)
     hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
+    icl_str = "ICL_" if conf.get("use_icl_retrieval", False) else ""
+    user_str = "USER_" if conf.get("use_user_context", False) else ""
     partial_str = "" if is_final else "_partial"
-    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
+    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
     df.to_csv(save_path, index=False, encoding='utf-8-sig')
     return save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_mask.sum()
 
-async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None, cf_cache=None):
+async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None, cf_cache=None, icl_retriever=None, user_context_retriever=None):
     results = initial_results if initial_results is not None else []
     
     use_cf = conf.get("use_cooccurrence", False) or conf.get("use_user_pref", False)
@@ -172,12 +192,56 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
                     opt = f"{opt} [{' | '.join(tags)}]"
                 enriched_options.append(opt)
             enriched_target_str = "; ".join(enriched_options)
+
+        icl_example = None
+        if icl_retriever is not None:
+            icl_example = icl_retriever.retrieve(sample)
+            sample.update(icl_retriever.metadata_for_csv(icl_example))
+
+        if idx == 0 and icl_example is not None:
+            print("\n[DEBUG] ICL Retrieval Check (First Sample):")
+            print(f"  [Enabled] {conf.get('use_icl_retrieval', False)}")
+            print(f"  [Method] {conf.get('icl_retrieval_method', '')}")
+            print(f"  [Example Bundle ID] {icl_example['bundle_id']}")
+            print(f"  [Retrieval Score] {icl_example['retrieval_score']:.6f}")
+            print(f"  [Rank After Filter] {icl_example['retrieval_rank_after_filter']}")
+            print(f"  [Input Overlap] {icl_example['query_input_overlap_count']}")
+            print(f"  [Candidate Overlap] {icl_example['query_candidate_overlap_count']}")
+            print(f"  [Example GT In Query Candidates] {icl_example['example_gt_in_query_candidates']}")
+            print(f"  [Example Input IDs] {icl_example['input_indices']}")
+            print(f"  [Example Candidate IDs] {icl_example['candidate_indices']}")
+            print(f"  [Example Correct] {icl_example['true_option_char']}. {icl_example['true_item_text'][:120]}")
+            print(f"  [Example Input Text] {icl_example['input_str'][:300]}...")
+            print(f"  [Example Options Text] {icl_example['target_str'][:300]}...")
+            print("-" * 50 + "\n")
+
+        user_context = None
+        user_context_block = ""
+        if user_context_retriever is not None:
+            user_context = user_context_retriever.retrieve(sample)
+            sample.update(user_context_retriever.metadata_for_csv(user_context))
+            user_context_block = user_context_retriever.format_context(user_context)
+
+        if idx == 0 and user_context is not None:
+            print("\n[DEBUG] User Context Check (First Sample):")
+            print(f"  [Enabled] {conf.get('use_user_context', False)}")
+            print(f"  [Selection] {conf.get('user_context_selection', '')}")
+            print(f"  [User ID] {user_context['user_id']}")
+            print(f"  [Input Overlap] {user_context['input_overlap_count']}")
+            print(f"  [Tie Pool Size] {user_context['tie_pool_size']}")
+            print(f"  [User History Size] {user_context['user_history_size']}")
+            print(f"  [Selected Item IDs] {user_context['selected_item_indices']}")
+            print(f"  [Selected Scores] {[round(x, 6) for x in user_context['selected_item_scores']]}")
+            print(f"  [Context Text] {user_context_block[:500]}...")
+            print("-" * 50 + "\n")
         
         text_prompt = generate_prompt(
             conf["dataset"], sample["input_str"], enriched_target_str,
             use_multimodal=conf.get("use_multimodal", False),
             use_cooccurrence=conf.get("use_cooccurrence", False),
-            use_user_pref=conf.get("use_user_pref", False)
+            use_user_pref=conf.get("use_user_pref", False),
+            icl_example=icl_example,
+            user_context_block=user_context_block
         )
         
         contents = text_prompt
@@ -505,6 +569,22 @@ if __name__ == "__main__":
         samples = samples[args.start_idx:]
         
     print(f"Total test samples prepared: {len(samples)} (Start Idx: {args.start_idx})")
+
+    icl_retriever = None
+    if conf.get("use_icl_retrieval", False):
+        if conf.get("mode") == "batch":
+            raise NotImplementedError("ICL retrieval is currently wired for sync mode only.")
+        from retrieve_icl_examples import InputEmbeddingICLRetriever
+        print(">>> Building ICL retriever from training bundles...")
+        icl_retriever = InputEmbeddingICLRetriever(conf, dataset)
+
+    user_context_retriever = None
+    if conf.get("use_user_context", False):
+        if conf.get("mode") == "batch":
+            raise NotImplementedError("User context is currently wired for sync mode only.")
+        from retrieve_user_context import UserContextRetriever
+        print(">>> Building user context retriever from user-item interactions...")
+        user_context_retriever = UserContextRetriever(conf, dataset)
     
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
@@ -531,7 +611,7 @@ if __name__ == "__main__":
     if conf["mode"] == "sync":
         print(">>> Running in Sync mode...")
         import asyncio
-        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset, cf_cache=cf_cache))
+        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset, cf_cache=cf_cache, icl_retriever=icl_retriever, user_context_retriever=user_context_retriever))
         
         # Final save
         save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_sum = save_intermediate_results(results, conf, timestamp, is_final=True)

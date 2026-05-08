@@ -1,0 +1,15 @@
+{
+  "dataset": "pog",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\pog\\results_pog_20260416_142034.csv",
+  "cache_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\openai_embedding_cache\\text-embedding-3-large\\pog\\embeddings_text-embedding-3-large_float16.npz",
+  "metadata_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\openai_embedding_cache\\text-embedding-3-large\\pog\\metadata.json",
+  "target_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\openai_embedding_cache\\text-embedding-3-large\\pog\\target_items.csv",
+  "cache_num_items": 2759,
+  "cache_embedding_dim": 3072,
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "embedding_norm_min": 0.9993939995765686,
+  "embedding_norm_mean": 1.0000011920928955,
+  "embedding_norm_max": 1.000607967376709
+}

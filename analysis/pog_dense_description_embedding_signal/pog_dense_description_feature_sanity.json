@@ -1,0 +1,28 @@
+{
+  "shape": [
+    31217,
+    768
+  ],
+  "stride": [
+    768,
+    1
+  ],
+  "finite_ratio": 1.0,
+  "zero_norm_rows": 0,
+  "zero_norm_first_ids": [],
+  "norm_quantiles_0_1_5_50_95_99_100": [
+    1.985898494720459,
+    1.9920581579208374,
+    2.048177719116211,
+    2.1948258876800537,
+    2.320455312728882,
+    2.3726651668548584,
+    2.393714427947998
+  ],
+  "adjacent_exact_duplicate_pairs": 31095,
+  "adjacent_exact_duplicate_ratio": 0.996123782675551,
+  "same_storage_as_content_feature": false,
+  "dataset": "pog_dense",
+  "count_num_items": 31217,
+  "results_path": "results\\pog_dense\\results_pog_dense_20260410_153600.csv"
+}

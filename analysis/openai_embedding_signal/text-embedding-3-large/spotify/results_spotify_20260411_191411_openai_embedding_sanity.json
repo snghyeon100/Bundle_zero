@@ -1,0 +1,15 @@
+{
+  "dataset": "spotify",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\spotify\\results_spotify_20260411_191411.csv",
+  "cache_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\openai_embedding_cache\\text-embedding-3-large\\spotify\\embeddings_text-embedding-3-large_float16.npz",
+  "metadata_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\openai_embedding_cache\\text-embedding-3-large\\spotify\\metadata.json",
+  "target_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\openai_embedding_cache\\text-embedding-3-large\\spotify\\target_items.csv",
+  "cache_num_items": 3664,
+  "cache_embedding_dim": 3072,
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "embedding_norm_min": 0.999343991279602,
+  "embedding_norm_mean": 1.0000180006027222,
+  "embedding_norm_max": 1.0007113218307495
+}
