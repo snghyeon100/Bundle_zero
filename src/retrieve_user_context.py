@@ -15,7 +15,7 @@ def read_user_item_file(path):
             if len(vals) < 2:
                 continue
             user_id = vals[0]
-            items = vals[1:]
+            items = list(dict.fromkeys(vals[1:]))
             users[user_id] = items
             for item_id in items:
                 item_to_users[item_id].append(user_id)
@@ -99,17 +99,30 @@ class UserContextRetriever:
             return vec
         return vec / norm
 
-    def _select_user(self, input_ids, bundle_id):
+    def _has_available_history(self, user_id, input_ids, candidate_ids):
+        excluded = set(int(x) for x in input_ids)
+        if self.exclude_candidates:
+            excluded.update(int(x) for x in candidate_ids)
+        return any(int(item_id) not in excluded for item_id in self.users[user_id])
+
+    def _select_user(self, input_ids, candidate_ids, bundle_id):
         counts = defaultdict(int)
         for item_id in input_ids:
             for user_id in self.item_to_users.get(int(item_id), []):
                 counts[user_id] += 1
         if not counts:
             return None, 0, 0
-        max_overlap = max(counts.values())
+        eligible_counts = {
+            user_id: overlap
+            for user_id, overlap in counts.items()
+            if self._has_available_history(user_id, input_ids, candidate_ids)
+        }
+        if not eligible_counts:
+            return None, max(counts.values()), 0
+        max_overlap = max(eligible_counts.values())
         if max_overlap < self.min_overlap:
             return None, max_overlap, 0
-        candidate_users = [user_id for user_id, overlap in counts.items() if overlap == max_overlap]
+        candidate_users = [user_id for user_id, overlap in eligible_counts.items() if overlap == max_overlap]
         rng = np.random.default_rng(int(bundle_id) + self.seed)
         selected = int(candidate_users[int(rng.integers(0, len(candidate_users)))])
         return selected, int(max_overlap), len(candidate_users)
@@ -133,7 +146,7 @@ class UserContextRetriever:
     def retrieve(self, sample):
         input_ids = [int(x) for x in sample.get("input_indices", [])]
         candidate_ids = [int(x) for x in sample.get("candidate_indices", [])]
-        user_id, input_overlap, tie_pool_size = self._select_user(input_ids, sample.get("bundle_id", 0))
+        user_id, input_overlap, tie_pool_size = self._select_user(input_ids, candidate_ids, sample.get("bundle_id", 0))
         if user_id is None:
             return None
 

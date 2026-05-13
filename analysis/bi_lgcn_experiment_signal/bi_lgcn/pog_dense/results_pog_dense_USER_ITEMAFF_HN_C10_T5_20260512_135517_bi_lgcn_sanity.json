@@ -1,0 +1,21 @@
+{
+  "dataset": "pog_dense",
+  "feature": "bi_lgcn",
+  "feature_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\pog_dense_LightGCN_bi_feature.pt",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\pog_dense\\results_pog_dense_USER_ITEMAFF_HN_C10_T5_20260512_135517.csv",
+  "shape": [
+    31217,
+    64
+  ],
+  "stride": [
+    64,
+    1
+  ],
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "zero_norm_rows": 0,
+  "norm_min": 0.0003309275780338794,
+  "norm_mean": 0.3759170174598694,
+  "norm_max": 18.02029037475586
+}

@@ -2,8 +2,10 @@ import argparse
 import ast
 import csv
 import hashlib
+import http.client
 import json
 import os
+import socket
 import time
 import urllib.error
 import urllib.request
@@ -178,7 +180,15 @@ def call_embeddings_with_retry(api_key, model, texts, dimensions, max_retries):
             retryable = e.code in {408, 409, 429, 500, 502, 503, 504}
             if not retryable or attempt >= max_retries:
                 raise RuntimeError(f"OpenAI embeddings request failed: HTTP {e.code}: {detail}") from e
-        except (urllib.error.URLError, TimeoutError) as e:
+        except (
+            urllib.error.URLError,
+            TimeoutError,
+            ConnectionError,
+            ConnectionResetError,
+            http.client.IncompleteRead,
+            http.client.RemoteDisconnected,
+            socket.timeout,
+        ) as e:
             if attempt >= max_retries:
                 raise RuntimeError(f"OpenAI embeddings request failed after retries: {e}") from e
 

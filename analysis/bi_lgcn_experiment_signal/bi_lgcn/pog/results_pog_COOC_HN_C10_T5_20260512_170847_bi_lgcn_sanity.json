@@ -1,0 +1,21 @@
+{
+  "dataset": "pog",
+  "feature": "bi_lgcn",
+  "feature_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\pog_LightGCN_bi_feature.pt",
+  "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\pog\\results_pog_COOC_HN_C10_T5_20260512_170847.csv",
+  "shape": [
+    48676,
+    64
+  ],
+  "stride": [
+    64,
+    1
+  ],
+  "result_rows": 250,
+  "usable_rows": 250,
+  "skipped_rows": 0,
+  "zero_norm_rows": 0,
+  "norm_min": 0.00045324835809879005,
+  "norm_mean": 0.5836547613143921,
+  "norm_max": 4.380255222320557
+}

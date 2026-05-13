@@ -31,9 +31,8 @@ Current narrative:
 ## 2. Main Folder Structure
 
 - `src/`
-  - `main.py`: Runs Gemini evaluation. Now supports multimodal images and optional CF prompt signals.
-  - `dataset.py`: Loads datasets, builds eval samples, computes co-occurrence/user-preference scores.
-  - `precompute_cf_scores.py`: Precomputes `cf_scores_<dataset>.json`.
+  - `main.py`: Runs Gemini evaluation. Supports multimodal images, ICL retrieval, and user context retrieval.
+  - `dataset.py`: Loads datasets and builds eval samples.
   - `generate_hard_negatives.py`: Generates hard negative samples.
   - `analyze_rule_based_baselines.py`: Rule-based baselines for shortcut analysis.
   - `create_tag_meta.py`: Builds reusable problem metadata and optional rule tags.
@@ -47,7 +46,6 @@ Current narrative:
 - `datasets/`
   - `pog/`, `pog_dense/`, `pog_dedup/`, `spotify/`, `spotify_sparse/`
   - Important files include `item_info.json`, `bi_train.txt`, `bi_test_input.txt`, `bi_test_gt.txt`, `ui_full.txt`, and `images/`.
-  - CF caches are stored as `datasets/<dataset>/cf_scores_<dataset>.json`.
 
 - `results/`
   - Dataset-specific result CSVs.
@@ -63,11 +61,6 @@ Current narrative:
 ### Core evaluation and image handling
 
 - `src/main.py`
-  - Supports `use_cooccurrence` and `use_user_pref`.
-  - Adds CF signals inline to candidate options:
-    - `Co-bundled: <score>`
-    - `User overlap: <score>%`
-  - Loads precomputed CF cache when available.
   - Multimodal image lookup was fixed:
     - Previously only searched `<item_id>.jpg`.
     - Now searches `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`, and falls back to `<item_id>.*`.
@@ -397,11 +390,6 @@ POG `ui_full.txt` had massive duplicate user-item entries:
 
 Created `datasets/pog_dedup`.
 
-For `pog_dedup`:
-
-- Run `src/precompute_cf_scores.py` after setting `dataset: pog_dedup`.
-- Then run `main.py` with `use_user_pref: true`.
-
 ## 7. Current Issues Or Cautions
 
 - Existing image/multimodal result CSVs should be treated cautiously.
@@ -417,7 +405,6 @@ For `pog_dedup`:
 
 - Running multiple experiments simultaneously is OK if:
   - output/partial files do not collide,
-  - CF cache is not being written at the same time,
   - already-running processes are restarted after code changes.
 
 - Windows console encoding can make some Korean comments or Chinese text look broken.
@@ -451,14 +438,6 @@ Config-based:
 
 ```powershell
 python download_images.py
-```
-
-### Precompute CF scores
-
-Edit `config.yaml` dataset first, then:
-
-```powershell
-python src\precompute_cf_scores.py
 ```
 
 ### Analyze CF signal

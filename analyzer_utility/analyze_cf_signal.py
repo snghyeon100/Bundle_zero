@@ -444,7 +444,7 @@ def main():
     )
     if not os.path.exists(cf_cache_path):
         raise FileNotFoundError(
-            f"CF cache not found: {cf_cache_path}. Run python src/precompute_cf_scores.py first."
+            f"CF cache not found: {cf_cache_path}."
         )
 
     output_dir = args.output_dir or os.path.join("analysis", f"{dataset}_cf_signal_analysis")

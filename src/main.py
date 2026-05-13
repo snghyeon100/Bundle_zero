@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import yaml
 import json
 import time
@@ -24,9 +25,49 @@ def parse_model_response(raw_text):
     match = re.search(r'([A-Z])', clean_text.upper())
     return match.group(1) if match else raw_text.strip()[0].upper()
 
+def console_safe_text(text):
+    encoding = sys.stdout.encoding or "utf-8"
+    return str(text).encode(encoding, errors="backslashreplace").decode(encoding)
+
+def pluralize(count, singular, plural=None):
+    return singular if int(count) == 1 else (plural or f"{singular}s")
+
+def print_first_qa_debug(sample, conf, text_prompt=None):
+    print("\n[DEBUG] First QA Preview:")
+    print(f"  [Bundle ID] {sample.get('bundle_id')}")
+    print(f"  [True Option] {sample.get('true_option_char')} | True Item ID: {sample.get('true_indice')}")
+    print(f"  [Input Item IDs] {sample.get('input_indices')}")
+    print(f"  [Candidate Item IDs] {sample.get('candidate_indices')}")
+    print(f"  [Co-occurrence Enabled] {conf.get('use_cooccurrence', False)}")
+    print(f"  [Soft Co-occurrence Enabled] {conf.get('use_soft_cooccurrence', False)}")
+    if conf.get("use_soft_cooccurrence", False):
+        print(f"  [Soft Co-occurrence Source] {conf.get('soft_cooccurrence_source', '')}")
+    print(f"  [Item Affiliation Enabled] {conf.get('use_item_bundle_affiliation_desc', False)}")
+    if conf.get("use_item_bundle_affiliation_desc", False):
+        print(f"  [Item Affiliation k] {conf.get('item_bundle_affiliation_k', '')}")
+        print(f"  [Item Affiliation alpha] {conf.get('item_bundle_affiliation_alpha', '')}")
+        print(f"  [Exclude Query Items] {conf.get('item_bundle_affiliation_exclude_query_items', False)}")
+    print(f"  [User Co-purchase Enabled] {conf.get('use_item_user_copurchase_desc', False)}")
+    if conf.get("use_item_user_copurchase_desc", False):
+        print(f"  [User Co-purchase k] {conf.get('item_user_copurchase_k', '')}")
+        print(f"  [User Co-purchase alpha] {conf.get('item_user_copurchase_alpha', '')}")
+        print(f"  [Exclude Query Items] {conf.get('item_user_copurchase_exclude_query_items', False)}")
+    print(f"  [Bundle Graph Context Enabled] {conf.get('use_bundle_graph_context', False)}")
+    if conf.get("use_bundle_graph_context", False):
+        print(f"  [Bundle Graph Context k] {conf.get('bundle_graph_context_k', '')}")
+        print(f"  [Bundle Graph Context max items] {conf.get('bundle_graph_context_max_items', '')}")
+    print("\n[DEBUG] First Question:")
+    print(console_safe_text(sample.get("input_str", "")))
+    print("\n[DEBUG] First Options:")
+    print(console_safe_text(sample.get("target_str", "")))
+    if text_prompt is not None:
+        print("\n[DEBUG] First Prompt Sent To Model:")
+        print(console_safe_text(text_prompt))
+    print("-" * 50 + "\n")
+
 def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
-                    use_cooccurrence=False, use_user_pref=False, icl_example=None,
-                    user_context_block=""):
+                    use_cooccurrence=False, use_soft_cooccurrence=False, soft_cooccurrence_source="",
+                    icl_example=None, user_context_block="", bundle_graph_context_block=""):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -50,28 +91,10 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         )
     #extra_instruction = f"First infer the intent of the given {b_name}, and then choose the candidate {i_name} that fits that intent.\n"
 
-    # Build CF legend explanation if any CF signal is enabled
     cf_legend = ""
-    if use_cooccurrence or use_user_pref:
-        legend_lines = [
-            "Note: Each option is annotated with collaborative filtering signals derived from historical user behavior data:"
-        ]
-        if use_cooccurrence:
-            legend_lines.append(
-                f"  - Co-bundled: the number of times this candidate {i_name} appeared together "
-                f"with the input {i_name}s in the same {b_name} in past data. "
-                f"A higher count suggests a historically strong co-occurrence relationship."
-            )
-        if use_user_pref:
-            legend_lines.append(
-                f"  - User overlap: the percentage of users who interacted with the input {i_name}s "
-                f"and also interacted with this candidate {i_name}. "
-                f"A higher percentage suggests this candidate is preferred by users with similar taste."
-            )
-        legend_lines.append(
-            "Use these signals as supplementary evidence alongside the content of each option."
-        )
-        cf_legend = "\n".join(legend_lines) + "\n"
+    if use_cooccurrence or use_soft_cooccurrence:
+        history_name = "past playlists" if "spotify" in dataset_name else "past outfits"
+        cf_legend = f"Some options include a short history note from {history_name}.\n"
 
     icl_block = ""
     if icl_example:
@@ -91,6 +114,7 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"{cf_legend}"
         f"{icl_block}"
         f"{user_context_block}"
+        f"{bundle_graph_context_block}"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"Options: {target_str}\n"
         #f"First, analyze the overall combination and coherence of the items in the {b_name}. Then, choose the candidate {i_name} that best completes the set."
@@ -98,6 +122,72 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"Your answer should indicate your choice with a single letter (e.g., \u201cA,\u201d \u201cB,\u201d \u201cC,\u201d etc.).\nChoice: "
     )
     return prompt
+
+def add_cooccurrence_to_options(sample, dataset, conf):
+    if (
+        not conf.get("use_cooccurrence", False)
+        and not conf.get("use_soft_cooccurrence", False)
+    ) or dataset is None:
+        return sample["target_str"], {}
+
+    cooc_stats = None
+    if conf.get("use_cooccurrence", False):
+        cooc_stats = dataset.get_cooccurrence_stats(
+            sample.get("input_indices", []),
+            sample.get("candidate_indices", [])
+        )
+    soft_cooc_stats = None
+    if conf.get("use_soft_cooccurrence", False):
+        soft_cooc_stats = dataset.get_soft_cooccurrence_stats(
+            sample.get("input_indices", []),
+            sample.get("candidate_indices", [])
+        )
+
+    options = sample["target_str"].split("; ")
+    enriched_options = []
+    is_spotify = "spotify" in conf.get("dataset", "")
+    item_name = "song" if is_spotify else "item"
+    item_plural = "songs" if is_spotify else "items"
+    collection_name = "playlist" if is_spotify else "outfit"
+    collection_plural = "playlists" if is_spotify else "outfits"
+    for idx, option in enumerate(options):
+        tags = []
+        if cooc_stats is not None and idx < len(cooc_stats):
+            stat = cooc_stats[idx]
+            denom = stat["candidate_train_bundles"]
+            shared = stat["shared_train_bundles"]
+            tags.append(
+                f"Past {collection_name} matches: this {item_name} appeared in {denom} "
+                f"past {pluralize(denom, collection_name, collection_plural)}; "
+                f"the given {item_plural} appeared in {shared} of them"
+            )
+        if soft_cooc_stats is not None and idx < len(soft_cooc_stats):
+            stat = soft_cooc_stats[idx]
+            denom = stat["candidate_train_bundles"]
+            shared = stat["shared_train_bundles"]
+            source = stat["source"]
+            if source == "item_smoothing_text":
+                tags.append(
+                    f"Similar-{item_name} matches: this {item_name} appeared in {denom} "
+                    f"past {pluralize(denom, collection_name, collection_plural)}; "
+                    f"{item_plural} similar to the given {item_plural} appeared in {shared} of them"
+                )
+            else:
+                tags.append(
+                    f"Similar-{collection_name} matches: this {item_name} appeared in {denom} "
+                    f"past {pluralize(denom, collection_name, collection_plural)}; "
+                    f"{shared} of them were similar to {collection_plural} containing the given {item_plural}"
+                )
+        if tags:
+            option = f"{option} [{' | '.join(tags)}]"
+        enriched_options.append(option)
+
+    signal_stats = {}
+    if cooc_stats is not None:
+        signal_stats["cooccurrence_stats"] = cooc_stats
+    if soft_cooc_stats is not None:
+        signal_stats["soft_cooccurrence_stats"] = soft_cooc_stats
+    return "; ".join(enriched_options), signal_stats
 
 def find_item_image(img_dir, item_id):
     for ext in (".jpg", ".jpeg", ".png", ".webp", ".gif"):
@@ -126,73 +216,65 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df['cfg_seed'] = conf.get("seed", "")
     df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
     df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
+    df['cfg_use_cooccurrence'] = conf.get("use_cooccurrence", False)
+    df['cfg_use_soft_cooccurrence'] = conf.get("use_soft_cooccurrence", False)
+    df['cfg_soft_cooccurrence_source'] = conf.get("soft_cooccurrence_source", "")
     df['cfg_use_icl_retrieval'] = conf.get("use_icl_retrieval", False)
     df['cfg_icl_retrieval_method'] = conf.get("icl_retrieval_method", "")
     df['cfg_use_user_context'] = conf.get("use_user_context", False)
     df['cfg_user_context_selection'] = conf.get("user_context_selection", "")
+    df['cfg_use_item_bundle_affiliation_desc'] = conf.get("use_item_bundle_affiliation_desc", False)
+    df['cfg_item_bundle_affiliation_k'] = conf.get("item_bundle_affiliation_k", "")
+    df['cfg_item_bundle_affiliation_alpha'] = conf.get("item_bundle_affiliation_alpha", "")
+    df['cfg_item_bundle_affiliation_exclude_query_items'] = conf.get("item_bundle_affiliation_exclude_query_items", False)
+    df['cfg_use_item_user_copurchase_desc'] = conf.get("use_item_user_copurchase_desc", False)
+    df['cfg_item_user_copurchase_k'] = conf.get("item_user_copurchase_k", "")
+    df['cfg_item_user_copurchase_alpha'] = conf.get("item_user_copurchase_alpha", "")
+    df['cfg_item_user_copurchase_exclude_query_items'] = conf.get("item_user_copurchase_exclude_query_items", False)
+    df['cfg_use_bundle_graph_context'] = conf.get("use_bundle_graph_context", False)
+    df['cfg_bundle_graph_context_k'] = conf.get("bundle_graph_context_k", "")
+    df['cfg_bundle_graph_context_max_items'] = conf.get("bundle_graph_context_max_items", "")
     
     actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
     os.makedirs(actual_output_dir, exist_ok=True)
+    cooc_str = "COOC_" if conf.get("use_cooccurrence", False) else ""
+    soft_source = conf.get("soft_cooccurrence_source", "")
+    soft_cooc_str = f"SOFTCOOC_{soft_source}_" if conf.get("use_soft_cooccurrence", False) else ""
     hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
     icl_str = "ICL_" if conf.get("use_icl_retrieval", False) else ""
     user_str = "USER_" if conf.get("use_user_context", False) else ""
+    item_aff_str = "ITEMAFF_" if conf.get("use_item_bundle_affiliation_desc", False) else ""
+    user_pur_str = "USERPUR_" if conf.get("use_item_user_copurchase_desc", False) else ""
+    bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
     partial_str = "" if is_final else "_partial"
-    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
-    df.to_csv(save_path, index=False, encoding='utf-8-sig')
+    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
+    tmp_path = f"{save_path}.tmp"
+    last_error = None
+    for attempt in range(5):
+        try:
+            df.to_csv(tmp_path, index=False, encoding='utf-8-sig')
+            os.replace(tmp_path, save_path)
+            last_error = None
+            break
+        except OSError as e:
+            last_error = e
+            time.sleep(0.5 * (attempt + 1))
+    if last_error is not None:
+        raise last_error
     return save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_mask.sum()
 
-async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None, cf_cache=None, icl_retriever=None, user_context_retriever=None):
+async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None, icl_retriever=None, user_context_retriever=None):
     results = initial_results if initial_results is not None else []
-    
-    use_cf = conf.get("use_cooccurrence", False) or conf.get("use_user_pref", False)
-    if cf_cache:
-        print(f">>> Using pre-computed CF score cache ({len(cf_cache)} entries).")
-    elif use_cf and dataset:
-        print(">>> CF cache not found — will compute scores on-the-fly per sample.")
 
     print(f">>> Processing {len(samples)} remaining samples sequentially to avoid rate limits...")
     total_samples_len = start_idx + len(samples)
 
     for idx, sample in enumerate(samples):
         current_idx = start_idx + idx
+        enriched_target_str, signal_stats = add_cooccurrence_to_options(sample, dataset, conf)
+        if signal_stats:
+            sample.update(signal_stats)
         
-        # Build enriched target_str with inline CF tags if enabled
-        enriched_target_str = sample["target_str"]
-        if use_cf:
-            cooc_scores = None
-            upref_scores = None
-
-            # 1. Try cache lookup first (O(1))
-            cache_key = f"{sample['bundle_id']}_{sample['true_indice']}"
-            if cf_cache and cache_key in cf_cache:
-                entry = cf_cache[cache_key]
-                if conf.get("use_cooccurrence", False):
-                    cooc_scores = entry.get("cooccurrence")
-                if conf.get("use_user_pref", False):
-                    upref_scores = entry.get("user_pref")
-            # 2. Fallback: compute on-the-fly
-            elif dataset:
-                input_ids = sample.get("input_indices", [])
-                cand_ids  = sample.get("candidate_indices", [])
-                if conf.get("use_cooccurrence", False) and hasattr(dataset, 'get_cooccurrence_scores'):
-                    cooc_scores = dataset.get_cooccurrence_scores(input_ids, cand_ids)
-                if conf.get("use_user_pref", False) and hasattr(dataset, 'get_user_pref_scores'):
-                    upref_scores = dataset.get_user_pref_scores(input_ids, cand_ids)
-            
-            # Append inline tags to each option
-            options = enriched_target_str.split("; ")
-            enriched_options = []
-            for i, opt in enumerate(options):
-                tags = []
-                if cooc_scores and i < len(cooc_scores):
-                    tags.append(f"Co-bundled: {cooc_scores[i]}")
-                if upref_scores and i < len(upref_scores):
-                    tags.append(f"User overlap: {upref_scores[i]}%")
-                if tags:
-                    opt = f"{opt} [{' | '.join(tags)}]"
-                enriched_options.append(opt)
-            enriched_target_str = "; ".join(enriched_options)
-
         icl_example = None
         if icl_retriever is not None:
             icl_example = icl_retriever.retrieve(sample)
@@ -234,15 +316,38 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             print(f"  [Selected Scores] {[round(x, 6) for x in user_context['selected_item_scores']]}")
             print(f"  [Context Text] {user_context_block[:500]}...")
             print("-" * 50 + "\n")
+
+        bundle_graph_context = None
+        bundle_graph_context_block = ""
+        if conf.get("use_bundle_graph_context", False) and dataset is not None:
+            bundle_graph_context = dataset.retrieve_bundle_graph_context(sample)
+            if bundle_graph_context is not None:
+                bundle_graph_context_block = bundle_graph_context["context_block"]
+                sample.update(bundle_graph_context["metadata"])
+
+        if idx == 0 and bundle_graph_context is not None:
+            print("\n[DEBUG] Bundle Graph Context Check (First Sample):")
+            print(f"  [Bundle IDs] {bundle_graph_context['metadata']['bundle_graph_context_bundle_ids']}")
+            print(f"  [Overlap Counts] {bundle_graph_context['metadata']['bundle_graph_context_overlap_counts']}")
+            print(f"  [IDF Scores] {[round(x, 6) for x in bundle_graph_context['metadata']['bundle_graph_context_idf_scores']]}")
+            print(f"  [Context Text] {console_safe_text(bundle_graph_context_block[:1000])}...")
+            print("-" * 50 + "\n")
         
         text_prompt = generate_prompt(
             conf["dataset"], sample["input_str"], enriched_target_str,
             use_multimodal=conf.get("use_multimodal", False),
             use_cooccurrence=conf.get("use_cooccurrence", False),
-            use_user_pref=conf.get("use_user_pref", False),
+            use_soft_cooccurrence=conf.get("use_soft_cooccurrence", False),
+            soft_cooccurrence_source=conf.get("soft_cooccurrence_source", ""),
             icl_example=icl_example,
-            user_context_block=user_context_block
+            user_context_block=user_context_block,
+            bundle_graph_context_block=bundle_graph_context_block
         )
+
+        if idx == 0:
+            debug_sample = dict(sample)
+            debug_sample["target_str"] = enriched_target_str
+            print_first_qa_debug(debug_sample, conf, text_prompt=text_prompt)
         
         contents = text_prompt
         loaded_image_count = 0
@@ -325,7 +430,7 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
                 if "429" in err_str or "503" in err_str or "quota" in err_str or "demand" in err_str or "overloaded" in err_str:
                     if attempt < max_retries - 1:
                         wait_time = base_delay * (attempt + 1)
-                        # 에러의 원인(Quota, 503 등)을 터미널에서 바로 확인할 수 있도록 원본 에러 메시지를 함께 출력합니다.
+                        # Print the original API error so quota/server issues are visible during retries.
                         short_err = str(e).replace('\n', ' ')[:150] 
                         print(f"[{current_idx+1}/{total_samples_len}] API Error: {short_err}... | Retrying in {wait_time}s... (Attempt {attempt+1}/{max_retries})")
                         await asyncio.sleep(wait_time)
@@ -339,7 +444,7 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
         sample['hit'] = int(pred_text == sample['true_option_char'])
         results.append(sample)
         
-        # 중간 저장 (한 문제 처리할 때마다 바로 덮어쓰기로 저장)
+        # Save after each sample so interrupted runs can resume.
         save_intermediate_results(results, conf, timestamp, is_final=False)
         
         print(f"[{current_idx+1}/{total_samples_len}] True: {sample['true_option_char']} | Pred: {pred_text}")
@@ -356,13 +461,43 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             
     return results
 
-def process_batch_samples(client, model, samples, conf):
+def process_batch_samples(client, model, samples, conf, dataset=None):
     print(">>> 1. Creating JSONL for Batch API...")
     jsonl_path = os.path.join(conf["output_dir"], f"batch_requests_{conf['dataset']}.jsonl")
     
     with open(jsonl_path, "w", encoding="utf-8") as f:
         for idx, sample in enumerate(samples):
-            prompt = generate_prompt(conf["dataset"], sample["input_str"], sample["target_str"], conf.get("use_multimodal", False))
+            enriched_target_str, signal_stats = add_cooccurrence_to_options(sample, dataset, conf)
+            if signal_stats:
+                sample.update(signal_stats)
+            bundle_graph_context = None
+            bundle_graph_context_block = ""
+            if conf.get("use_bundle_graph_context", False) and dataset is not None:
+                bundle_graph_context = dataset.retrieve_bundle_graph_context(sample)
+                if bundle_graph_context is not None:
+                    bundle_graph_context_block = bundle_graph_context["context_block"]
+                    sample.update(bundle_graph_context["metadata"])
+            prompt = generate_prompt(
+                conf["dataset"],
+                sample["input_str"],
+                enriched_target_str,
+                conf.get("use_multimodal", False),
+                use_cooccurrence=conf.get("use_cooccurrence", False),
+                use_soft_cooccurrence=conf.get("use_soft_cooccurrence", False),
+                soft_cooccurrence_source=conf.get("soft_cooccurrence_source", ""),
+                bundle_graph_context_block=bundle_graph_context_block
+            )
+            if idx == 0 and bundle_graph_context is not None:
+                print("\n[DEBUG] Bundle Graph Context Check (First Sample):")
+                print(f"  [Bundle IDs] {bundle_graph_context['metadata']['bundle_graph_context_bundle_ids']}")
+                print(f"  [Overlap Counts] {bundle_graph_context['metadata']['bundle_graph_context_overlap_counts']}")
+                print(f"  [IDF Scores] {[round(x, 6) for x in bundle_graph_context['metadata']['bundle_graph_context_idf_scores']]}")
+                print(f"  [Context Text] {console_safe_text(bundle_graph_context_block[:1000])}...")
+                print("-" * 50 + "\n")
+            if idx == 0:
+                debug_sample = dict(sample)
+                debug_sample["target_str"] = enriched_target_str
+                print_first_qa_debug(debug_sample, conf, text_prompt=prompt)
             req_obj = {
                 "id": str(idx),
                 "request": {
@@ -458,13 +593,33 @@ def process_batch_samples(client, model, samples, conf):
         df['cfg_seed'] = conf.get("seed", "")
         df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
         df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
+        df['cfg_use_cooccurrence'] = conf.get("use_cooccurrence", False)
+        df['cfg_use_soft_cooccurrence'] = conf.get("use_soft_cooccurrence", False)
+        df['cfg_soft_cooccurrence_source'] = conf.get("soft_cooccurrence_source", "")
+        df['cfg_use_item_bundle_affiliation_desc'] = conf.get("use_item_bundle_affiliation_desc", False)
+        df['cfg_item_bundle_affiliation_k'] = conf.get("item_bundle_affiliation_k", "")
+        df['cfg_item_bundle_affiliation_alpha'] = conf.get("item_bundle_affiliation_alpha", "")
+        df['cfg_item_bundle_affiliation_exclude_query_items'] = conf.get("item_bundle_affiliation_exclude_query_items", False)
+        df['cfg_use_item_user_copurchase_desc'] = conf.get("use_item_user_copurchase_desc", False)
+        df['cfg_item_user_copurchase_k'] = conf.get("item_user_copurchase_k", "")
+        df['cfg_item_user_copurchase_alpha'] = conf.get("item_user_copurchase_alpha", "")
+        df['cfg_item_user_copurchase_exclude_query_items'] = conf.get("item_user_copurchase_exclude_query_items", False)
+        df['cfg_use_bundle_graph_context'] = conf.get("use_bundle_graph_context", False)
+        df['cfg_bundle_graph_context_k'] = conf.get("bundle_graph_context_k", "")
+        df['cfg_bundle_graph_context_max_items'] = conf.get("bundle_graph_context_max_items", "")
 
         # Save results in dataset-specific subfolder
         actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
         os.makedirs(actual_output_dir, exist_ok=True)
         
+        cooc_str = "COOC_" if conf.get("use_cooccurrence", False) else ""
+        soft_source = conf.get("soft_cooccurrence_source", "")
+        soft_cooc_str = f"SOFTCOOC_{soft_source}_" if conf.get("use_soft_cooccurrence", False) else ""
         hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
-        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
+        item_aff_str = "ITEMAFF_" if conf.get("use_item_bundle_affiliation_desc", False) else ""
+        user_pur_str = "USERPUR_" if conf.get("use_item_user_copurchase_desc", False) else ""
+        bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
+        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{item_aff_str}{user_pur_str}{bundle_ctx_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
         df.to_csv(save_path, index=False, encoding='utf-8-sig')
         
         print("-" * 30)
@@ -490,7 +645,7 @@ def save_translated_csv(df, conf, base_timestamp, mode_suffix="", actual_output_
         
         df_kor = df.copy()
         
-        # 안전한 배치 번역 로직 (10개씩 묶기)
+        # Translate safely in small batches.
         def batch_translate(series):
             texts = series.tolist()
             translated = []
@@ -503,10 +658,10 @@ def save_translated_csv(df, conf, base_timestamp, mode_suffix="", actual_output_
                     except KeyboardInterrupt:
                         raise
                     except Exception as e:
-                        print(f"[경고] 배치 {i//batch_size + 1} 번역 실패: {e}. 원본 유지.")
+                        print(f"[Warning] Batch {i//batch_size + 1} translation failed: {e}. Keeping original text.")
                         translated.extend(batch)
             except KeyboardInterrupt:
-                print("\n>>> [중단] 사용자에 의해 번역이 중지되었습니다.")
+                print("\n>>> [Stopped] Translation was interrupted by the user.")
                 exit(1)
             return translated
 
@@ -520,7 +675,7 @@ def save_translated_csv(df, conf, base_timestamp, mode_suffix="", actual_output_
         df_kor.to_csv(save_path_kor, index=False)
         print(f">>> Saved translated file: {save_path_kor}")
     except ImportError:
-        print("[경고] deep-translator 모듈이 필요합니다.")
+        print("[Warning] deep-translator is required.")
         
 if __name__ == "__main__":
     import argparse
@@ -588,30 +743,15 @@ if __name__ == "__main__":
     
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        print("[오류] .env 파일 안에 GEMINI_API_KEY (또는 GOOGLE_API_KEY)가 설정되지 않았습니다.")
+        print("[Error] GEMINI_API_KEY or GOOGLE_API_KEY is not set in .env.")
         exit(1)
         
     client = genai.Client(api_key=api_key)
     
-    # Load pre-computed CF score cache if available
-    cf_cache = None
-    if conf.get("use_cooccurrence", False) or conf.get("use_user_pref", False):
-        cf_cache_path = os.path.join(
-            conf.get("data_path", "./datasets"),
-            conf["dataset"],
-            f"cf_scores_{conf['dataset']}.json"
-        )
-        if os.path.exists(cf_cache_path):
-            print(f">>> Loading pre-computed CF scores from {cf_cache_path}")
-            with open(cf_cache_path, "r", encoding="utf-8") as f:
-                cf_cache = json.load(f)
-        else:
-            print(f"[Warning] CF cache not found at {cf_cache_path}. Run src/precompute_cf_scores.py first for faster evaluation.")
-
     if conf["mode"] == "sync":
         print(">>> Running in Sync mode...")
         import asyncio
-        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset, cf_cache=cf_cache, icl_retriever=icl_retriever, user_context_retriever=user_context_retriever))
+        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset, icl_retriever=icl_retriever, user_context_retriever=user_context_retriever))
         
         # Final save
         save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_sum = save_intermediate_results(results, conf, timestamp, is_final=True)
@@ -634,4 +774,4 @@ if __name__ == "__main__":
 
     elif conf["mode"] == "batch":
         print(">>> Running in Batch API mode...")
-        process_batch_samples(client, conf["model"], samples, conf)
+        process_batch_samples(client, conf["model"], samples, conf, dataset=dataset)

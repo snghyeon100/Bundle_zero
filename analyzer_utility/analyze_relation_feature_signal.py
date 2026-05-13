@@ -194,6 +194,22 @@ def analyze_dataset(repo_root, dataset, result_csv, feature, args):
             if pred_option_idx is not None and 0 <= pred_option_idx < len(candidate_ids)
             else np.nan
         )
+        pred_valid = pred_option_idx is not None and 0 <= pred_option_idx < len(candidate_ids)
+        if pred_valid:
+            pred_vec = cand_vecs[pred_option_idx]
+            pred_to_candidates = cand_vecs @ pred_vec
+            pred_other_mask = np.ones(len(candidate_ids), dtype=bool)
+            pred_other_mask[pred_option_idx] = False
+            pred_to_others = pred_to_candidates[pred_other_mask]
+            pred_to_gt_sim = float(pred_to_candidates[true_option_idx])
+            pred_to_other_candidate_sim_mean = float(pred_to_others.mean())
+            pred_to_other_candidate_sim_max = float(pred_to_others.max())
+            pred_to_other_candidate_sim_min = float(pred_to_others.min())
+        else:
+            pred_to_gt_sim = np.nan
+            pred_to_other_candidate_sim_mean = np.nan
+            pred_to_other_candidate_sim_max = np.nan
+            pred_to_other_candidate_sim_min = np.nan
 
         gt_vec = cand_vecs[true_option_idx]
         gt_to_candidates = cand_vecs @ gt_vec
@@ -232,6 +248,14 @@ def analyze_dataset(repo_root, dataset, result_csv, feature, args):
                 "pred_input_rank": int(np.where(order == pred_option_idx)[0][0] + 1)
                 if pred_option_idx is not None and 0 <= pred_option_idx < len(candidate_ids)
                 else np.nan,
+                "pred_to_gt_sim": pred_to_gt_sim,
+                "pred_to_other_candidate_sim_mean": pred_to_other_candidate_sim_mean,
+                "pred_to_other_candidate_sim_max": pred_to_other_candidate_sim_max,
+                "pred_to_other_candidate_sim_min": pred_to_other_candidate_sim_min,
+                "pred_margin_vs_other_candidate_mean": float(pred_to_gt_sim - pred_to_other_candidate_sim_mean)
+                if pred_valid else np.nan,
+                "pred_margin_vs_best_other_candidate": float(pred_to_gt_sim - pred_to_other_candidate_sim_max)
+                if pred_valid else np.nan,
                 "pairmean_input_gt_sim": gt_pair_mean,
                 "pairmean_input_neg_sim_mean": float(neg_pair_means.mean()),
                 "pairmean_input_neg_sim_max": float(neg_pair_means.max()),
@@ -249,6 +273,8 @@ def analyze_dataset(repo_root, dataset, result_csv, feature, args):
                 "gt_to_distractor_sim_min": float(gt_to_distractors.min()),
                 "candidate_ids": json.dumps(candidate_ids, ensure_ascii=False),
                 "input_sims_by_option": json.dumps([float(x) for x in input_to_candidates], ensure_ascii=False),
+                "pred_to_candidate_sims_by_option": json.dumps([float(x) for x in pred_to_candidates], ensure_ascii=False)
+                if pred_valid else "[]",
             }
         )
 
@@ -317,6 +343,10 @@ def make_summary(usable):
                 "input_gt_margin_vs_best_neg_mean": float(sub["input_gt_margin_vs_best_neg"].mean()),
                 "pred_is_input_semantic_top1_rate": float(sub["pred_is_input_semantic_top1"].dropna().mean()),
                 "pred_input_rank_mean": float(sub["pred_input_rank"].dropna().mean()),
+                "pred_to_gt_sim_mean": float(sub["pred_to_gt_sim"].dropna().mean()),
+                "pred_to_other_candidate_sim_mean": float(sub["pred_to_other_candidate_sim_mean"].dropna().mean()),
+                "pred_to_other_candidate_sim_max_mean": float(sub["pred_to_other_candidate_sim_max"].dropna().mean()),
+                "pred_margin_vs_best_other_candidate_mean": float(sub["pred_margin_vs_best_other_candidate"].dropna().mean()),
                 "pairmean_gt_top1_rate": float(sub["pairmean_input_gt_top1"].mean()),
                 "pairmean_gt_rank_mean": float(sub["pairmean_input_gt_rank"].mean()),
                 "pairmean_gt_margin_vs_best_neg_mean": float(sub["pairmean_input_gt_margin_vs_best_neg"].mean()),
