@@ -680,12 +680,14 @@ def save_translated_csv(df, conf, base_timestamp, mode_suffix="", actual_output_
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Run LLM Zero-Shot Bundle Evaluation")
+    parser.add_argument("--config", type=str, default="config.yaml", help="Path to a YAML config file")
     parser.add_argument("--start_idx", type=int, default=0, help="Start from a specific sample index (0-based)")
     parser.add_argument("--resume", type=str, default="", help="Path to a _partial.csv file to resume from")
     args = parser.parse_args()
 
-    with open("config.yaml", "r", encoding="utf-8") as f:
+    with open(args.config, "r", encoding="utf-8") as f:
         conf = yaml.safe_load(f)
+    print(f">>> Loaded config: {args.config}")
 
     os.makedirs(conf["output_dir"], exist_ok=True)
     set_seed(conf["seed"])

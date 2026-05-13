@@ -17,7 +17,7 @@ temperature: 0.0
 use_multimodal: false  # If true, loads images and sends them to Gemini along with text
 
 use_cooccurrence: true  # If true, appends train BI co-bundled shared/candidate bundle counts to candidate options
-use_soft_cooccurrence: false  # If true, appends soft I->B' co-bundled counts to candidate options
+use_soft_cooccurrence: true  # If true, appends soft I->B' co-bundled counts to candidate options
 soft_cooccurrence_source: item_smoothing_text  # item_smoothing_text | bundle_smoothing_text | bundle_smoothing_bi_lgcn
 
 use_item_bundle_affiliation_desc: false  # If true, appends BI^T BI co-bundled item descriptions to input/candidate items
