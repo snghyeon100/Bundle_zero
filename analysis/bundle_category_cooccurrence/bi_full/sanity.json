@@ -1,0 +1,26 @@
+[
+  {
+    "dataset": "pog",
+    "bundle_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\bi_full.txt",
+    "item_info_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\item_info.json",
+    "category_field": "cate",
+    "num_item_info_items": 48676,
+    "num_categorized_items": 48676,
+    "missing_category_items_in_item_info": 0,
+    "num_bundles": 20000,
+    "missing_item_ids_in_bundles": 0,
+    "missing_item_occurrences_in_bundles": 0
+  },
+  {
+    "dataset": "pog_dense",
+    "bundle_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\bi_full.txt",
+    "item_info_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\item_info.json",
+    "category_field": "cate_id",
+    "num_item_info_items": 31217,
+    "num_categorized_items": 31217,
+    "missing_category_items_in_item_info": 0,
+    "num_bundles": 29686,
+    "missing_item_ids_in_bundles": 0,
+    "missing_item_occurrences_in_bundles": 0
+  }
+]

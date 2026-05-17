@@ -1,0 +1,22 @@
+{
+  "dataset": "pog_dense",
+  "model": "text-embedding-3-large",
+  "source_item_info": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\item_info.json",
+  "source_embedding_cache": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\openai_embedding_cache\\text-embedding-3-large\\all_items\\pog_dense\\embeddings_text-embedding-3-large_float16.npz",
+  "category_field": "auto",
+  "resolved_category_field": "cate_id",
+  "num_cache_items": 31217,
+  "num_categories": 67,
+  "embedding_dim": 3072,
+  "input_dtype": "float16",
+  "output_dtype": "float32",
+  "min_items_per_category": 1,
+  "mean_items_per_category": 465.92537313432837,
+  "median_items_per_category": 110.0,
+  "max_items_per_category": 4615,
+  "missing_item_info_count": 0,
+  "uncategorized_item_count": 0,
+  "output_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\category_embedding_cache\\text-embedding-3-large\\all_items\\pog_dense\\category_embeddings_text-embedding-3-large_float32.npz",
+  "summary_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\category_embedding_cache\\text-embedding-3-large\\all_items\\pog_dense\\category_summary.csv",
+  "created_at_unix": 1778741031
+}

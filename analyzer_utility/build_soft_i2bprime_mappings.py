@@ -6,8 +6,13 @@ from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.analyze_relation_feature_signal import read_torch_float_tensor
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(REPO_ROOT / "src"))
+try:
+    from src.analyze_relation_feature_signal import read_torch_float_tensor
+except ModuleNotFoundError:
+    from analyze_relation_feature_signal import read_torch_float_tensor
 
 
 DEFAULT_CACHE_ROOT = Path("analysis") / "openai_embedding_cache" / "text-embedding-3-large" / "all_items"
@@ -209,6 +214,9 @@ def build_for_dataset(repo_root, dataset, args):
     bi_emb, bi_feature_path = load_bi_lgcn_embeddings(dataset_dir, dataset)
     if bi_emb.shape[0] != num_items:
         raise ValueError(f"{dataset}: BI-LightGCN rows {bi_emb.shape[0]} != #I {num_items}")
+    top_bi_item, top_bi_item_sim = top1_similar_items(bi_emb, train_active_items, args.item_block_size)
+    item_bi_smooth = build_item_smooth_mapping(top_bi_item, item_to_bundles)
+
     bi_bundle_ids, bi_bundle_emb = build_bundle_embeddings(bi_emb, bundle_items)
     top_bi_bundle, top_bi_bundle_sim = top1_similar_bundles(
         bi_bundle_ids,
@@ -223,11 +231,14 @@ def build_for_dataset(repo_root, dataset, args):
 
     item_json = dataset_dir / "item_smoothing_i2bprime_text_top1.json"
     item_txt = dataset_dir / "item_smoothing_i2bprime_text_top1.txt"
+    item_bi_json = dataset_dir / "item_smoothing_i2bprime_bi_lgcn_top1.json"
+    item_bi_txt = dataset_dir / "item_smoothing_i2bprime_bi_lgcn_top1.txt"
     bundle_json = dataset_dir / "bundle_smoothing_i2bprime_text_top1.json"
     bundle_txt = dataset_dir / "bundle_smoothing_i2bprime_text_top1.txt"
     bundle_bi_json = dataset_dir / "bundle_smoothing_i2bprime_bi_lgcn_top1.json"
     bundle_bi_txt = dataset_dir / "bundle_smoothing_i2bprime_bi_lgcn_top1.txt"
     item_neighbor_csv = dataset_dir / "item_top1_similar_train_item_text.csv"
+    item_bi_neighbor_csv = dataset_dir / "item_top1_similar_train_item_bi_lgcn.csv"
     bundle_neighbor_csv = dataset_dir / "train_bundle_top1_similar_bundle_text.csv"
     bundle_bi_neighbor_csv = dataset_dir / "train_bundle_top1_similar_bundle_bi_lgcn.csv"
     meta_path = dataset_dir / "soft_i2bprime_text_top1_meta.json"
@@ -235,11 +246,14 @@ def build_for_dataset(repo_root, dataset, args):
 
     write_mapping_json(item_json, item_smooth)
     write_mapping_txt(item_txt, item_smooth)
+    write_mapping_json(item_bi_json, item_bi_smooth)
+    write_mapping_txt(item_bi_txt, item_bi_smooth)
     write_mapping_json(bundle_json, bundle_smooth)
     write_mapping_txt(bundle_txt, bundle_smooth)
     write_mapping_json(bundle_bi_json, bundle_bi_smooth)
     write_mapping_txt(bundle_bi_txt, bundle_bi_smooth)
     write_item_neighbors(item_neighbor_csv, top_item, top_item_sim)
+    write_item_neighbors(item_bi_neighbor_csv, top_bi_item, top_bi_item_sim)
     write_bundle_neighbors(bundle_neighbor_csv, bundle_ids, top_bundle, top_bundle_sim)
     write_bundle_neighbors(bundle_bi_neighbor_csv, bi_bundle_ids, top_bi_bundle, top_bi_bundle_sim)
 
@@ -252,6 +266,7 @@ def build_for_dataset(repo_root, dataset, args):
         "num_train_active_items": len(train_active_items),
         "method": {
             "item_smoothing": "I -> top-1 text-similar train item I' -> train bundles B'",
+            "item_smoothing_bi_lgcn": "I -> top-1 BI-LightGCN-similar train item I' -> train bundles B'",
             "bundle_smoothing": "I -> train bundles B -> top-1 text-similar train bundle B'",
             "bundle_smoothing_bi_lgcn": "I -> train bundles B -> top-1 BI-LightGCN-similar train bundle B'",
             "similarity": "cosine over normalized OpenAI text embeddings; bundle embedding is mean item embedding",
@@ -261,15 +276,19 @@ def build_for_dataset(repo_root, dataset, args):
         "outputs": {
             "item_smoothing_json": str(item_json),
             "item_smoothing_txt": str(item_txt),
+            "item_smoothing_bi_lgcn_json": str(item_bi_json),
+            "item_smoothing_bi_lgcn_txt": str(item_bi_txt),
             "bundle_smoothing_json": str(bundle_json),
             "bundle_smoothing_txt": str(bundle_txt),
             "bundle_smoothing_bi_lgcn_json": str(bundle_bi_json),
             "bundle_smoothing_bi_lgcn_txt": str(bundle_bi_txt),
             "item_neighbors_csv": str(item_neighbor_csv),
+            "item_bi_lgcn_neighbors_csv": str(item_bi_neighbor_csv),
             "bundle_neighbors_csv": str(bundle_neighbor_csv),
             "bundle_bi_lgcn_neighbors_csv": str(bundle_bi_neighbor_csv),
         },
         "item_smoothing_stats": mapping_stats(item_smooth, num_items),
+        "item_smoothing_bi_lgcn_stats": mapping_stats(item_bi_smooth, num_items),
         "bundle_smoothing_stats": mapping_stats(bundle_smooth, num_items),
         "bundle_smoothing_bi_lgcn_stats": mapping_stats(bundle_bi_smooth, num_items),
     }
@@ -277,6 +296,7 @@ def build_for_dataset(repo_root, dataset, args):
         json.dump(meta, f, ensure_ascii=False, indent=2)
 
     print(f"[{dataset}] item smoothing: {meta['item_smoothing_stats']}")
+    print(f"[{dataset}] item smoothing BI-LightGCN: {meta['item_smoothing_bi_lgcn_stats']}")
     print(f"[{dataset}] bundle smoothing: {meta['bundle_smoothing_stats']}")
     print(f"[{dataset}] bundle smoothing BI-LightGCN: {meta['bundle_smoothing_bi_lgcn_stats']}")
     print(f"[{dataset}] wrote {meta_path}")
@@ -288,15 +308,20 @@ def build_for_dataset(repo_root, dataset, args):
         "num_train_bundles": len(bundle_items),
         "num_train_active_items": len(train_active_items),
         "method": {
+            "item_smoothing": "I -> top-1 BI-LightGCN-similar train item I' -> train bundles B'",
             "bundle_smoothing": "I -> train bundles B -> top-1 BI-LightGCN-similar train bundle B'",
             "similarity": "cosine over normalized BI-LightGCN item embeddings; bundle embedding is mean item embedding",
             "exact_I_B_included": False,
         },
         "outputs": {
+            "item_smoothing_bi_lgcn_json": str(item_bi_json),
+            "item_smoothing_bi_lgcn_txt": str(item_bi_txt),
+            "item_bi_lgcn_neighbors_csv": str(item_bi_neighbor_csv),
             "bundle_smoothing_bi_lgcn_json": str(bundle_bi_json),
             "bundle_smoothing_bi_lgcn_txt": str(bundle_bi_txt),
             "bundle_bi_lgcn_neighbors_csv": str(bundle_bi_neighbor_csv),
         },
+        "item_smoothing_bi_lgcn_stats": mapping_stats(item_bi_smooth, num_items),
         "bundle_smoothing_bi_lgcn_stats": mapping_stats(bundle_bi_smooth, num_items),
     }
     with open(meta_bi_path, "w", encoding="utf-8") as f:

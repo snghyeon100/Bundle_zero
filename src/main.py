@@ -47,6 +47,10 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
         print(f"  [Item Affiliation k] {conf.get('item_bundle_affiliation_k', '')}")
         print(f"  [Item Affiliation alpha] {conf.get('item_bundle_affiliation_alpha', '')}")
         print(f"  [Exclude Query Items] {conf.get('item_bundle_affiliation_exclude_query_items', False)}")
+        print(f"  [Item Affiliation Use Soft] {conf.get('item_bundle_affiliation_use_soft', False)}")
+        if conf.get("item_bundle_affiliation_use_soft", False):
+            print(f"  [Item Affiliation Soft Source] {conf.get('item_bundle_affiliation_soft_source', '')}")
+            print(f"  [Item Affiliation Soft Alpha] {conf.get('item_bundle_affiliation_soft_alpha', '')}")
     print(f"  [User Co-purchase Enabled] {conf.get('use_item_user_copurchase_desc', False)}")
     if conf.get("use_item_user_copurchase_desc", False):
         print(f"  [User Co-purchase k] {conf.get('item_user_copurchase_k', '')}")
@@ -56,6 +60,10 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
     if conf.get("use_bundle_graph_context", False):
         print(f"  [Bundle Graph Context k] {conf.get('bundle_graph_context_k', '')}")
         print(f"  [Bundle Graph Context max items] {conf.get('bundle_graph_context_max_items', '')}")
+        print(f"  [Bundle Graph Context Use Soft] {conf.get('bundle_graph_context_use_soft', False)}")
+        if conf.get("bundle_graph_context_use_soft", False):
+            print(f"  [Bundle Graph Context Soft Source] {conf.get('bundle_graph_context_soft_source', '')}")
+            print(f"  [Bundle Graph Context Soft Alpha] {conf.get('bundle_graph_context_soft_alpha', '')}")
     print("\n[DEBUG] First Question:")
     print(console_safe_text(sample.get("input_str", "")))
     print("\n[DEBUG] First Options:")
@@ -227,6 +235,9 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df['cfg_item_bundle_affiliation_k'] = conf.get("item_bundle_affiliation_k", "")
     df['cfg_item_bundle_affiliation_alpha'] = conf.get("item_bundle_affiliation_alpha", "")
     df['cfg_item_bundle_affiliation_exclude_query_items'] = conf.get("item_bundle_affiliation_exclude_query_items", False)
+    df['cfg_item_bundle_affiliation_use_soft'] = conf.get("item_bundle_affiliation_use_soft", False)
+    df['cfg_item_bundle_affiliation_soft_source'] = conf.get("item_bundle_affiliation_soft_source", "")
+    df['cfg_item_bundle_affiliation_soft_alpha'] = conf.get("item_bundle_affiliation_soft_alpha", "")
     df['cfg_use_item_user_copurchase_desc'] = conf.get("use_item_user_copurchase_desc", False)
     df['cfg_item_user_copurchase_k'] = conf.get("item_user_copurchase_k", "")
     df['cfg_item_user_copurchase_alpha'] = conf.get("item_user_copurchase_alpha", "")
@@ -234,6 +245,9 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df['cfg_use_bundle_graph_context'] = conf.get("use_bundle_graph_context", False)
     df['cfg_bundle_graph_context_k'] = conf.get("bundle_graph_context_k", "")
     df['cfg_bundle_graph_context_max_items'] = conf.get("bundle_graph_context_max_items", "")
+    df['cfg_bundle_graph_context_use_soft'] = conf.get("bundle_graph_context_use_soft", False)
+    df['cfg_bundle_graph_context_soft_source'] = conf.get("bundle_graph_context_soft_source", "")
+    df['cfg_bundle_graph_context_soft_alpha'] = conf.get("bundle_graph_context_soft_alpha", "")
     
     actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
     os.makedirs(actual_output_dir, exist_ok=True)
@@ -243,9 +257,15 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
     icl_str = "ICL_" if conf.get("use_icl_retrieval", False) else ""
     user_str = "USER_" if conf.get("use_user_context", False) else ""
-    item_aff_str = "ITEMAFF_" if conf.get("use_item_bundle_affiliation_desc", False) else ""
+    if conf.get("use_item_bundle_affiliation_desc", False) and conf.get("item_bundle_affiliation_use_soft", False):
+        item_aff_str = f"ITEMAFF_SOFT_{conf.get('item_bundle_affiliation_soft_source', '')}_"
+    else:
+        item_aff_str = "ITEMAFF_" if conf.get("use_item_bundle_affiliation_desc", False) else ""
     user_pur_str = "USERPUR_" if conf.get("use_item_user_copurchase_desc", False) else ""
-    bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
+    if conf.get("use_bundle_graph_context", False) and conf.get("bundle_graph_context_use_soft", False):
+        bundle_ctx_str = f"BGRAPH_SOFT_{conf.get('bundle_graph_context_soft_source', '')}_"
+    else:
+        bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
     partial_str = "" if is_final else "_partial"
     save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
     tmp_path = f"{save_path}.tmp"
@@ -329,6 +349,8 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             print("\n[DEBUG] Bundle Graph Context Check (First Sample):")
             print(f"  [Bundle IDs] {bundle_graph_context['metadata']['bundle_graph_context_bundle_ids']}")
             print(f"  [Overlap Counts] {bundle_graph_context['metadata']['bundle_graph_context_overlap_counts']}")
+            print(f"  [Soft Hit Counts] {bundle_graph_context['metadata'].get('bundle_graph_context_soft_hit_counts', [])}")
+            print(f"  [Context Scores] {bundle_graph_context['metadata'].get('bundle_graph_context_scores', [])}")
             print(f"  [IDF Scores] {[round(x, 6) for x in bundle_graph_context['metadata']['bundle_graph_context_idf_scores']]}")
             print(f"  [Context Text] {console_safe_text(bundle_graph_context_block[:1000])}...")
             print("-" * 50 + "\n")
@@ -491,6 +513,8 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 print("\n[DEBUG] Bundle Graph Context Check (First Sample):")
                 print(f"  [Bundle IDs] {bundle_graph_context['metadata']['bundle_graph_context_bundle_ids']}")
                 print(f"  [Overlap Counts] {bundle_graph_context['metadata']['bundle_graph_context_overlap_counts']}")
+                print(f"  [Soft Hit Counts] {bundle_graph_context['metadata'].get('bundle_graph_context_soft_hit_counts', [])}")
+                print(f"  [Context Scores] {bundle_graph_context['metadata'].get('bundle_graph_context_scores', [])}")
                 print(f"  [IDF Scores] {[round(x, 6) for x in bundle_graph_context['metadata']['bundle_graph_context_idf_scores']]}")
                 print(f"  [Context Text] {console_safe_text(bundle_graph_context_block[:1000])}...")
                 print("-" * 50 + "\n")
@@ -600,6 +624,9 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
         df['cfg_item_bundle_affiliation_k'] = conf.get("item_bundle_affiliation_k", "")
         df['cfg_item_bundle_affiliation_alpha'] = conf.get("item_bundle_affiliation_alpha", "")
         df['cfg_item_bundle_affiliation_exclude_query_items'] = conf.get("item_bundle_affiliation_exclude_query_items", False)
+        df['cfg_item_bundle_affiliation_use_soft'] = conf.get("item_bundle_affiliation_use_soft", False)
+        df['cfg_item_bundle_affiliation_soft_source'] = conf.get("item_bundle_affiliation_soft_source", "")
+        df['cfg_item_bundle_affiliation_soft_alpha'] = conf.get("item_bundle_affiliation_soft_alpha", "")
         df['cfg_use_item_user_copurchase_desc'] = conf.get("use_item_user_copurchase_desc", False)
         df['cfg_item_user_copurchase_k'] = conf.get("item_user_copurchase_k", "")
         df['cfg_item_user_copurchase_alpha'] = conf.get("item_user_copurchase_alpha", "")
@@ -607,6 +634,9 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
         df['cfg_use_bundle_graph_context'] = conf.get("use_bundle_graph_context", False)
         df['cfg_bundle_graph_context_k'] = conf.get("bundle_graph_context_k", "")
         df['cfg_bundle_graph_context_max_items'] = conf.get("bundle_graph_context_max_items", "")
+        df['cfg_bundle_graph_context_use_soft'] = conf.get("bundle_graph_context_use_soft", False)
+        df['cfg_bundle_graph_context_soft_source'] = conf.get("bundle_graph_context_soft_source", "")
+        df['cfg_bundle_graph_context_soft_alpha'] = conf.get("bundle_graph_context_soft_alpha", "")
 
         # Save results in dataset-specific subfolder
         actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
@@ -616,9 +646,15 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
         soft_source = conf.get("soft_cooccurrence_source", "")
         soft_cooc_str = f"SOFTCOOC_{soft_source}_" if conf.get("use_soft_cooccurrence", False) else ""
         hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
-        item_aff_str = "ITEMAFF_" if conf.get("use_item_bundle_affiliation_desc", False) else ""
+        if conf.get("use_item_bundle_affiliation_desc", False) and conf.get("item_bundle_affiliation_use_soft", False):
+            item_aff_str = f"ITEMAFF_SOFT_{conf.get('item_bundle_affiliation_soft_source', '')}_"
+        else:
+            item_aff_str = "ITEMAFF_" if conf.get("use_item_bundle_affiliation_desc", False) else ""
         user_pur_str = "USERPUR_" if conf.get("use_item_user_copurchase_desc", False) else ""
-        bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
+        if conf.get("use_bundle_graph_context", False) and conf.get("bundle_graph_context_use_soft", False):
+            bundle_ctx_str = f"BGRAPH_SOFT_{conf.get('bundle_graph_context_soft_source', '')}_"
+        else:
+            bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
         save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{item_aff_str}{user_pur_str}{bundle_ctx_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
         df.to_csv(save_path, index=False, encoding='utf-8-sig')
         

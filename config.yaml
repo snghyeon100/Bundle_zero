@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: pog_dense                  # pog | pog_dense | spotify | spotify_sparse
+dataset: pog                  # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────
@@ -16,15 +16,18 @@ model: gemini-3.1-flash-lite-preview
 temperature: 0.0
 use_multimodal: false  # If true, loads images and sends them to Gemini along with text
 
-use_cooccurrence: true  # If true, appends train BI co-bundled shared/candidate bundle counts to candidate options
-use_soft_cooccurrence: true  # If true, appends soft I->B' co-bundled counts to candidate options
-soft_cooccurrence_source: item_smoothing_text  # item_smoothing_text | bundle_smoothing_text | bundle_smoothing_bi_lgcn
+use_cooccurrence: false  # If true, appends train BI co-bundled shared/candidate bundle counts to candidate options
+use_soft_cooccurrence: false  # If true, appends soft I->B' co-bundled counts to candidate options
+soft_cooccurrence_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
 
-use_item_bundle_affiliation_desc: false  # If true, appends BI^T BI co-bundled item descriptions to input/candidate items
+use_item_bundle_affiliation_desc: true  # IB x BI. If true, appends co-bundled item descriptions to input/candidate items
 item_bundle_affiliation_k: 3
 item_bundle_affiliation_alpha: 0.5
 item_bundle_affiliation_seed: 45
 item_bundle_affiliation_exclude_query_items: false
+item_bundle_affiliation_use_soft: true  # (IB + I-B') x BI. Adds soft I->B' bundles before retrieving co-bundled items
+item_bundle_affiliation_soft_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
+item_bundle_affiliation_soft_alpha: 1.0
 
 use_item_user_copurchase_desc: false  # If true, appends UI^T UI co-purchased item descriptions to input/candidate items
 item_user_copurchase_k: 3
@@ -32,10 +35,13 @@ item_user_copurchase_alpha: 0.5
 item_user_copurchase_seed: 45
 item_user_copurchase_exclude_query_items: false
 
-use_bundle_graph_context: false  # If true, prepends similar train bundles retrieved by input-item overlap and IDF tie-break
+use_bundle_graph_context: false  # BI x IB. If true, prepends train bundles retrieved by input-item overlap and IDF tie-break
 bundle_graph_context_k: 1
 bundle_graph_context_max_items: 5
 bundle_graph_context_seed: 45
+bundle_graph_context_use_soft: true  # BI x (IB + I-B'). Adds soft I->B' matches to the bundle-context retrieval pool/score
+bundle_graph_context_soft_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
+bundle_graph_context_soft_alpha: 1.0
 
 use_icl_retrieval: false # If true, prepends one retrieved solved example from bi_train.txt
 icl_retrieval_method: input_embedding

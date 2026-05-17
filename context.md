@@ -1,6 +1,6 @@
 # LLM-ZeroShot Context
 
-Last updated: 2026-05-08
+Last updated: 2026-05-17
 
 ## 1. Project Purpose
 
@@ -27,6 +27,7 @@ Current narrative:
 - Co-occurrence can help when it aligns with the ground truth, but the LLM tends to over-follow the score.
 - User preference often hurts because the signal is not reliably aligned with bundle/playlist completion.
 - For POG/POG-dense, semantic tags plus empirical difficulty are the most useful way to explain what the LLM can and cannot do.
+- For POG/POG-dense, item category structure is highly informative, but not as embedding similarity. The stronger signal is train-derived category co-occurrence: observed bundle categories predict likely missing/complementary categories.
 
 ## 2. Main Folder Structure
 
@@ -55,6 +56,10 @@ Current narrative:
 
 - `analysis/`
   - Generated analysis outputs and Overleaf table files.
+
+- `analyzer_utility/`
+  - Analysis and experiment helper scripts used after the core evaluation runs.
+  - Recent category-related scripts live here, including category embedding, full-bundle category co-occurrence, and train-to-test category completion evaluation.
 
 ## 3. Files Modified Or Created
 
@@ -161,6 +166,31 @@ Current narrative:
   - Deduplicates repeated user-item entries in `ui_full.txt`.
   - Copies/dedupes dataset files and links/copies images.
 
+### Category signal analysis
+
+- `analyzer_utility/build_category_embedding_cache.py`
+  - Builds category prototype embeddings from existing all-item OpenAI text embedding caches.
+  - For each category, averages all item text embeddings assigned to that category.
+  - Automatically resolves category fields:
+    - `pog`: `cate`
+    - `pog_dense`: `cate_id`
+  - Outputs category embedding `.npz`, category counts, and metadata under `analysis/category_embedding_cache/`.
+
+- `analyzer_utility/analyze_category_embedding_signal.py`
+  - Evaluates whether category prototype embeddings provide a useful problem-level signal.
+  - Compares item text embedding signal and category embedding signal on POG/POG-dense result rows.
+  - Outputs category quality, per-problem detail, summary, and text/category hit-miss quadrants.
+
+- `analyzer_utility/analyze_bundle_category_cooccurrence.py`
+  - Analyzes full original bundles from `bi_full.txt` without using GT/candidate result rows.
+  - Converts each bundle to a category set/multiset.
+  - Outputs category frequency, pair co-occurrence, full category set patterns, itemset patterns, and association rules.
+
+- `analyzer_utility/evaluate_category_completion_selfsup.py`
+  - Learns category co-occurrence rules from `bi_train.txt`.
+  - Evaluates on `bi_test_input.txt` as observed categories and `bi_test_gt.txt` as held-out categories.
+  - Uses no LLM; this is a category-only self-supervised completion prior.
+
 ## 4. Generated Metadata And Analysis Outputs
 
 ### Problem metadata
@@ -222,6 +252,46 @@ Fashion semantic tag files:
 
 - `analysis/cf_signal_all_datasets_overleaf.tex`
   - Overleaf tables for CF signal statistics across POG, POG-dense, Spotify, and Spotify-Sparse.
+
+### Category analysis folders
+
+- `analysis/category_embedding_cache/text-embedding-3-large/all_items/`
+  - Category prototype embeddings built by averaging all item text embeddings within each item category.
+  - Current outputs:
+    - `pog/category_embeddings_text-embedding-3-large_float32.npz`
+    - `pog/category_summary.csv`
+    - `pog_dense/category_embeddings_text-embedding-3-large_float32.npz`
+    - `pog_dense/category_summary.csv`
+
+- `analysis/category_embedding_signal/text-embedding-3-large/`
+  - Tests category prototype embeddings as a direct semantic signal.
+  - Important files:
+    - `category_embedding_quality.csv`
+    - `category_signal_detail.csv`
+    - `category_signal_summary.csv`
+    - `category_text_joint_quadrants.csv`
+    - `summary.md`
+
+- `analysis/bundle_category_cooccurrence/bi_full/`
+  - Full-bundle category grammar analysis from `bi_full.txt`.
+  - Important files:
+    - `bundle_category_detail.csv`
+    - `category_frequency.csv`
+    - `category_pair_cooccur.csv`
+    - `category_set_patterns.csv`
+    - `category_itemset_patterns.csv`
+    - `category_association_rules.csv`
+    - `bundle_category_summary.csv`
+    - `summary.md`
+
+- `analysis/category_completion_selfsup/train_to_test/`
+  - Category-only train-to-test completion evaluation.
+  - Rules are learned from `bi_train.txt`.
+  - Evaluation uses `bi_test_input.txt` as observed categories and `bi_test_gt.txt` as held-out categories.
+  - Important files:
+    - `category_completion_selfsup_detail.csv`
+    - `category_completion_selfsup_summary.csv`
+    - `summary.md`
 
 ## 5. Important Result CSV Mapping
 
@@ -390,6 +460,115 @@ POG `ui_full.txt` had massive duplicate user-item entries:
 
 Created `datasets/pog_dedup`.
 
+### Category embedding analysis
+
+Category prototype embeddings were built from existing all-item OpenAI text embedding caches:
+
+- `pog`: 72 categories, category field `cate`
+- `pog_dense`: 67 categories, category field `cate_id`
+
+Problem-level category embedding signal was weak when used as semantic similarity:
+
+- `pog`:
+  - category top-1: 5.2%
+  - category top-3: 26.4%
+  - text-miss/category-hit: 2.4%
+- `pog_dense`:
+  - category top-1: 2.0%
+  - category top-3: 10.8%
+  - text-miss/category-hit: 1.2%
+
+Interpretation:
+
+- Category embeddings are useful for category quality/prototype inspection, but not strong as a direct similarity scorer from input categories to candidate categories.
+- Fashion bundle completion is not mainly "find a semantically similar category"; it is closer to "infer the complementary category slot missing from the current bundle."
+
+### Full-bundle category co-occurrence analysis
+
+Using `bi_full.txt`, each original bundle was converted into a category set/multiset without using GT/candidate rows.
+
+Key statistics:
+
+- `pog`:
+  - bundles: 20,000
+  - categories: 72
+  - average item count: 3.61
+  - average unique category count: 3.61
+  - repeated-category bundle rate: 0.003
+  - unique category set ratio: 0.251
+
+- `pog_dense`:
+  - bundles: 29,686
+  - categories: 67
+  - average item count: 3.56
+  - average unique category count: 3.56
+  - repeated-category bundle rate: 0.001
+  - unique category set ratio: 0.113
+
+Interpretation:
+
+- Bundle categories almost never repeat inside the same bundle.
+- The original bundles look like category slot templates rather than arbitrary item collections.
+- `pog_dense` has stronger repeated category templates than `pog`, because it has more bundles but fewer unique category sets.
+- Raw co-occurrence counts are dominated by high-frequency categories, so confidence/lift/PMI should be interpreted separately.
+
+### Category completion self-supervised evaluation
+
+Rules were trained only on `bi_train.txt` and evaluated on test split categories:
+
+- observed: categories from `bi_test_input.txt`
+- held-out target: categories from `bi_test_gt.txt`
+- no LLM and no result predictions were used
+
+`direct_confidence` scoring:
+
+```text
+score(c | observed S) = count_train(S union {c}) / count_train(S)
+```
+
+Main results:
+
+- `pog direct_confidence`:
+  - coverage: 0.996
+  - hit@1: 0.455
+  - hit@3: 0.765
+  - hit@5: 0.879
+  - MRR: 0.634
+
+- `pog_dense direct_confidence`:
+  - coverage: 0.995
+  - hit@1: 0.465
+  - hit@3: 0.787
+  - hit@5: 0.875
+  - MRR: 0.643
+
+Observed-size breakdown for confidence:
+
+- `pog`:
+  - observed size 1: direct hit@3 0.698
+  - observed size 2: direct hit@3 0.832
+- `pog_dense`:
+  - most test inputs have observed size 2
+  - observed size 2: direct hit@3 0.787
+
+Interpretation:
+
+- Train-derived category co-occurrence alone recovers held-out test categories surprisingly well.
+- Confidence works much better than lift/PMI, meaning the frequent category templates are not just noise; they are useful priors in this dataset.
+- This supports a method direction based on category completion priors rather than category embedding similarity.
+
+Methodology implication:
+
+- Prompting the LLM with raw numeric counts/probabilities may look ad-hoc.
+- A more natural paper framing is:
+  - learn a category-level co-occurrence prior from train bundles,
+  - convert it into LLM-readable structured hints such as top-k likely complementary categories, verbal strength buckets, or candidate-level prior annotations.
+- Candidate alternatives:
+  - use category prior as prompt hint,
+  - use it for candidate annotation,
+  - use it as external reranking,
+  - use category pattern similarity for few-shot example selection.
+
 ## 7. Current Issues Or Cautions
 
 - Existing image/multimodal result CSVs should be treated cautiously.
@@ -411,6 +590,15 @@ Created `datasets/pog_dedup`.
   - Source item text itself is generally fine.
 
 - Git worktree is dirty with user/generated files. Do not revert unrelated changes.
+
+- POG and POG-dense category IDs are opaque hashes.
+  - They are useful for deterministic analysis.
+  - They are not directly meaningful to an LLM.
+  - Any prompt-facing category signal needs category verbalization, such as representative item titles or generated category descriptions.
+
+- Category co-occurrence confidence is a strong prior, but it is still a dataset prior.
+  - It should be evaluated separately from LLM reasoning.
+  - If used in prompts, compare raw category labels, top-k complementary hints, verbalized confidence buckets, raw numeric confidence, and external reranking.
 
 ## 8. Important Commands
 
@@ -476,6 +664,32 @@ analysis/pog_dense_all_methods_tag_analysis/overleaf_tables_safe.tex
 python src\analyze_joint_success_failure.py --results results\pog_dense\results_pog_dense_HN_C10_T5_20260430_172343.csv results\pog_dense\results_pog_dense_HN_C10_T5_20260506_133202.csv results\pog_dense\results_pog_dense_HN_C10_T5_20260506_163507.csv --names base co_occur user_prefer --semantic results\pog_dense\problem_fashion_semantic_tags_v2.csv --rule results\pog_dense\problem_tag_meta.csv --output_dir analysis\pog_dense_text_cf_joint_success_failure
 ```
 
+### Category embedding and co-occurrence analysis
+
+Build category embedding cache:
+
+```powershell
+python analyzer_utility\build_category_embedding_cache.py --datasets pog pog_dense
+```
+
+Analyze category embedding signal:
+
+```powershell
+python analyzer_utility\analyze_category_embedding_signal.py
+```
+
+Analyze full-bundle category co-occurrence from `bi_full.txt`:
+
+```powershell
+python analyzer_utility\analyze_bundle_category_cooccurrence.py
+```
+
+Evaluate train-to-test category completion prior:
+
+```powershell
+python analyzer_utility\evaluate_category_completion_selfsup.py
+```
+
 ### Create clean problem metadata
 
 ```powershell
@@ -528,3 +742,13 @@ python src\analyze_rule_based_baselines.py --csv results\spotify\results_spotify
    - all-hit examples: clear brand/gender/plausibility.
    - all-fail examples: style/theme, low plausibility, weak rule signal.
    - CoCF-only examples: GT is co-occurrence unique top-1.
+
+6. Turn category co-occurrence prior into LLM-facing signals.
+   - First build a readable category map from hashed category IDs to representative item titles/descriptions.
+   - Compare:
+     - raw item category labels,
+     - top-k complementary category hints,
+     - verbal strength buckets,
+     - raw confidence numbers,
+     - external co-occurrence reranking.
+   - Use the self-supervised result as justification that the prior is strong before exposing it to the LLM.

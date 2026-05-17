@@ -1,0 +1,40 @@
+[
+  {
+    "dataset": "pog",
+    "item_info_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\item_info.json",
+    "category_field": "cate",
+    "train_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\bi_train.txt",
+    "test_input_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\bi_test_input.txt",
+    "test_gt_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\bi_test_gt.txt",
+    "num_train_bundles": 14000,
+    "num_usable_train_bundles": 14000,
+    "num_train_categories": 72,
+    "train_missing_category_occurrences": 0,
+    "num_test_input_bundles": 4000,
+    "num_test_gt_bundles": 4000,
+    "num_common_test_bundles": 4000,
+    "missing_test_bundle_count": 0,
+    "min_support": 3,
+    "max_itemset_size": 4,
+    "max_backoff_size": 3
+  },
+  {
+    "dataset": "pog_dense",
+    "item_info_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\item_info.json",
+    "category_field": "cate_id",
+    "train_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\bi_train.txt",
+    "test_input_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\bi_test_input.txt",
+    "test_gt_file": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog_dense\\bi_test_gt.txt",
+    "num_train_bundles": 20780,
+    "num_usable_train_bundles": 20780,
+    "num_train_categories": 67,
+    "train_missing_category_occurrences": 0,
+    "num_test_input_bundles": 5938,
+    "num_test_gt_bundles": 5938,
+    "num_common_test_bundles": 5938,
+    "missing_test_bundle_count": 0,
+    "min_support": 3,
+    "max_itemset_size": 4,
+    "max_backoff_size": 3
+  }
+]

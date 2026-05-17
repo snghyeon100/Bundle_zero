@@ -1,0 +1,60 @@
+max_parallel: 4
+tmp_config_dir: experiments/tmp_configs
+log_dir: experiments/logs
+
+experiments:
+  - name: pog_bgraph_hard_ib
+    api_key_slot: 1
+    overrides:
+      dataset: pog
+      use_cooccurrence: false
+      use_soft_cooccurrence: false
+      use_item_bundle_affiliation_desc: false
+      use_item_user_copurchase_desc: false
+      use_bundle_graph_context: true
+      bundle_graph_context_use_soft: false
+      use_icl_retrieval: false
+      use_user_context: false
+
+  - name: pog_bgraph_soft_bundle_bi_lgcn_ibprime
+    api_key_slot: 2
+    overrides:
+      dataset: pog
+      use_cooccurrence: false
+      use_soft_cooccurrence: false
+      use_item_bundle_affiliation_desc: false
+      use_item_user_copurchase_desc: false
+      use_bundle_graph_context: true
+      bundle_graph_context_use_soft: true
+      bundle_graph_context_soft_source: bundle_smoothing_bi_lgcn
+      bundle_graph_context_soft_alpha: 1.0
+      use_icl_retrieval: false
+      use_user_context: false
+
+  - name: pog_dense_bgraph_hard_ib
+    api_key_slot: 3
+    overrides:
+      dataset: pog_dense
+      use_cooccurrence: false
+      use_soft_cooccurrence: false
+      use_item_bundle_affiliation_desc: false
+      use_item_user_copurchase_desc: false
+      use_bundle_graph_context: true
+      bundle_graph_context_use_soft: false
+      use_icl_retrieval: false
+      use_user_context: false
+
+  - name: pog_dense_bgraph_soft_bundle_bi_lgcn_ibprime
+    api_key_slot: 4
+    overrides:
+      dataset: pog_dense
+      use_cooccurrence: false
+      use_soft_cooccurrence: false
+      use_item_bundle_affiliation_desc: false
+      use_item_user_copurchase_desc: false
+      use_bundle_graph_context: true
+      bundle_graph_context_use_soft: true
+      bundle_graph_context_soft_source: bundle_smoothing_bi_lgcn
+      bundle_graph_context_soft_alpha: 1.0
+      use_icl_retrieval: false
+      use_user_context: false

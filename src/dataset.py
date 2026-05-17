@@ -39,6 +39,10 @@ class BundleZeroShotDataset:
         self.item_bundle_affiliation_alpha = conf.get("item_bundle_affiliation_alpha", 0.5)
         self.item_bundle_affiliation_seed = conf.get("item_bundle_affiliation_seed", self.seed)
         self.item_bundle_affiliation_exclude_query_items = conf.get("item_bundle_affiliation_exclude_query_items", False)
+        self.item_bundle_affiliation_use_soft = conf.get("item_bundle_affiliation_use_soft", False)
+        self.item_bundle_affiliation_soft_source = conf.get("item_bundle_affiliation_soft_source", "bundle_smoothing_bi_lgcn")
+        self.item_bundle_affiliation_soft_alpha = conf.get("item_bundle_affiliation_soft_alpha", 1.0)
+        self.item_bundle_affiliation_soft_item_to_bundles = None
         self.item_bundle_affiliation_matrix = None
         self.use_item_user_copurchase_desc = conf.get("use_item_user_copurchase_desc", False)
         self.item_user_copurchase_k = conf.get("item_user_copurchase_k", 3)
@@ -55,6 +59,10 @@ class BundleZeroShotDataset:
         self.bundle_graph_context_k = conf.get("bundle_graph_context_k", 1)
         self.bundle_graph_context_max_items = conf.get("bundle_graph_context_max_items", 5)
         self.bundle_graph_context_seed = conf.get("bundle_graph_context_seed", self.seed)
+        self.bundle_graph_context_use_soft = conf.get("bundle_graph_context_use_soft", False)
+        self.bundle_graph_context_soft_source = conf.get("bundle_graph_context_soft_source", "bundle_smoothing_bi_lgcn")
+        self.bundle_graph_context_soft_alpha = conf.get("bundle_graph_context_soft_alpha", 1.0)
+        self.bundle_graph_context_soft_item_to_bundles = None
         self.bundle_graph_train_matrix = None
         self.bundle_graph_train_items = {}
         self.bundle_graph_train_bundle_ids = np.array([], dtype=np.int32)
@@ -87,6 +95,23 @@ class BundleZeroShotDataset:
         if self.use_item_bundle_affiliation_desc:
             self.item_bundle_affiliation_matrix = self._build_item_bundle_affiliation_matrix()
             print(f"[Item Bundle Affiliation] Loaded BI^T BI from bi_train.txt with {self.item_bundle_affiliation_matrix.nnz} item-item links")
+            if self.item_bundle_affiliation_use_soft:
+                soft_matrix = self._build_soft_item_bundle_affiliation_matrix(
+                    self.item_bundle_affiliation_soft_source
+                )
+                if self.item_bundle_affiliation_soft_alpha != 1.0:
+                    soft_matrix = soft_matrix.copy()
+                    soft_matrix.data *= float(self.item_bundle_affiliation_soft_alpha)
+                self.item_bundle_affiliation_matrix = (
+                    self.item_bundle_affiliation_matrix + soft_matrix
+                ).tocsr()
+                self.item_bundle_affiliation_matrix.setdiag(0)
+                self.item_bundle_affiliation_matrix.eliminate_zeros()
+                print(
+                    f"[Item Bundle Affiliation] Added soft I-B' x BI from "
+                    f"{self.item_bundle_affiliation_soft_source} with {soft_matrix.nnz} item-item links "
+                    f"(alpha={self.item_bundle_affiliation_soft_alpha})"
+                )
         if self.use_item_user_copurchase_desc:
             self.item_user_copurchase_matrix = self._build_item_user_copurchase_matrix()
             print(f"[Item User Co-purchase] Loaded UI^T UI from ui_full.txt with {self.item_user_copurchase_matrix.nnz} item-item links")
@@ -99,6 +124,15 @@ class BundleZeroShotDataset:
         if self.use_bundle_graph_context:
             self._build_bundle_graph_context_index()
             print(f"[Bundle Graph Context] Loaded {len(self.bundle_graph_train_items)} train bundles from bi_train.txt")
+            if self.bundle_graph_context_use_soft:
+                self.bundle_graph_context_soft_item_to_bundles = self._load_soft_item_to_bundles(
+                    self.bundle_graph_context_soft_source
+                )
+                print(
+                    f"[Bundle Graph Context] Loaded soft I-B' mapping for "
+                    f"{len(self.bundle_graph_context_soft_item_to_bundles)} items from "
+                    f"{self.bundle_graph_context_soft_source}"
+                )
 
         # Apply toy_eval truncating
         if self.toy_eval > 0:
@@ -118,6 +152,37 @@ class BundleZeroShotDataset:
         train_pairs = list2pairs(train_path)
         b_i_graph_train = pairs2csr(train_pairs, (self.num_bundles, self.num_items))
         item_item = (b_i_graph_train.T @ b_i_graph_train).tocsr()
+        item_item.setdiag(0)
+        item_item.eliminate_zeros()
+        return item_item
+
+    def _build_soft_item_bundle_affiliation_matrix(self, source):
+        """Build item-item co-affiliation counts through soft item -> train bundle B' links."""
+        train_bundle_items = self._load_train_bundle_items()
+        if not train_bundle_items:
+            return sp.csr_matrix((self.num_items, self.num_items), dtype=np.float32)
+
+        self.item_bundle_affiliation_soft_item_to_bundles = self._load_soft_item_to_bundles(source)
+        rows = []
+        cols = []
+        for item_id, bundle_ids in self.item_bundle_affiliation_soft_item_to_bundles.items():
+            if not 0 <= int(item_id) < self.num_items:
+                continue
+            for bundle_id in bundle_ids:
+                for co_item_id in train_bundle_items.get(int(bundle_id), []):
+                    if 0 <= int(co_item_id) < self.num_items and int(co_item_id) != int(item_id):
+                        rows.append(int(item_id))
+                        cols.append(int(co_item_id))
+
+        if not rows:
+            return sp.csr_matrix((self.num_items, self.num_items), dtype=np.float32)
+
+        values = np.ones(len(rows), dtype=np.float32)
+        item_item = sp.csr_matrix(
+            (values, (np.asarray(rows, dtype=np.int32), np.asarray(cols, dtype=np.int32))),
+            shape=(self.num_items, self.num_items)
+        )
+        item_item.sum_duplicates()
         item_item.setdiag(0)
         item_item.eliminate_zeros()
         return item_item
@@ -153,20 +218,25 @@ class BundleZeroShotDataset:
                 item_to_bundles[item_id].add(bundle_id)
         return item_to_bundles
 
-    def _soft_cooccurrence_path(self):
+    def _soft_mapping_path(self, source):
         file_by_source = {
             "item_smoothing_text": "item_smoothing_i2bprime_text_top1.json",
+            "item_smoothing_bi_lgcn": "item_smoothing_i2bprime_bi_lgcn_top1.json",
             "bundle_smoothing_text": "bundle_smoothing_i2bprime_text_top1.json",
             "bundle_smoothing_bi_lgcn": "bundle_smoothing_i2bprime_bi_lgcn_top1.json",
         }
-        if self.soft_cooccurrence_source not in file_by_source:
+        if source not in file_by_source:
             allowed = ", ".join(sorted(file_by_source))
-            raise ValueError(f"Unknown soft_cooccurrence_source={self.soft_cooccurrence_source}. Allowed: {allowed}")
-        return os.path.join(self.path, self.name, file_by_source[self.soft_cooccurrence_source])
+            raise ValueError(f"Unknown soft mapping source={source}. Allowed: {allowed}")
+        return os.path.join(self.path, self.name, file_by_source[source])
 
-    def _load_soft_item_to_bundles(self):
+    def _soft_cooccurrence_path(self):
+        return self._soft_mapping_path(self.soft_cooccurrence_source)
+
+    def _load_soft_item_to_bundles(self, source=None):
         """Load precomputed item -> soft train bundle B' mapping."""
-        soft_path = self._soft_cooccurrence_path()
+        source = source or self.soft_cooccurrence_source
+        soft_path = self._soft_mapping_path(source)
         if not os.path.exists(soft_path):
             raise FileNotFoundError(
                 f"Soft co-occurrence mapping not found: {soft_path}. "
@@ -315,9 +385,23 @@ class BundleZeroShotDataset:
             return None
 
         overlap = np.asarray(self.bundle_graph_train_matrix[:, input_indices].sum(axis=1)).ravel()
+        candidate_bundle_set = set(int(i) for i in np.flatnonzero(overlap > 0))
+
+        soft_hit = np.zeros(self.num_bundles, dtype=np.float64)
+        if self.bundle_graph_context_use_soft:
+            if self.bundle_graph_context_soft_item_to_bundles is None:
+                self.bundle_graph_context_soft_item_to_bundles = self._load_soft_item_to_bundles(
+                    self.bundle_graph_context_soft_source
+                )
+            for item_id in input_indices:
+                for bundle_id in self.bundle_graph_context_soft_item_to_bundles.get(int(item_id), set()):
+                    if 0 <= bundle_id < self.num_bundles:
+                        soft_hit[bundle_id] += 1.0
+                        candidate_bundle_set.add(int(bundle_id))
+
         candidate_bundle_ids = np.intersect1d(
             self.bundle_graph_train_bundle_ids,
-            np.flatnonzero(overlap > 0),
+            np.fromiter(candidate_bundle_set, dtype=np.int32),
             assume_unique=False
         )
         if len(candidate_bundle_ids) == 0:
@@ -327,6 +411,7 @@ class BundleZeroShotDataset:
         idf_overlap = np.asarray(
             self.bundle_graph_train_matrix[:, input_indices].multiply(idf_weights).sum(axis=1)
         ).ravel()
+        score = overlap + (float(self.bundle_graph_context_soft_alpha) * soft_hit)
 
         rng = np.random.default_rng(
             int(sample.get("bundle_id", 0)) + int(self.bundle_graph_context_seed)
@@ -335,15 +420,28 @@ class BundleZeroShotDataset:
         order = np.lexsort((
             tie_break,
             -idf_overlap[candidate_bundle_ids],
+            -soft_hit[candidate_bundle_ids],
             -overlap[candidate_bundle_ids],
+            -score[candidate_bundle_ids],
         ))
+        if not self.bundle_graph_context_use_soft:
+            order = np.lexsort((
+                tie_break,
+                -idf_overlap[candidate_bundle_ids],
+                -overlap[candidate_bundle_ids],
+            ))
         selected_bundle_ids = [int(i) for i in candidate_bundle_ids[order[:int(self.bundle_graph_context_k)]]]
 
         examples = []
         metadata = {
             "bundle_graph_context_bundle_ids": selected_bundle_ids,
             "bundle_graph_context_overlap_counts": [int(overlap[i]) for i in selected_bundle_ids],
+            "bundle_graph_context_soft_hit_counts": [float(soft_hit[i]) for i in selected_bundle_ids],
+            "bundle_graph_context_scores": [float(score[i]) for i in selected_bundle_ids],
             "bundle_graph_context_idf_scores": [float(idf_overlap[i]) for i in selected_bundle_ids],
+            "bundle_graph_context_use_soft": int(self.bundle_graph_context_use_soft),
+            "bundle_graph_context_soft_source": self.bundle_graph_context_soft_source if self.bundle_graph_context_use_soft else "",
+            "bundle_graph_context_soft_alpha": float(self.bundle_graph_context_soft_alpha),
         }
         for bundle_id in selected_bundle_ids:
             items = self.bundle_graph_train_items.get(bundle_id, [])
@@ -361,9 +459,9 @@ class BundleZeroShotDataset:
             return None
 
         if "spotify" in self.name:
-            header = "Additional context: Similar historical playlists based on shared input songs:"
+            header = "Additional context: Related past playlists:"
         else:
-            header = "Additional context: Similar historical outfits based on shared input items:"
+            header = "Additional context: Related past outfits:"
 
         lines = [header]
         for idx, example in enumerate(examples, start=1):
