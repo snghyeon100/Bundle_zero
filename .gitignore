@@ -6,6 +6,8 @@ venv/
 .venv/
 env/
 ENV/
+.venv_matrix/
+venv_matrix/
 
 # Python caching
 __pycache__/

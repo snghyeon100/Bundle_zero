@@ -1,6 +1,6 @@
 # LLM-ZeroShot Context
 
-Last updated: 2026-05-17
+Last updated: 2026-05-18
 
 ## 1. Project Purpose
 
@@ -28,6 +28,28 @@ Current narrative:
 - User preference often hurts because the signal is not reliably aligned with bundle/playlist completion.
 - For POG/POG-dense, semantic tags plus empirical difficulty are the most useful way to explain what the LLM can and cannot do.
 - For POG/POG-dense, item category structure is highly informative, but not as embedding similarity. The stronger signal is train-derived category co-occurrence: observed bundle categories predict likely missing/complementary categories.
+
+### Why extend `I-B'` with category structure
+
+The motivation for extending the original item-bundle interaction space is sparsity in exact item-level collaborative evidence.
+
+- In sparse POG-style settings, many test input items and candidate items have little or no direct co-occurrence history in `bi_train.txt`.
+- When this happens, raw `BI x IB` item-item evidence often collapses into all-zero or tie-heavy scores, so candidate items are hard to distinguish.
+- `UI/IU` user-preference evidence can also be weak or misaligned with bundle completion: it may describe broad user taste, but not necessarily which missing item completes the current outfit.
+- POG-dense behaves differently: item-level co-occurrence is much more predictive, which is why `use_cooccurrence` works strongly there. This suggests the issue is not that collaborative structure is useless, but that exact item-level structure is too sparse in POG.
+
+`I-B'` is therefore intended to enrich the interaction space with category-aware bundle structure. Instead of relying only on exact item co-occurrence, the model can use repeated category-composition patterns. For example, if input item categories are `A, B, C`, train bundles may show that category `D` frequently completes this category set, even when the exact candidate item has never co-occurred with the exact input items.
+
+This connects directly to the category-completion findings:
+
+- Full bundles behave like category slot templates: repeated-category rates are almost zero, while category set patterns repeat.
+- Category-only train-to-test completion works surprisingly well without an LLM.
+- Text/category embedding similarity is weak as a direct scorer, implying the key signal is not semantic closeness but complementary category completion.
+
+Methodologically, this supports category-aware extensions in two forms:
+
+- Use category completion priors as LLM-facing context, verbalized through representative items rather than opaque category IDs or raw numeric scores.
+- Use category structure to expand item-bundle evidence, so sparse exact `BI` signals can be backed by category-level bundle patterns.
 
 ## 2. Main Folder Structure
 
@@ -569,6 +591,175 @@ Methodology implication:
   - use it as external reranking,
   - use category pattern similarity for few-shot example selection.
 
+### Implemented category prior prompt method
+
+Implemented the first category-aware baseline extension as `use_category_completion_prior_desc`.
+
+Design:
+
+- For each test sample, use the full input category set `S`.
+- Learn category completion confidence from `bi_train.txt` only:
+
+```text
+score(c | S) = count_train(S union {c}) / count_train(S)
+```
+
+- Select top-k complementary categories by this score.
+- Default:
+  - `category_prior_top_k: 3`
+  - `category_prior_rep_items_per_category: 3`
+  - `category_prior_min_support: 3`
+- Do not expose raw scores or category hash IDs to the LLM.
+- For each selected category, show representative item titles instead.
+- Representative items are selected from train bundle items in that category.
+- Ranking criterion for representatives:
+  - use all-items category centroid from `analysis/category_embedding_cache/...`,
+  - compute cosine similarity between train item text embeddings and the category centroid,
+  - take centroid-nearest train items.
+- Input items and candidate items are excluded from representative examples for the current sample.
+
+Prompt block wording:
+
+```text
+Additional outfit context:
+The current outfit is commonly completed by item categories similar to the examples below.
+1. Similar category examples: ...
+2. Similar category examples: ...
+3. Similar category examples: ...
+Use these examples only as a soft hint about plausible missing item types.
+```
+
+Prompt placement:
+
+- ICL example, if any, remains before the target question.
+- Current-sample context blocks now appear after the input question and before candidate options:
+  - `user_context_block`
+  - `bundle_graph_context_block`
+  - `category_prior_context_block`
+- This means `use_bundle_graph_context`, `use_user_context`, and `use_category_completion_prior_desc` are affected by the prompt placement change.
+- Inline item/candidate augmentations are not affected:
+  - `use_item_bundle_affiliation_desc`
+  - `use_item_user_copurchase_desc`
+  - `use_cooccurrence`
+  - `use_soft_cooccurrence`
+  - `use_category_item_text_aug`
+  - `input_category_co_occur`
+
+Result file naming:
+
+- Runs with category prior enabled include `CATPRIOR_` in the output filename.
+
+Implementation files:
+
+- `src/dataset.py`
+  - Builds category completion prior from `bi_train.txt`.
+  - Loads category and item embedding caches.
+  - Selects centroid-nearest representative train items.
+  - Formats the category prior context block.
+- `src/main.py`
+  - Adds `category_prior_context_block` to `generate_prompt`.
+  - Places current-sample context after the input question and before options.
+  - Saves category-prior config fields and metadata in result CSVs.
+- `config.yaml`
+  - Added category prior options.
+
+### Additional category prompt methods
+
+After the first category prior prompt result was weak, two lighter category verbalization methods were added to test whether category information should be attached directly to item text rather than as a separate global context block.
+
+#### Same-category item text augmentation
+
+Implemented as `use_category_item_text_aug`.
+
+Design:
+
+- For each item, detect its category from `item_info.json`.
+- Select representative train items from the same category.
+- Representative item ranking uses the already-built category centroid:
+  - load all-item text embeddings,
+  - load all-items category centroid embeddings,
+  - rank train items in the category by cosine similarity to the category centroid.
+- Exclude the current sample's input and candidate items from representative examples.
+- This is intended to verbalize what the current item category looks like, without showing opaque category IDs.
+
+Config:
+
+```yaml
+use_category_item_text_aug: false
+category_item_aug_apply_to: both  # inputs | candidates | both
+category_item_aug_rep_items_per_category: 2
+```
+
+Prompt form:
+
+```text
+{item title} [Additional context: Item Category examples: {rep item 1}; {rep item 2}.]
+```
+
+Notes:
+
+- This method is semantic/category-grounding oriented.
+- It does not directly encode category co-occurrence.
+- Runs with this option enabled include `CATITEMAUG_` in the output filename.
+
+#### Pairwise category co-occurrence item augmentation
+
+Implemented as `input_category_co_occur`.
+
+Design:
+
+- Learn category-category pair co-occurrence from `bi_train.txt`.
+- For each train bundle, convert items to a unique category set.
+- For every category pair in the set, increment a symmetric pair count.
+- For an item category `c`, retrieve the top-k categories that most often co-occur with `c`.
+- For each co-occurring category, show one representative item title.
+- Do not expose raw counts or category IDs.
+- Current wording explicitly says that each example item represents one co-occurring category, so the LLM does not read the examples as three items from one category.
+
+Config:
+
+```yaml
+input_category_co_occur: true
+input_category_co_occur_apply_to: inputs  # inputs | candidates | both
+input_category_co_occur_top_k: 3
+input_category_co_occur_rep_items_per_category: 1
+```
+
+Prompt form:
+
+```text
+{item title} [Additional context: Category context: this item's category often appears with the following other categories, each represented by one example item: {rep item 1}; {rep item 2}; {rep item 3}.]
+```
+
+Apply-to variants:
+
+- `inputs`: query-side augmentation only. This is the cleanest first variant because it enriches the partial outfit without directly annotating options.
+- `candidates`: option-side augmentation only. This tests whether candidate category-neighborhood descriptions help option comparison.
+- `both`: query and option augmentation. This is the strongest verbalized category graph variant but may add more prompt noise.
+
+Notes:
+
+- This method is closer to the strong category co-occurrence signal observed in self-supervised analysis than same-category examples.
+- It uses pairwise category co-occurrence, not the full input-set completion score `score(c | S)`.
+- Runs with this option enabled include `INPCATCOOC_` in the output filename.
+- Result CSVs save:
+  - `cfg_input_category_co_occur`
+  - `cfg_input_category_co_occur_apply_to`
+  - `cfg_input_category_co_occur_top_k`
+  - `cfg_input_category_co_occur_rep_items_per_category`
+
+Implementation files:
+
+- `src/dataset.py`
+  - Builds category pair co-occurrence counts from `bi_train.txt`.
+  - Reuses category representative item ranking.
+  - Adds item-level category co-occurrence context according to `input_category_co_occur_apply_to`.
+- `src/main.py`
+  - Saves the new config fields.
+  - Adds `INPCATCOOC_` to result filenames.
+- `config.yaml`
+  - Added same-category and pairwise category co-occurrence augmentation options.
+
 ## 7. Current Issues Or Cautions
 
 - Existing image/multimodal result CSVs should be treated cautiously.
@@ -599,6 +790,21 @@ Methodology implication:
 - Category co-occurrence confidence is a strong prior, but it is still a dataset prior.
   - It should be evaluated separately from LLM reasoning.
   - If used in prompts, compare raw category labels, top-k complementary hints, verbalized confidence buckets, raw numeric confidence, and external reranking.
+
+- Category prior prompt uses all-items category centroids for representative selection, but representatives themselves are selected only from train bundle items and exclude the current sample's input/candidate items.
+  - This was chosen for analysis-oriented experimentation.
+  - A stricter later variant could rebuild train-only category centroids.
+
+- Because prompt block placement changed, rerun methods that use separate context blocks before using old results:
+  - `use_category_completion_prior_desc`
+  - `use_bundle_graph_context`
+  - `use_user_context`
+  - Methods with inline item/candidate augmentation do not need rerun solely due to this prompt placement change.
+
+- Category item augmentation methods are inline item-text changes.
+  - `use_category_item_text_aug` appends same-category representative examples.
+  - `input_category_co_occur` appends co-occurring-category representative examples.
+  - Their behavior depends on `*_apply_to` options, so compare `inputs`, `candidates`, and `both` as separate ablations.
 
 ## 8. Important Commands
 
@@ -690,6 +896,58 @@ Evaluate train-to-test category completion prior:
 python analyzer_utility\evaluate_category_completion_selfsup.py
 ```
 
+Run category prior prompt experiment:
+
+```yaml
+use_category_completion_prior_desc: true
+category_prior_top_k: 3
+category_prior_rep_items_per_category: 3
+category_prior_min_support: 3
+```
+
+Then run:
+
+```powershell
+python src\main.py
+```
+
+Resume works as usual:
+
+```powershell
+python src\main.py --resume results\<dataset>\results_<dataset>_CATPRIOR_..._partial.csv
+```
+
+Run same-category item text augmentation:
+
+```yaml
+use_category_item_text_aug: true
+category_item_aug_apply_to: both
+category_item_aug_rep_items_per_category: 2
+input_category_co_occur: false
+```
+
+Then run:
+
+```powershell
+python src\main.py
+```
+
+Run pairwise category co-occurrence item augmentation:
+
+```yaml
+use_category_item_text_aug: false
+input_category_co_occur: true
+input_category_co_occur_apply_to: inputs  # inputs | candidates | both
+input_category_co_occur_top_k: 3
+input_category_co_occur_rep_items_per_category: 1
+```
+
+Then run:
+
+```powershell
+python src\main.py
+```
+
 ### Create clean problem metadata
 
 ```powershell
@@ -752,3 +1010,10 @@ python src\analyze_rule_based_baselines.py --csv results\spotify\results_spotify
      - raw confidence numbers,
      - external co-occurrence reranking.
    - Use the self-supervised result as justification that the prior is strong before exposing it to the LLM.
+
+7. Category method ablations to run next.
+   - `input_category_co_occur_apply_to: inputs`
+   - `input_category_co_occur_apply_to: candidates`
+   - `input_category_co_occur_apply_to: both`
+   - `use_category_item_text_aug: true` with `category_item_aug_apply_to: both`
+   - Compare these against `use_category_completion_prior_desc` and base.

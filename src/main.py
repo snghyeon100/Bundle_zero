@@ -64,6 +64,20 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
         if conf.get("bundle_graph_context_use_soft", False):
             print(f"  [Bundle Graph Context Soft Source] {conf.get('bundle_graph_context_soft_source', '')}")
             print(f"  [Bundle Graph Context Soft Alpha] {conf.get('bundle_graph_context_soft_alpha', '')}")
+    print(f"  [Category Completion Prior Enabled] {conf.get('use_category_completion_prior_desc', False)}")
+    if conf.get("use_category_completion_prior_desc", False):
+        print(f"  [Category Prior top-k] {conf.get('category_prior_top_k', '')}")
+        print(f"  [Representative items/category] {conf.get('category_prior_rep_items_per_category', '')}")
+        print(f"  [Category Prior min support] {conf.get('category_prior_min_support', '')}")
+    print(f"  [Category Item Text Aug Enabled] {conf.get('use_category_item_text_aug', False)}")
+    if conf.get("use_category_item_text_aug", False):
+        print(f"  [Category Item Aug apply-to] {conf.get('category_item_aug_apply_to', '')}")
+        print(f"  [Category Item Aug reps/category] {conf.get('category_item_aug_rep_items_per_category', '')}")
+    print(f"  [Input Category Co-occur Enabled] {conf.get('input_category_co_occur', False)}")
+    if conf.get("input_category_co_occur", False):
+        print(f"  [Input Category Co-occur apply-to] {conf.get('input_category_co_occur_apply_to', '')}")
+        print(f"  [Input Category Co-occur top-k] {conf.get('input_category_co_occur_top_k', '')}")
+        print(f"  [Input Category Co-occur reps/category] {conf.get('input_category_co_occur_rep_items_per_category', '')}")
     print("\n[DEBUG] First Question:")
     print(console_safe_text(sample.get("input_str", "")))
     print("\n[DEBUG] First Options:")
@@ -75,7 +89,8 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
 
 def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
                     use_cooccurrence=False, use_soft_cooccurrence=False, soft_cooccurrence_source="",
-                    icl_example=None, user_context_block="", bundle_graph_context_block=""):
+                    icl_example=None, user_context_block="", bundle_graph_context_block="",
+                    category_prior_context_block=""):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -121,9 +136,10 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
         f"{cf_legend}"
         f"{icl_block}"
+        f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
         f"{user_context_block}"
         f"{bundle_graph_context_block}"
-        f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
+        f"{category_prior_context_block}"
         f"Options: {target_str}\n"
         #f"First, analyze the overall combination and coherence of the items in the {b_name}. Then, choose the candidate {i_name} that best completes the set."
         #f"{extra_instruction}"
@@ -248,6 +264,18 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df['cfg_bundle_graph_context_use_soft'] = conf.get("bundle_graph_context_use_soft", False)
     df['cfg_bundle_graph_context_soft_source'] = conf.get("bundle_graph_context_soft_source", "")
     df['cfg_bundle_graph_context_soft_alpha'] = conf.get("bundle_graph_context_soft_alpha", "")
+    df['cfg_use_category_completion_prior_desc'] = conf.get("use_category_completion_prior_desc", False)
+    df['cfg_use_category_item_text_aug'] = conf.get("use_category_item_text_aug", False)
+    df['cfg_category_item_aug_apply_to'] = conf.get("category_item_aug_apply_to", "")
+    df['cfg_category_item_aug_rep_items_per_category'] = conf.get("category_item_aug_rep_items_per_category", "")
+    df['cfg_input_category_co_occur'] = conf.get("input_category_co_occur", False)
+    df['cfg_input_category_co_occur_apply_to'] = conf.get("input_category_co_occur_apply_to", "")
+    df['cfg_input_category_co_occur_top_k'] = conf.get("input_category_co_occur_top_k", "")
+    df['cfg_input_category_co_occur_rep_items_per_category'] = conf.get("input_category_co_occur_rep_items_per_category", "")
+    df['cfg_category_prior_top_k'] = conf.get("category_prior_top_k", "")
+    df['cfg_category_prior_rep_items_per_category'] = conf.get("category_prior_rep_items_per_category", "")
+    df['cfg_category_prior_min_support'] = conf.get("category_prior_min_support", "")
+    df['cfg_category_prior_embedding_model'] = conf.get("category_prior_embedding_model", "")
     
     actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
     os.makedirs(actual_output_dir, exist_ok=True)
@@ -266,8 +294,11 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
         bundle_ctx_str = f"BGRAPH_SOFT_{conf.get('bundle_graph_context_soft_source', '')}_"
     else:
         bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
+    category_prior_str = "CATPRIOR_" if conf.get("use_category_completion_prior_desc", False) else ""
+    category_item_aug_str = "CATITEMAUG_" if conf.get("use_category_item_text_aug", False) else ""
+    input_category_co_occur_str = "INPCATCOOC_" if conf.get("input_category_co_occur", False) else ""
     partial_str = "" if is_final else "_partial"
-    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
+    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{category_prior_str}{category_item_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
     tmp_path = f"{save_path}.tmp"
     last_error = None
     for attempt in range(5):
@@ -354,6 +385,23 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             print(f"  [IDF Scores] {[round(x, 6) for x in bundle_graph_context['metadata']['bundle_graph_context_idf_scores']]}")
             print(f"  [Context Text] {console_safe_text(bundle_graph_context_block[:1000])}...")
             print("-" * 50 + "\n")
+
+        category_prior_context = None
+        category_prior_context_block = ""
+        if conf.get("use_category_completion_prior_desc", False) and dataset is not None:
+            category_prior_context = dataset.retrieve_category_completion_prior_context(sample)
+            if category_prior_context is not None:
+                category_prior_context_block = category_prior_context["context_block"]
+                sample.update(category_prior_context["metadata"])
+
+        if idx == 0 and category_prior_context is not None:
+            print("\n[DEBUG] Category Completion Prior Check (First Sample):")
+            print(f"  [Observed Categories] {category_prior_context['metadata'].get('category_prior_observed_categories', '')}")
+            print(f"  [Observed Support] {category_prior_context['metadata'].get('category_prior_observed_support', '')}")
+            print(f"  [Top Categories] {category_prior_context['metadata'].get('category_prior_top_categories', '')}")
+            print(f"  [Representative Item IDs] {category_prior_context['metadata'].get('category_prior_rep_item_ids', '')}")
+            print(f"  [Context Text] {console_safe_text(category_prior_context_block[:1000])}...")
+            print("-" * 50 + "\n")
         
         text_prompt = generate_prompt(
             conf["dataset"], sample["input_str"], enriched_target_str,
@@ -363,7 +411,8 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             soft_cooccurrence_source=conf.get("soft_cooccurrence_source", ""),
             icl_example=icl_example,
             user_context_block=user_context_block,
-            bundle_graph_context_block=bundle_graph_context_block
+            bundle_graph_context_block=bundle_graph_context_block,
+            category_prior_context_block=category_prior_context_block
         )
 
         if idx == 0:
@@ -499,6 +548,13 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 if bundle_graph_context is not None:
                     bundle_graph_context_block = bundle_graph_context["context_block"]
                     sample.update(bundle_graph_context["metadata"])
+            category_prior_context = None
+            category_prior_context_block = ""
+            if conf.get("use_category_completion_prior_desc", False) and dataset is not None:
+                category_prior_context = dataset.retrieve_category_completion_prior_context(sample)
+                if category_prior_context is not None:
+                    category_prior_context_block = category_prior_context["context_block"]
+                    sample.update(category_prior_context["metadata"])
             prompt = generate_prompt(
                 conf["dataset"],
                 sample["input_str"],
@@ -507,7 +563,8 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 use_cooccurrence=conf.get("use_cooccurrence", False),
                 use_soft_cooccurrence=conf.get("use_soft_cooccurrence", False),
                 soft_cooccurrence_source=conf.get("soft_cooccurrence_source", ""),
-                bundle_graph_context_block=bundle_graph_context_block
+                bundle_graph_context_block=bundle_graph_context_block,
+                category_prior_context_block=category_prior_context_block
             )
             if idx == 0 and bundle_graph_context is not None:
                 print("\n[DEBUG] Bundle Graph Context Check (First Sample):")
@@ -637,6 +694,18 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
         df['cfg_bundle_graph_context_use_soft'] = conf.get("bundle_graph_context_use_soft", False)
         df['cfg_bundle_graph_context_soft_source'] = conf.get("bundle_graph_context_soft_source", "")
         df['cfg_bundle_graph_context_soft_alpha'] = conf.get("bundle_graph_context_soft_alpha", "")
+        df['cfg_use_category_completion_prior_desc'] = conf.get("use_category_completion_prior_desc", False)
+        df['cfg_use_category_item_text_aug'] = conf.get("use_category_item_text_aug", False)
+        df['cfg_category_item_aug_apply_to'] = conf.get("category_item_aug_apply_to", "")
+        df['cfg_category_item_aug_rep_items_per_category'] = conf.get("category_item_aug_rep_items_per_category", "")
+        df['cfg_input_category_co_occur'] = conf.get("input_category_co_occur", False)
+        df['cfg_input_category_co_occur_apply_to'] = conf.get("input_category_co_occur_apply_to", "")
+        df['cfg_input_category_co_occur_top_k'] = conf.get("input_category_co_occur_top_k", "")
+        df['cfg_input_category_co_occur_rep_items_per_category'] = conf.get("input_category_co_occur_rep_items_per_category", "")
+        df['cfg_category_prior_top_k'] = conf.get("category_prior_top_k", "")
+        df['cfg_category_prior_rep_items_per_category'] = conf.get("category_prior_rep_items_per_category", "")
+        df['cfg_category_prior_min_support'] = conf.get("category_prior_min_support", "")
+        df['cfg_category_prior_embedding_model'] = conf.get("category_prior_embedding_model", "")
 
         # Save results in dataset-specific subfolder
         actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
@@ -655,7 +724,10 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
             bundle_ctx_str = f"BGRAPH_SOFT_{conf.get('bundle_graph_context_soft_source', '')}_"
         else:
             bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
-        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{item_aff_str}{user_pur_str}{bundle_ctx_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
+        category_prior_str = "CATPRIOR_" if conf.get("use_category_completion_prior_desc", False) else ""
+        category_item_aug_str = "CATITEMAUG_" if conf.get("use_category_item_text_aug", False) else ""
+        input_category_co_occur_str = "INPCATCOOC_" if conf.get("input_category_co_occur", False) else ""
+        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{item_aff_str}{user_pur_str}{bundle_ctx_str}{category_prior_str}{category_item_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
         df.to_csv(save_path, index=False, encoding='utf-8-sig')
         
         print("-" * 30)

@@ -1,0 +1,5 @@
+﻿dataset,split,mode,num_categories,nonzero_diag,undirected_edges,density,total_offdiag_weight,mean_degree,median_degree,max_degree,mean_weighted_degree,max_weighted_degree,num_components,largest_component_size,isolated_categories
+pog,train,count,72,72,1059,0.41431924882629106,69594.0,29.416666666666668,32.0,65,1933.1666666666667,20302.0,1,72,0
+pog,train,binary,72,72,1059,0.41431924882629106,69505.0,29.416666666666668,32.0,65,1930.6944444444443,20292.0,1,72,0
+pog,full,count,72,72,1126,0.4405320813771518,99094.0,31.27777777777778,33.0,65,2752.6111111111113,28898.0,1,72,0
+pog,full,binary,72,72,1126,0.4405320813771518,98964.0,31.27777777777778,33.0,65,2749.0,28882.0,1,72,0

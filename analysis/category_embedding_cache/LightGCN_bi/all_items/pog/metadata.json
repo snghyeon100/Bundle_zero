@@ -1,0 +1,24 @@
+{
+  "dataset": "pog",
+  "source_feature_path": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\datasets\\pog\\pog_LightGCN_bi_feature.pt",
+  "embedding_name": "LightGCN_bi",
+  "category_field": "cate",
+  "num_items_in_feature": 48676,
+  "embedding_dim": 64,
+  "num_categories": 72,
+  "output_npz": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\analysis\\category_embedding_cache\\LightGCN_bi\\all_items\\pog\\category_embeddings_LightGCN_bi_float32.npz",
+  "tensor_metadata": {
+    "storage_numel": 4395264,
+    "storage_location": "cuda:0",
+    "storage_offset": 1280000,
+    "tensor_shape": [
+      48676,
+      64
+    ],
+    "tensor_stride": [
+      64,
+      1
+    ]
+  },
+  "pooling": "mean item LightGCN BI embeddings per category"
+}

@@ -4,6 +4,8 @@ import random
 import numpy as np
 import scipy.sparse as sp
 from collections import defaultdict
+from collections import Counter
+from itertools import combinations
 
 def set_seed(seed):
     random.seed(seed)
@@ -67,6 +69,36 @@ class BundleZeroShotDataset:
         self.bundle_graph_train_items = {}
         self.bundle_graph_train_bundle_ids = np.array([], dtype=np.int32)
         self.bundle_graph_item_idf = None
+        self.use_category_completion_prior_desc = conf.get("use_category_completion_prior_desc", False)
+        self.use_category_item_text_aug = conf.get("use_category_item_text_aug", False)
+        self.category_item_aug_apply_to = conf.get("category_item_aug_apply_to", "both")
+        self.category_item_aug_rep_items_per_category = conf.get("category_item_aug_rep_items_per_category", 2)
+        self.input_category_co_occur = conf.get("input_category_co_occur", False)
+        self.input_category_co_occur_apply_to = conf.get("input_category_co_occur_apply_to", "inputs")
+        self.input_category_co_occur_top_k = conf.get("input_category_co_occur_top_k", 3)
+        self.input_category_co_occur_rep_items_per_category = conf.get("input_category_co_occur_rep_items_per_category", 1)
+        self.category_prior_top_k = conf.get("category_prior_top_k", 3)
+        self.category_prior_rep_items_per_category = conf.get("category_prior_rep_items_per_category", 3)
+        self.category_prior_min_support = conf.get("category_prior_min_support", 3)
+        self.category_prior_max_itemset_size = conf.get("category_prior_max_itemset_size", 6)
+        self.category_prior_embedding_model = conf.get("category_prior_embedding_model", "text-embedding-3-large")
+        self.category_prior_embedding_dtype = conf.get("category_prior_embedding_dtype", "float16")
+        self.category_prior_category_dtype = conf.get("category_prior_category_dtype", "float32")
+        self.category_prior_item_embedding_cache_root = conf.get(
+            "category_prior_item_embedding_cache_root",
+            os.path.join("analysis", "openai_embedding_cache")
+        )
+        self.category_prior_category_embedding_cache_root = conf.get(
+            "category_prior_category_embedding_cache_root",
+            os.path.join("analysis", "category_embedding_cache")
+        )
+        self.category_prior_itemset_counts = defaultdict(Counter)
+        self.category_prior_train_category_counts = Counter()
+        self.category_pair_cooccur_counts = defaultdict(Counter)
+        self.category_prior_categories = []
+        self.category_prior_item_category_field = None
+        self.category_prior_train_items_by_category = defaultdict(list)
+        self.category_prior_ranked_rep_items_by_category = {}
         
         # Load counts
         count_path = os.path.join(self.path, self.name, 'count.json')
@@ -133,6 +165,14 @@ class BundleZeroShotDataset:
                     f"{len(self.bundle_graph_context_soft_item_to_bundles)} items from "
                     f"{self.bundle_graph_context_soft_source}"
                 )
+
+        if self.use_category_completion_prior_desc or self.use_category_item_text_aug or self.input_category_co_occur:
+            self._build_category_completion_prior()
+            self._build_category_representative_index()
+            print(
+                f"[Category Context] Loaded {len(self.category_prior_categories)} categories "
+                f"from bi_train.txt using field={self.category_prior_item_category_field}"
+            )
 
         # Apply toy_eval truncating
         if self.toy_eval > 0:
@@ -217,6 +257,352 @@ class BundleZeroShotDataset:
             for item_id in items:
                 item_to_bundles[item_id].add(bundle_id)
         return item_to_bundles
+
+    def _detect_item_category_field(self):
+        field_candidates = ["cate_id", "cate", "category"]
+        counts = {field: 0 for field in field_candidates}
+        for item in self.item_info.values():
+            for field in field_candidates:
+                value = item.get(field)
+                if value is not None and str(value).strip():
+                    counts[field] += 1
+        best = max(counts, key=counts.get)
+        if counts[best] == 0:
+            return None
+        return best
+
+    def _get_item_category(self, item_id):
+        if self.category_prior_item_category_field is None:
+            self.category_prior_item_category_field = self._detect_item_category_field()
+        if self.category_prior_item_category_field is None:
+            return None
+        item = self.item_info.get(str(int(item_id)), {})
+        value = item.get(self.category_prior_item_category_field)
+        if value is None or not str(value).strip():
+            return None
+        return str(value).strip()
+
+    @staticmethod
+    def _category_key(categories):
+        return "|".join(sorted(str(c) for c in categories))
+
+    def _items_to_unique_categories(self, item_ids):
+        categories = []
+        seen = set()
+        for item_id in item_ids:
+            category = self._get_item_category(item_id)
+            if category and category not in seen:
+                categories.append(category)
+                seen.add(category)
+        return sorted(categories)
+
+    def _build_category_completion_prior(self):
+        train_bundle_items = self._load_train_bundle_items()
+        max_size = max(1, int(self.category_prior_max_itemset_size))
+        for items in train_bundle_items.values():
+            categories = self._items_to_unique_categories(items)
+            if not categories:
+                continue
+            for item_id in items:
+                category = self._get_item_category(item_id)
+                if category:
+                    self.category_prior_train_items_by_category[category].append(int(item_id))
+            for category in categories:
+                self.category_prior_train_category_counts[category] += 1
+            for cat_a, cat_b in combinations(categories, 2):
+                self.category_pair_cooccur_counts[cat_a][cat_b] += 1
+                self.category_pair_cooccur_counts[cat_b][cat_a] += 1
+            for size in range(1, min(max_size, len(categories)) + 1):
+                for combo in combinations(categories, size):
+                    self.category_prior_itemset_counts[size][self._category_key(combo)] += 1
+        self.category_prior_categories = sorted(self.category_prior_train_category_counts)
+
+    def _resolve_repo_relative_path(self, path):
+        if os.path.isabs(path):
+            return path
+        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        return os.path.join(repo_root, path)
+
+    def _load_category_prior_item_embeddings(self):
+        cache_root = self._resolve_repo_relative_path(self.category_prior_item_embedding_cache_root)
+        cache_dir = os.path.join(cache_root, self.category_prior_embedding_model, "all_items", self.name)
+        cache_path = os.path.join(
+            cache_dir,
+            f"embeddings_{self.category_prior_embedding_model}_{self.category_prior_embedding_dtype}.npz"
+        )
+        if not os.path.exists(cache_path):
+            raise FileNotFoundError(
+                f"Category prior item embedding cache not found: {cache_path}. "
+                "Run analyzer_utility/build_openai_embedding_cache.py --mode all-items first."
+            )
+        with np.load(cache_path, allow_pickle=False) as data:
+            ids = data["ids"].astype(np.int64)
+            embeddings = data["embeddings"].astype(np.float32)
+        norms = np.linalg.norm(embeddings, axis=1)
+        safe = norms > 0
+        embeddings_normed = np.zeros_like(embeddings, dtype=np.float32)
+        embeddings_normed[safe] = embeddings[safe] / norms[safe, None]
+        return ids, embeddings_normed, {int(item_id): idx for idx, item_id in enumerate(ids.tolist())}
+
+    def _load_category_prior_category_embeddings(self):
+        cache_root = self._resolve_repo_relative_path(self.category_prior_category_embedding_cache_root)
+        cache_dir = os.path.join(cache_root, self.category_prior_embedding_model, "all_items", self.name)
+        cache_path = os.path.join(
+            cache_dir,
+            f"category_embeddings_{self.category_prior_embedding_model}_{self.category_prior_category_dtype}.npz"
+        )
+        if not os.path.exists(cache_path):
+            raise FileNotFoundError(
+                f"Category embedding cache not found: {cache_path}. "
+                "Run analyzer_utility/build_category_embedding_cache.py first."
+            )
+        with np.load(cache_path, allow_pickle=False) as data:
+            category_ids = data["category_ids"].astype(str)
+            embeddings_normed = data["embeddings_normed"].astype(np.float32)
+        return {
+            str(category_id): idx
+            for idx, category_id in enumerate(category_ids.tolist())
+        }, embeddings_normed
+
+    def _build_category_representative_index(self):
+        item_ids, item_embeddings, item_to_row = self._load_category_prior_item_embeddings()
+        category_to_row, category_embeddings = self._load_category_prior_category_embeddings()
+        del item_ids
+
+        for category, item_list in self.category_prior_train_items_by_category.items():
+            if category not in category_to_row:
+                continue
+            unique_items = sorted(set(int(item_id) for item_id in item_list if int(item_id) in item_to_row))
+            if not unique_items:
+                continue
+            rows = [item_to_row[item_id] for item_id in unique_items]
+            centroid = category_embeddings[category_to_row[category]]
+            scores = item_embeddings[rows] @ centroid
+            order = np.argsort(-scores, kind="mergesort")
+            self.category_prior_ranked_rep_items_by_category[category] = [
+                int(unique_items[int(i)]) for i in order.tolist()
+            ]
+
+    def _category_prior_scores(self, observed_categories):
+        observed = sorted(set(observed_categories))
+        observed_size = len(observed)
+        if observed_size == 0:
+            return {}, 0
+        if observed_size + 1 > int(self.category_prior_max_itemset_size):
+            return {}, 0
+        observed_count = self.category_prior_itemset_counts[observed_size].get(
+            self._category_key(observed),
+            0
+        )
+        if observed_count < int(self.category_prior_min_support):
+            return {}, observed_count
+        scores = {}
+        observed_set = set(observed)
+        for category in self.category_prior_categories:
+            if category in observed_set:
+                continue
+            joint_count = self.category_prior_itemset_counts[observed_size + 1].get(
+                self._category_key(observed + [category]),
+                0
+            )
+            scores[category] = joint_count / observed_count
+        return scores, observed_count
+
+    def _representative_items_for_category(self, category, exclude_items, max_items=None):
+        reps = []
+        exclude = {int(item_id) for item_id in exclude_items}
+        limit = int(max_items if max_items is not None else self.category_prior_rep_items_per_category)
+        if limit <= 0:
+            return reps
+        for item_id in self.category_prior_ranked_rep_items_by_category.get(category, []):
+            if int(item_id) in exclude:
+                continue
+            reps.append(int(item_id))
+            if len(reps) >= limit:
+                break
+        return reps
+
+    def _category_item_aug_enabled_for_role(self, role):
+        if not self.use_category_item_text_aug:
+            return False
+        apply_to = str(self.category_item_aug_apply_to).strip().lower()
+        if apply_to == "both":
+            return role in {"input", "candidate"}
+        if apply_to in {"inputs", "input"}:
+            return role == "input"
+        if apply_to in {"candidates", "candidate"}:
+            return role == "candidate"
+        return False
+
+    def _category_item_aug_text(self, item_id, exclude_items):
+        if "spotify" in self.name:
+            return ""
+        category = self._get_item_category(item_id)
+        if not category:
+            return ""
+
+        rep_items = self._representative_items_for_category(
+            category,
+            exclude_items,
+            max_items=self.category_item_aug_rep_items_per_category
+        )
+        if not rep_items:
+            return ""
+
+        rep_text = "; ".join(self._clean_inline_text(self.get_item_text(j)) for j in rep_items)
+        return f"Item Category examples: {rep_text}."
+
+    def _input_category_co_occur_text(self, item_id, exclude_items):
+        if "spotify" in self.name:
+            return ""
+        category = self._get_item_category(item_id)
+        if not category:
+            return ""
+        top_k = int(self.input_category_co_occur_top_k)
+        if top_k <= 0:
+            return ""
+
+        neighbors = sorted(
+            self.category_pair_cooccur_counts.get(category, {}).items(),
+            key=lambda x: (-x[1], x[0])
+        )
+        if not neighbors:
+            return ""
+
+        rep_texts = []
+        selected_categories = 0
+        for neighbor_category, _ in neighbors:
+            rep_items = self._representative_items_for_category(
+                neighbor_category,
+                exclude_items,
+                max_items=self.input_category_co_occur_rep_items_per_category
+            )
+            if not rep_items:
+                continue
+            for rep_item in rep_items:
+                rep_texts.append(self._clean_inline_text(self.get_item_text(rep_item)))
+            selected_categories += 1
+            if selected_categories >= top_k:
+                break
+
+        if not rep_texts:
+            return ""
+        return (
+            "Category context: this item's category often appears with the following "
+            f"other categories, each represented by one example item: {'; '.join(rep_texts)}."
+        )
+
+    def _input_category_co_occur_enabled_for_role(self, role):
+        if not self.input_category_co_occur:
+            return False
+        apply_to = str(self.input_category_co_occur_apply_to).strip().lower()
+        if apply_to == "both":
+            return role in {"input", "candidate"}
+        if apply_to in {"inputs", "input"}:
+            return role == "input"
+        if apply_to in {"candidates", "candidate"}:
+            return role == "candidate"
+        return False
+
+    def get_item_text_for_prompt(
+        self,
+        item_id,
+        role,
+        bundle_exclude_indices=None,
+        user_exclude_indices=None,
+        category_exclude_indices=None
+    ):
+        item_text = self.get_item_text_with_contexts(
+            item_id,
+            bundle_exclude_indices=bundle_exclude_indices,
+            user_exclude_indices=user_exclude_indices
+        )
+
+        context_sentences = []
+        if self._category_item_aug_enabled_for_role(role):
+            category_text = self._category_item_aug_text(
+                item_id,
+                category_exclude_indices or []
+            )
+            if category_text:
+                context_sentences.append(category_text)
+        if self._input_category_co_occur_enabled_for_role(role):
+            co_occur_text = self._input_category_co_occur_text(
+                item_id,
+                category_exclude_indices or []
+            )
+            if co_occur_text:
+                context_sentences.append(co_occur_text)
+
+        if not context_sentences:
+            return item_text
+
+        if item_text.endswith("]") and " [Additional context: " in item_text:
+            return item_text[:-1] + " " + " ".join(context_sentences) + "]"
+        return f"{item_text} [Additional context: {' '.join(context_sentences)}]"
+
+    def retrieve_category_completion_prior_context(self, sample):
+        if not self.use_category_completion_prior_desc:
+            return None
+        if "spotify" in self.name:
+            return None
+
+        input_indices = [int(i) for i in sample.get("input_indices", [])]
+        candidate_indices = [int(i) for i in sample.get("candidate_indices", [])]
+        observed_categories = self._items_to_unique_categories(input_indices)
+        scores, observed_support = self._category_prior_scores(observed_categories)
+        if not scores:
+            return {
+                "context_block": "",
+                "metadata": {
+                    "category_prior_observed_categories": json.dumps(observed_categories, ensure_ascii=False),
+                    "category_prior_observed_support": int(observed_support),
+                    "category_prior_top_categories": json.dumps([], ensure_ascii=False),
+                    "category_prior_top_scores": json.dumps([], ensure_ascii=False),
+                    "category_prior_rep_item_ids": json.dumps([], ensure_ascii=False),
+                    "category_prior_rep_item_texts": json.dumps([], ensure_ascii=False),
+                    "category_prior_coverage": 0,
+                }
+            }
+
+        ranked = sorted(scores.items(), key=lambda x: (-x[1], x[0]))
+        top = ranked[:int(self.category_prior_top_k)]
+        exclude_items = set(input_indices) | set(candidate_indices)
+        lines = [
+            "Additional outfit context:",
+            "The current outfit is commonly completed by item categories similar to the examples below.",
+        ]
+        top_categories = []
+        top_scores = []
+        rep_item_ids_by_category = []
+        rep_item_texts_by_category = []
+
+        for idx, (category, score) in enumerate(top, start=1):
+            rep_items = self._representative_items_for_category(category, exclude_items)
+            if not rep_items:
+                continue
+            rep_texts = [self._clean_inline_text(self.get_item_text(item_id)) for item_id in rep_items]
+            lines.append(f"{idx}. Similar category examples: {'; '.join(rep_texts)}.")
+            top_categories.append(category)
+            top_scores.append(float(score))
+            rep_item_ids_by_category.append(rep_items)
+            rep_item_texts_by_category.append(rep_texts)
+
+        if not top_categories:
+            return None
+        lines.append("Use these examples only as a soft hint about plausible missing item types.")
+        return {
+            "context_block": "\n".join(lines) + "\n\n",
+            "metadata": {
+                "category_prior_observed_categories": json.dumps(observed_categories, ensure_ascii=False),
+                "category_prior_observed_support": int(observed_support),
+                "category_prior_top_categories": json.dumps(top_categories, ensure_ascii=False),
+                "category_prior_top_scores": json.dumps(top_scores, ensure_ascii=False),
+                "category_prior_rep_item_ids": json.dumps(rep_item_ids_by_category, ensure_ascii=False),
+                "category_prior_rep_item_texts": json.dumps(rep_item_texts_by_category, ensure_ascii=False),
+                "category_prior_coverage": 1,
+            }
+        }
 
     def _soft_mapping_path(self, source):
         file_by_source = {
@@ -569,18 +955,14 @@ class BundleZeroShotDataset:
             query_indices = set(input_indices.tolist()) | set(indices.tolist())
             bundle_exclude_indices = query_indices if self.item_bundle_affiliation_exclude_query_items else None
             user_exclude_indices = query_indices if self.item_user_copurchase_exclude_query_items else None
-            if self.use_item_bundle_affiliation_desc or self.use_item_user_copurchase_desc:
-                input_str = "; ".join([
-                    f"{idx + 1}. {self.get_item_text_with_contexts(j, bundle_exclude_indices=bundle_exclude_indices, user_exclude_indices=user_exclude_indices)}"
-                    for idx, j in enumerate(input_indices)
-                ])
-                target_str = "; ".join([
-                    f"{chr(ord('A') + idx)}. {self.get_item_text_with_contexts(j, bundle_exclude_indices=bundle_exclude_indices, user_exclude_indices=user_exclude_indices)}"
-                    for idx, j in enumerate(indices)
-                ])
-            else:
-                input_str = "; ".join([f"{idx + 1}. {self.get_item_text(j)}" for idx, j in enumerate(input_indices)])
-                target_str = "; ".join([f"{chr(ord('A') + idx)}. {self.get_item_text(j)}" for idx, j in enumerate(indices)])
+            input_str = "; ".join([
+                f"{idx + 1}. {self.get_item_text_for_prompt(j, role='input', bundle_exclude_indices=bundle_exclude_indices, user_exclude_indices=user_exclude_indices, category_exclude_indices=query_indices)}"
+                for idx, j in enumerate(input_indices)
+            ])
+            target_str = "; ".join([
+                f"{chr(ord('A') + idx)}. {self.get_item_text_for_prompt(j, role='candidate', bundle_exclude_indices=bundle_exclude_indices, user_exclude_indices=user_exclude_indices, category_exclude_indices=query_indices)}"
+                for idx, j in enumerate(indices)
+            ])
             
             samples.append({
                 "bundle_id": int(b_idx),
