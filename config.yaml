@@ -15,6 +15,7 @@ use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.j
 model: gemini-3.1-flash-lite-preview
 temperature: 0.0
 use_multimodal: true  # If true, loads images and sends them to Gemini along with text
+use_image_category_completion_prompt: false  # If true with use_multimodal, adds coarse category completion guidance
 
 use_cooccurrence: false  # If true, appends train BI co-bundled shared/candidate bundle counts to candidate options
 use_soft_cooccurrence: false  # If true, appends soft I->B' co-bundled counts to candidate options

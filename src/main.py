@@ -90,7 +90,7 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
 def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
                     use_cooccurrence=False, use_soft_cooccurrence=False, soft_cooccurrence_source="",
                     icl_example=None, user_context_block="", bundle_graph_context_block="",
-                    category_prior_context_block=""):
+                    category_prior_context_block="", use_image_category_completion_prompt=False):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -120,6 +120,13 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
             "Use the images as visual references for the corresponding input items and candidate options, "
             "while also considering the item titles.\n"
         )
+        if use_image_category_completion_prompt:
+            image_instruction += (
+                "Using both item titles and images, infer the coarse category of each input item and candidate option "
+                "(e.g., top, bottom, dress, outerwear, shoes, bag, hat, jewelry, accessory, other). "
+                "Prefer a candidate whose category naturally completes the partial outfit, while still prioritizing "
+                "overall compatibility in style, season, gender, color, and occasion.\n"
+            )
 
     cf_legend = ""
     if use_cooccurrence or use_soft_cooccurrence:
@@ -478,7 +485,8 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             icl_example=icl_example,
             user_context_block=user_context_block,
             bundle_graph_context_block=bundle_graph_context_block,
-            category_prior_context_block=category_prior_context_block
+            category_prior_context_block=category_prior_context_block,
+            use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False)
         )
 
         if idx == 0:
@@ -607,7 +615,8 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 use_soft_cooccurrence=conf.get("use_soft_cooccurrence", False),
                 soft_cooccurrence_source=conf.get("soft_cooccurrence_source", ""),
                 bundle_graph_context_block=bundle_graph_context_block,
-                category_prior_context_block=category_prior_context_block
+                category_prior_context_block=category_prior_context_block,
+                use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False)
             )
             if idx == 0 and bundle_graph_context is not None:
                 print("\n[DEBUG] Bundle Graph Context Check (First Sample):")
