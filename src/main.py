@@ -114,6 +114,13 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         )
     #extra_instruction = f"First infer the intent of the given {b_name}, and then choose the candidate {i_name} that fits that intent.\n"
 
+    image_instruction = ""
+    if use_multimodal:
+        image_instruction = (
+            "Use the images as visual references for the corresponding input items and candidate options, "
+            "while also considering the item titles.\n"
+        )
+
     cf_legend = ""
     if use_cooccurrence or use_soft_cooccurrence:
         history_name = "past playlists" if "spotify" in dataset_name else "past outfits"
@@ -134,6 +141,7 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"You are a helpful and honest assistant. The following are multiple choice questions about {t_name}. "
         f"You should directly answer the question by choosing the letter of the correct option. "
         f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
+        f"{image_instruction}"
         f"{cf_legend}"
         f"{icl_block}"
         f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
