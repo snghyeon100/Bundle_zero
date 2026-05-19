@@ -223,6 +223,64 @@ def find_item_image(img_dir, item_id):
         return matches[0]
     return None
 
+def build_interleaved_multimodal_contents(text_prompt, sample, enriched_target_str, img_dir):
+    contents = []
+    loaded_image_count = 0
+    requested_image_ids = []
+    found_image_paths = []
+    missing_image_ids = []
+    failed_image_paths = []
+
+    def append_items_with_images(item_texts, item_ids):
+        nonlocal loaded_image_count
+        for idx, item_text in enumerate(item_texts):
+            if idx > 0:
+                contents.append("; ")
+            contents.append(item_text)
+            if idx >= len(item_ids):
+                continue
+            item_id = item_ids[idx]
+            requested_image_ids.append(int(item_id))
+            img_path = find_item_image(img_dir, item_id)
+            if img_path:
+                try:
+                    contents.append(Image.open(img_path))
+                    loaded_image_count += 1
+                    found_image_paths.append(img_path)
+                except Exception as e:
+                    failed_image_paths.append(f"{img_path} ({e})")
+            else:
+                missing_image_ids.append(int(item_id))
+
+    input_str = sample["input_str"]
+    target_str = enriched_target_str
+    try:
+        before_input, after_input = text_prompt.split(input_str, 1)
+        before_options, after_options = after_input.split(target_str, 1)
+    except ValueError:
+        contents.append(text_prompt)
+        return contents, {
+            "loaded_image_count": loaded_image_count,
+            "requested_image_ids": requested_image_ids,
+            "found_image_paths": found_image_paths,
+            "missing_image_ids": missing_image_ids,
+            "failed_image_paths": failed_image_paths,
+        }
+
+    contents.append(before_input)
+    append_items_with_images(input_str.split("; "), sample.get("input_indices", []))
+    contents.append(before_options)
+    append_items_with_images(target_str.split("; "), sample.get("candidate_indices", []))
+    contents.append(after_options)
+
+    return contents, {
+        "loaded_image_count": loaded_image_count,
+        "requested_image_ids": requested_image_ids,
+        "found_image_paths": found_image_paths,
+        "missing_image_ids": missing_image_ids,
+        "failed_image_paths": failed_image_paths,
+    }
+
 def save_intermediate_results(results, conf, timestamp, is_final=False):
     df = pd.DataFrame(results)
     hit_rate = df['hit'].mean() if not df.empty else 0.0
@@ -427,41 +485,18 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
         missing_image_ids = []
         failed_image_paths = []
         if conf.get("use_multimodal", False):
-            contents = []
             img_dir = os.path.join(conf.get("data_path", "./datasets"), conf["dataset"], "images")
-            
-            contents.append("Images for the items currently in the bundle:")
-            for i, item_id in enumerate(sample.get("input_indices", [])):
-                requested_image_ids.append(int(item_id))
-                img_path = find_item_image(img_dir, item_id)
-                if img_path:
-                    try:
-                        contents.append(f"[Input Item {i+1}]")
-                        contents.append(Image.open(img_path))
-                        loaded_image_count += 1
-                        found_image_paths.append(img_path)
-                    except Exception as e:
-                        failed_image_paths.append(f"{img_path} ({e})")
-                else:
-                    missing_image_ids.append(int(item_id))
-                    
-            contents.append("Images for the candidate items:")
-            for i, item_id in enumerate(sample.get("candidate_indices", [])):
-                opt_char = chr(ord('A') + i)
-                requested_image_ids.append(int(item_id))
-                img_path = find_item_image(img_dir, item_id)
-                if img_path:
-                    try:
-                        contents.append(f"[Candidate {opt_char}]")
-                        contents.append(Image.open(img_path))
-                        loaded_image_count += 1
-                        found_image_paths.append(img_path)
-                    except Exception as e:
-                        failed_image_paths.append(f"{img_path} ({e})")
-                else:
-                    missing_image_ids.append(int(item_id))
-                    
-            contents.append(text_prompt)
+            contents, image_debug = build_interleaved_multimodal_contents(
+                text_prompt,
+                sample,
+                enriched_target_str,
+                img_dir,
+            )
+            loaded_image_count = image_debug["loaded_image_count"]
+            requested_image_ids = image_debug["requested_image_ids"]
+            found_image_paths = image_debug["found_image_paths"]
+            missing_image_ids = image_debug["missing_image_ids"]
+            failed_image_paths = image_debug["failed_image_paths"]
 
         if idx == 0 and conf.get("use_multimodal", False):
             print("\n[DEBUG] Multimodal Input Check (First Sample):")

@@ -14,18 +14,18 @@ use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.j
 
 model: gemini-3.1-flash-lite-preview
 temperature: 0.0
-use_multimodal: false  # If true, loads images and sends them to Gemini along with text
+use_multimodal: true  # If true, loads images and sends them to Gemini along with text
 
 use_cooccurrence: false  # If true, appends train BI co-bundled shared/candidate bundle counts to candidate options
 use_soft_cooccurrence: false  # If true, appends soft I->B' co-bundled counts to candidate options
-soft_cooccurrence_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
+soft_cooccurrence_source: item_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
 
 use_item_bundle_affiliation_desc: false  # IB x BI. If true, appends co-bundled item descriptions to input/candidate items
 item_bundle_affiliation_k: 3
 item_bundle_affiliation_alpha: 0.5
 item_bundle_affiliation_seed: 45
 item_bundle_affiliation_exclude_query_items: false
-item_bundle_affiliation_use_soft: true  # (IB + I-B') x BI. Adds soft I->B' bundles before retrieving co-bundled items
+item_bundle_affiliation_use_soft: false  # (IB + I-B') x BI. Adds soft I->B' bundles before retrieving co-bundled items
 item_bundle_affiliation_soft_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
 item_bundle_affiliation_soft_alpha: 1.0
 
@@ -47,7 +47,7 @@ use_category_completion_prior_desc: false  # If true, prepends train-derived top
 use_category_item_text_aug: false  # If true, appends same-category representative item examples to item text
 category_item_aug_apply_to: both  # inputs | candidates | both
 category_item_aug_rep_items_per_category: 2
-input_category_co_occur: true  # If true, appends category co-occurrence examples
+input_category_co_occur: false  # If true, appends category co-occurrence examples
 input_category_co_occur_apply_to: inputs  # inputs | candidates | both
 input_category_co_occur_top_k: 3
 input_category_co_occur_rep_items_per_category: 1
