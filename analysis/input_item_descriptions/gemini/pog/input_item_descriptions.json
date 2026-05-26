@@ -1,0 +1,2641 @@
+{
+  "metadata": {
+    "dataset": "pog",
+    "result_csv": "C:\\Users\\wotjs\\Desktop\\bundle\\LLM-ZeroShot\\results\\pog\\results_pog_CATSUM_HN_C10_T5_20260525_151003.csv",
+    "model": "gemini-3.1-flash-lite-preview",
+    "api_key_env": "GEMINI_API_KEY_2",
+    "num_target_input_items": 375,
+    "prompt_version": "input_item_description_v1",
+    "api_key_envs": [
+      "GEMINI_API_KEY_2",
+      "GEMINI_API_KEY"
+    ]
+  },
+  "items": {
+    "105": {
+      "item_id": 105,
+      "text": "毛线帽子女潮韩国百搭保暖日系堆堆针织帽秋冬韩版男纯色套头冷帽",
+      "description": "This cozy, solid-colored knit beanie features a trendy Japanese-inspired slouchy fit, perfect for staying warm during the autumn and winter seasons.",
+      "raw_response": "This cozy, solid-colored knit beanie features a trendy Japanese-inspired slouchy fit, perfect for staying warm during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "246": {
+      "item_id": 246,
+      "text": "原创森女部落可爱棉服短款面包服chic冬季女棉衣学生韩版ulzzang",
+      "description": "This cute, cropped puffer jacket features a cozy, oversized fit perfect for winter, blending Korean ulzzang style with a charming, casual aesthetic.",
+      "raw_response": "This cute, cropped puffer jacket features a cozy, oversized fit perfect for winter, blending Korean ulzzang style with a charming, casual aesthetic.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "349": {
+      "item_id": 349,
+      "text": "入店必败 复古高腰加绒加厚小脚牛仔裤修身显瘦九分铅笔裤子女 冬",
+      "description": "These vintage-inspired, high-waisted skinny jeans feature a fleece-lined, thickened design for warmth, offering a slim, flattering fit perfect for winter outfits.",
+      "raw_response": "These vintage-inspired, high-waisted skinny jeans feature a fleece-lined, thickened design for warmth, offering a slim, flattering fit perfect for winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "582": {
+      "item_id": 582,
+      "text": "李维斯男鞋夏季白色帆布鞋男低帮布鞋子男一脚蹬懒人板鞋休闲潮鞋",
+      "description": "These Levi's men's white canvas slip-on sneakers offer a casual, low-top style perfect for summer wear.",
+      "raw_response": "These Levi's men's white canvas slip-on sneakers offer a casual, low-top style perfect for summer wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "651": {
+      "item_id": 651,
+      "text": "小包包女chic链条斜挎包2019新款时尚丝绒小黑包百搭网红单肩女包",
+      "description": "This chic black velvet crossbody bag features a stylish chain strap, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This chic black velvet crossbody bag features a stylish chain strap, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "737": {
+      "item_id": 737,
+      "text": "Belle/百丽凉鞋商场同款羊绒皮一字带女鞋BRU34BL8",
+      "description": "These elegant Belle women’s sandals feature premium sheepskin leather and a chic one-strap design, perfect for completing your sophisticated summer ensemble.",
+      "raw_response": "These elegant Belle women’s sandals feature premium sheepskin leather and a chic one-strap design, perfect for completing your sophisticated summer ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "828": {
+      "item_id": 828,
+      "text": "2019春季新款加绒爱心松糕鞋女厚底英伦坡跟桃心星星方头休闲单鞋",
+      "description": "These women’s spring platform loafers feature a charming heart and star design, combining British-inspired style with a comfortable, thick-soled casual silhouette.",
+      "raw_response": "These women’s spring platform loafers feature a charming heart and star design, combining British-inspired style with a comfortable, thick-soled casual silhouette.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1018": {
+      "item_id": 1018,
+      "text": "女鞋2018新款真皮尖头切尔西靴粗跟马丁靴女英伦风黑色百搭及踝靴",
+      "description": "These black leather Chelsea boots feature a chic pointed toe and sturdy block heel, offering a versatile, British-inspired style for any season.",
+      "raw_response": "These black leather Chelsea boots feature a chic pointed toe and sturdy block heel, offering a versatile, British-inspired style for any season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1050": {
+      "item_id": 1050,
+      "text": "欧美时尚夸张夏季耳环女潮个性设计感耳饰百搭高级感菠萝网红耳坠",
+      "description": "These trendy, oversized pineapple-shaped earrings feature a bold, high-fashion design, perfect for adding a statement touch to your summer outfits.",
+      "raw_response": "These trendy, oversized pineapple-shaped earrings feature a bold, high-fashion design, perfect for adding a statement touch to your summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1142": {
+      "item_id": 1142,
+      "text": "LEIYU宽松直筒阔腿泫雅牛仔裤女浅色夏季显瘦复古高腰拖地长裤子",
+      "description": "These light-wash, high-waisted wide-leg jeans feature a relaxed, vintage-inspired fit, perfect for a stylish and flattering summer look.",
+      "raw_response": "These light-wash, high-waisted wide-leg jeans feature a relaxed, vintage-inspired fit, perfect for a stylish and flattering summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1371": {
+      "item_id": 1371,
+      "text": "小清新勾勾白色背带裤女夏2018新款韩版宽松可爱九分ins休闲裤子",
+      "description": "These cute, white Korean-style cropped overalls feature a relaxed fit, perfect for a fresh and casual summer look.",
+      "raw_response": "These cute, white Korean-style cropped overalls feature a relaxed fit, perfect for a fresh and casual summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1522": {
+      "item_id": 1522,
+      "text": "小白鞋女真皮韩版透气单鞋2018秋款平底休闲板鞋潮流做旧星星鞋女",
+      "description": "These trendy women's white leather sneakers feature a distressed star design, offering a breathable, casual flat style perfect for autumn outfits.",
+      "raw_response": "These trendy women's white leather sneakers feature a distressed star design, offering a breathable, casual flat style perfect for autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1712": {
+      "item_id": 1712,
+      "text": "马丁靴男生中帮英伦潮流百搭雪地靴子2018新款韩版冬季加绒高帮鞋",
+      "description": "These men’s British-style winter boots feature a warm fleece lining and a versatile high-top design, perfect for a trendy, rugged seasonal look.",
+      "raw_response": "These men’s British-style winter boots feature a warm fleece lining and a versatile high-top design, perfect for a trendy, rugged seasonal look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1717": {
+      "item_id": 1717,
+      "text": "波西米亚复古耳钉耳环925银针长款耳坠女 韩国原宿风气质短发耳饰",
+      "description": "These bohemian-style vintage drop earrings feature 925 silver needles, perfect for adding a chic, Harajuku-inspired touch to any outfit.",
+      "raw_response": "These bohemian-style vintage drop earrings feature 925 silver needles, perfect for adding a chic, Harajuku-inspired touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1841": {
+      "item_id": 1841,
+      "text": "棉鞋女2018新款冬季百搭学生韩版保暖二棉鞋女加绒休闲运动小白鞋",
+      "description": "These women's winter sneakers feature a cozy fleece lining and a versatile white design, perfect for casual, everyday student style.",
+      "raw_response": "These women's winter sneakers feature a cozy fleece lining and a versatile white design, perfect for casual, everyday student style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "1995": {
+      "item_id": 1995,
+      "text": "ulzzang呢子大衣女原宿风 中长款新款2017时尚冬季复古赫本风毛呢",
+      "description": "This vintage-inspired wool-blend coat features a chic mid-length silhouette, perfect for adding a sophisticated, retro touch to your winter wardrobe.",
+      "raw_response": "This vintage-inspired wool-blend coat features a chic mid-length silhouette, perfect for adding a sophisticated, retro touch to your winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2002": {
+      "item_id": 2002,
+      "text": "高帮鞋男加绒保暖韩版潮流板鞋嘻哈帅t鞋男运动休闲百搭拉链男鞋",
+      "description": "These stylish men’s high-top sneakers feature a warm fleece lining, trendy zip detailing, and a versatile design perfect for casual winter streetwear.",
+      "raw_response": "These stylish men’s high-top sneakers feature a warm fleece lining, trendy zip detailing, and a versatile design perfect for casual winter streetwear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2295": {
+      "item_id": 2295,
+      "text": "麦渔人2019春夏新款水桶包女包流苏单肩斜挎包牛皮复古简约小迷你",
+      "description": "This minimalist mini bucket bag is crafted from vintage-style leather, featuring chic tassel accents perfect for effortless spring and summer styling.",
+      "raw_response": "This minimalist mini bucket bag is crafted from vintage-style leather, featuring chic tassel accents perfect for effortless spring and summer styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2727": {
+      "item_id": 2727,
+      "text": "小瑞靓包 闺蜜包拼色锁扣小方包包女2019新款单肩包斜挎包小包包",
+      "description": "This stylish women's color-block crossbody bag features a secure lock closure, perfect for adding a chic, modern touch to any outfit.",
+      "raw_response": "This stylish women's color-block crossbody bag features a secure lock closure, perfect for adding a chic, modern touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2740": {
+      "item_id": 2740,
+      "text": "LOSEA 马毛锁扣包包女2018新款时尚小方包女包百搭单肩斜挎小包女",
+      "description": "This stylish women's small square shoulder bag features a chic lock closure and premium calf hair, perfect for versatile everyday wear.",
+      "raw_response": "This stylish women's small square shoulder bag features a chic lock closure and premium calf hair, perfect for versatile everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2773": {
+      "item_id": 2773,
+      "text": "【现货】梅子熟了 文艺小清新套头毛衣女复古短款针织上衣秋冬",
+      "description": "This vintage-inspired women’s pullover sweater features a cozy knit design, perfect for adding a touch of artistic charm to your autumn and winter outfits.",
+      "raw_response": "This vintage-inspired women’s pullover sweater features a cozy knit design, perfect for adding a touch of artistic charm to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2797": {
+      "item_id": 2797,
+      "text": "森系温暖针织小包包少女2019新款韩版潮时尚单肩包文艺百搭斜挎包",
+      "description": "This cozy, forest-style knitted shoulder bag features a trendy Korean-inspired design, perfect for adding a touch of artistic charm to any casual outfit.",
+      "raw_response": "This cozy, forest-style knitted shoulder bag features a trendy Korean-inspired design, perfect for adding a touch of artistic charm to any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2819": {
+      "item_id": 2819,
+      "text": "小ck女包2019新款时尚夏季小包包女斜挎包真皮水桶包百搭单肩包潮",
+      "description": "This stylish 2019 summer leather bucket bag for women features a versatile design, perfect for carrying your essentials in chic, crossbody style.",
+      "raw_response": "This stylish 2019 summer leather bucket bag for women features a versatile design, perfect for carrying your essentials in chic, crossbody style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "2956": {
+      "item_id": 2956,
+      "text": "断码清仓 欧洲站韩版泰迪毛毛鞋女 羊羔毛学生百搭网红糖果色",
+      "description": "These trendy, candy-colored teddy faux-shearling shoes for women offer a cozy, versatile style perfect for casual everyday wear.",
+      "raw_response": "These trendy, candy-colored teddy faux-shearling shoes for women offer a cozy, versatile style perfect for casual everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3103": {
+      "item_id": 3103,
+      "text": "Daphne/达芙妮夏休闲平底女鞋 优雅钻饰珍珠丁字搭扣夹趾凉鞋",
+      "description": "These elegant Daphne women’s flat sandals feature chic rhinestone and pearl embellishments with a T-strap buckle design, perfect for stylish summer casual wear.",
+      "raw_response": "These elegant Daphne women’s flat sandals feature chic rhinestone and pearl embellishments with a T-strap buckle design, perfect for stylish summer casual wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3569": {
+      "item_id": 3569,
+      "text": "VANS SK8-HI范斯黑武士高帮白标男女休闲帆布鞋滑板鞋VN000TS9BJ4",
+      "description": "These classic black Vans Sk8-Hi high-top sneakers feature durable canvas construction, offering a versatile, timeless style for any casual occasion.",
+      "raw_response": "These classic black Vans Sk8-Hi high-top sneakers feature durable canvas construction, offering a versatile, timeless style for any casual occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3596": {
+      "item_id": 3596,
+      "text": "小瑞靓包锁扣小方包包女2018新款时尚豆腐包box手提单肩斜挎小包",
+      "description": "This stylish women's box-shaped shoulder bag features a chic lock closure, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This stylish women's box-shaped shoulder bag features a chic lock closure, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3755": {
+      "item_id": 3755,
+      "text": "上新质感小包包女2019新款chic链条复古小方包迷你百搭单肩斜挎包",
+      "description": "This chic, vintage-inspired mini square bag features a stylish chain strap, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This chic, vintage-inspired mini square bag features a stylish chain strap, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3774": {
+      "item_id": 3774,
+      "text": "2019新款豆腐包box锁扣小方包真皮都挺好同款包单肩斜挎小ck女包",
+      "description": "This stylish 2019 genuine leather box bag features a chic lock closure, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This stylish 2019 genuine leather box bag features a chic lock closure, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3810": {
+      "item_id": 3810,
+      "text": "韩国复古木质几何耳环女气质长款耳坠耳钉简约个性欧美夸张耳饰品",
+      "description": "These Korean-style vintage geometric wooden earrings feature a long, minimalist design, perfect for adding a bold, statement touch to any outfit.",
+      "raw_response": "These Korean-style vintage geometric wooden earrings feature a long, minimalist design, perfect for adding a bold, statement touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3865": {
+      "item_id": 3865,
+      "text": "秋冬韩版百搭贝雷帽日系甜美可爱白色画家帽英伦复古羊毛帽子女春",
+      "description": "This white wool beret features a sweet, vintage-inspired Japanese style, perfect for adding a chic, cozy touch to your autumn and winter outfits.",
+      "raw_response": "This white wool beret features a sweet, vintage-inspired Japanese style, perfect for adding a chic, cozy touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3883": {
+      "item_id": 3883,
+      "text": "9-22",
+      "description": "This versatile piece offers a sleek, modern aesthetic perfect for elevating your seasonal wardrobe with effortless style.",
+      "raw_response": "This versatile piece offers a sleek, modern aesthetic perfect for elevating your seasonal wardrobe with effortless style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3928": {
+      "item_id": 3928,
+      "text": "joy trip明星同款方扣平底复古单鞋女真皮穆勒鞋浅口英伦小皮鞋潮",
+      "description": "These vintage-inspired women’s leather mule flats feature a chic square buckle, offering a sophisticated, British-style finish to any ensemble.",
+      "raw_response": "These vintage-inspired women’s leather mule flats feature a chic square buckle, offering a sophisticated, British-style finish to any ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3945": {
+      "item_id": 3945,
+      "text": "树小姐定制  银扣30厘米 铂金包头层牛皮百搭手提单肩斜跨包女包",
+      "description": "This versatile women's leather handbag features a chic silver-tone clasp, offering a sophisticated, multi-way carry option for any stylish ensemble.",
+      "raw_response": "This versatile women's leather handbag features a chic silver-tone clasp, offering a sophisticated, multi-way carry option for any stylish ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "3951": {
+      "item_id": 3951,
+      "text": "原创设计日韩帆布包女单肩斜挎包韩国文艺学院风拉链手提包女包大",
+      "description": "This stylish Japanese-inspired canvas shoulder bag features a versatile design, perfect for adding a casual, academic touch to your everyday outfits.",
+      "raw_response": "This stylish Japanese-inspired canvas shoulder bag features a versatile design, perfect for adding a casual, academic touch to your everyday outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "4093": {
+      "item_id": 4093,
+      "text": "2018新款星空面钢带女士手表韩版时尚潮流水钻时装女表防水石英表",
+      "description": "This stylish women's quartz watch features a starry dial, rhinestone accents, and a sleek steel strap, perfect for adding a trendy, fashionable touch.",
+      "raw_response": "This stylish women's quartz watch features a starry dial, rhinestone accents, and a sleek steel strap, perfect for adding a trendy, fashionable touch.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "4272": {
+      "item_id": 4272,
+      "text": "李雨薇 冬季新款韩版中长款半高领直筒打底针织衫长袖毛衣连衣裙",
+      "description": "This Korean-style mid-length knit sweater dress features a mock neck and long sleeves, perfect for a chic, cozy look during the winter season.",
+      "raw_response": "This Korean-style mid-length knit sweater dress features a mock neck and long sleeves, perfect for a chic, cozy look during the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "4746": {
+      "item_id": 4746,
+      "text": "牛仔裤女宽松显瘦百搭高腰2019春秋新款cec老爹裤chic直筒九分裤",
+      "description": "These high-waisted, loose-fit straight-leg jeans in a classic denim wash offer a chic, versatile silhouette perfect for effortless spring and autumn styling.",
+      "raw_response": "These high-waisted, loose-fit straight-leg jeans in a classic denim wash offer a chic, versatile silhouette perfect for effortless spring and autumn styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "4847": {
+      "item_id": 4847,
+      "text": "A7seven 弹力显瘦黑色外穿打底裤女秋季百搭修身小脚裤铅笔裤长裤",
+      "description": "These versatile black skinny leggings feature a stretchy, slim-fit design, perfect for effortless autumn styling and everyday wear.",
+      "raw_response": "These versatile black skinny leggings feature a stretchy, slim-fit design, perfect for effortless autumn styling and everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5091": {
+      "item_id": 5091,
+      "text": "九月陌墨 2019秋季新款女装蕾丝拼接翻领连衣裙 韩版休闲宽松裙子",
+      "description": "This casual Korean-style women's autumn dress features elegant lace paneling and a classic collar, offering a relaxed, chic silhouette for the season.",
+      "raw_response": "This casual Korean-style women's autumn dress features elegant lace paneling and a classic collar, offering a relaxed, chic silhouette for the season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5124": {
+      "item_id": 5124,
+      "text": "春装2019新款女流行很仙的法国小众连衣裙雪纺裙子夏款法式桔梗裙",
+      "description": "This ethereal French-style chiffon dress features a romantic silhouette, perfect for adding a feminine, vintage-inspired touch to your spring and summer wardrobe.",
+      "raw_response": "This ethereal French-style chiffon dress features a romantic silhouette, perfect for adding a feminine, vintage-inspired touch to your spring and summer wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5211": {
+      "item_id": 5211,
+      "text": "滕雨佳   阔腿短裤女高腰宽松水洗磨白色牛仔短裤女",
+      "description": "These high-waisted, loose-fit white denim shorts feature a washed finish, offering a stylish and comfortable choice for casual summer outfits.",
+      "raw_response": "These high-waisted, loose-fit white denim shorts feature a washed finish, offering a stylish and comfortable choice for casual summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5568": {
+      "item_id": 5568,
+      "text": "粗跟单鞋女2019春款中跟百搭英伦小皮鞋春季一脚蹬女鞋尖头乐福鞋",
+      "description": "These versatile women’s pointed-toe loafers feature a chic block heel and a classic British-inspired design, perfect for effortless spring styling.",
+      "raw_response": "These versatile women’s pointed-toe loafers feature a chic block heel and a classic British-inspired design, perfect for effortless spring styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5582": {
+      "item_id": 5582,
+      "text": "港风复古格子蓓蕾帽甜美画家帽日系百搭贝雷帽春秋冬凹造型帽子潮",
+      "description": "This vintage-inspired plaid beret adds a chic, artistic touch to your autumn and winter outfits with its classic Japanese-style design.",
+      "raw_response": "This vintage-inspired plaid beret adds a chic, artistic touch to your autumn and winter outfits with its classic Japanese-style design.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5681": {
+      "item_id": 5681,
+      "text": "运动鞋女韩版2019春新款小白鞋女百搭厚底学生休闲鞋板鞋子女透气",
+      "description": "These versatile white Korean-style platform sneakers for women feature a breathable design, perfect for casual spring outfits and everyday student wear.",
+      "raw_response": "These versatile white Korean-style platform sneakers for women feature a breathable design, perfect for casual spring outfits and everyday student wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5864": {
+      "item_id": 5864,
+      "text": "黑色网红牛仔裤女春秋2019新款高腰小脚裤子修身显瘦百搭直筒复古",
+      "description": "These black, high-waisted slim-fit jeans offer a versatile, retro-inspired look perfect for spring and autumn styling.",
+      "raw_response": "These black, high-waisted slim-fit jeans offer a versatile, retro-inspired look perfect for spring and autumn styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "5922": {
+      "item_id": 5922,
+      "text": "羊毛呢贝雷帽女秋冬日系韩版百搭英伦画家帽毛呢帽子南瓜蓓蕾帽子",
+      "description": "This stylish wool-blend beret features a classic Japanese-inspired design, perfect for adding a chic, cozy touch to your autumn and winter outfits.",
+      "raw_response": "This stylish wool-blend beret features a classic Japanese-inspired design, perfect for adding a chic, cozy touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6036": {
+      "item_id": 6036,
+      "text": "Mexican/稻草人女包手提包包女2019新款时尚百搭女式单肩斜挎包潮",
+      "description": "This stylish, versatile women's handbag features a chic design, perfect for elevating your everyday look with a touch of modern sophistication.",
+      "raw_response": "This stylish, versatile women's handbag features a chic design, perfect for elevating your everyday look with a touch of modern sophistication.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6087": {
+      "item_id": 6087,
+      "text": "手表 男韩国时尚薄款男士手表复古表 简约男表防水大表盘皮带黑色",
+      "description": "This sleek, minimalist men’s watch features a slim black leather strap and a large, vintage-inspired dial, perfect for adding a sophisticated touch.",
+      "raw_response": "This sleek, minimalist men’s watch features a slim black leather strap and a large, vintage-inspired dial, perfect for adding a sophisticated touch.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6254": {
+      "item_id": 6254,
+      "text": "AJOY SAHU小跟单鞋女2019春夏新款百搭猫跟鞋舒适尖头细跟高跟鞋",
+      "description": "These elegant women's pointed-toe kitten heels feature a comfortable slim stiletto, perfect for versatile styling throughout the spring and summer seasons.",
+      "raw_response": "These elegant women's pointed-toe kitten heels feature a comfortable slim stiletto, perfect for versatile styling throughout the spring and summer seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6371": {
+      "item_id": 6371,
+      "text": "正品雷诺女士手表玫瑰金时尚大气防水日历全自动机械腕表时装女表",
+      "description": "This elegant rose gold automatic mechanical watch for women features a sophisticated, waterproof design, perfect for adding a polished finish to any outfit.",
+      "raw_response": "This elegant rose gold automatic mechanical watch for women features a sophisticated, waterproof design, perfect for adding a polished finish to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6438": {
+      "item_id": 6438,
+      "text": "omont蛋挞家 复古直筒高腰加厚格子毛呢裤女学生显瘦休闲长裤春秋",
+      "description": "These vintage-inspired, high-waisted plaid wool trousers feature a flattering straight-leg cut, perfect for adding a cozy, stylish touch to your autumn outfits.",
+      "raw_response": "These vintage-inspired, high-waisted plaid wool trousers feature a flattering straight-leg cut, perfect for adding a cozy, stylish touch to your autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6605": {
+      "item_id": 6605,
+      "text": "MAGENA原创复古风柔软小羊皮贝雷帽优雅真皮画家女帽子秋冬新品",
+      "description": "Elevate your autumn and winter wardrobe with this elegant, vintage-inspired women’s beret, crafted from soft, premium lambskin leather for a sophisticated finish.",
+      "raw_response": "Elevate your autumn and winter wardrobe with this elegant, vintage-inspired women’s beret, crafted from soft, premium lambskin leather for a sophisticated finish.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6606": {
+      "item_id": 6606,
+      "text": "2018春新款浅口黑色小蜜蜂高跟鞋女小清新蝴蝶结尖头细跟中跟单鞋",
+      "description": "These elegant black pointed-toe pumps feature a delicate bee charm and bow detail, perfect for adding a sophisticated touch to your spring wardrobe.",
+      "raw_response": "These elegant black pointed-toe pumps feature a delicate bee charm and bow detail, perfect for adding a sophisticated touch to your spring wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "6839": {
+      "item_id": 6839,
+      "text": "九月陌墨 2019夏季新款女装中长娃娃领连衣裙 韩版宽松休闲裙子女",
+      "description": "This casual Korean-style midi dress features a charming doll collar, perfect for a relaxed summer look for women.",
+      "raw_response": "This casual Korean-style midi dress features a charming doll collar, perfect for a relaxed summer look for women.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "7008": {
+      "item_id": 7008,
+      "text": "方头女凉鞋平底低跟交叉带罗马鞋女一字带扣学生罗马凉鞋女夏夹趾",
+      "description": "These women’s flat, square-toe Roman sandals feature chic crossover straps and a buckle closure, perfect for casual summer wear.",
+      "raw_response": "These women’s flat, square-toe Roman sandals feature chic crossover straps and a buckle closure, perfect for casual summer wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "7255": {
+      "item_id": 7255,
+      "text": "春季女鞋子2019新款韩版潮学生平底单鞋内增高街拍百搭基础小白鞋",
+      "description": "These trendy 2019 Korean-style women's white sneakers feature a versatile flat design with a hidden wedge, perfect for casual spring street style.",
+      "raw_response": "These trendy 2019 Korean-style women's white sneakers feature a versatile flat design with a hidden wedge, perfect for casual spring street style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "7328": {
+      "item_id": 7328,
+      "text": "二十八间春装ins工装裤魔术贴束脚裤潮chic宽松男休闲长裤男裤子",
+      "description": "These men’s casual cargo joggers feature a trendy, loose-fit design with adjustable velcro cuffs, perfect for a stylish spring streetwear look.",
+      "raw_response": "These men’s casual cargo joggers feature a trendy, loose-fit design with adjustable velcro cuffs, perfect for a stylish spring streetwear look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "7403": {
+      "item_id": 7403,
+      "text": "加绒打底裤女纯棉加厚外穿小猫冬一体绒保暖高腰百搭弹力纯色长裤",
+      "description": "These high-waisted, fleece-lined cotton leggings offer warmth and stretch, making them a versatile, essential choice for winter outfits.",
+      "raw_response": "These high-waisted, fleece-lined cotton leggings offer warmth and stretch, making them a versatile, essential choice for winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "7765": {
+      "item_id": 7765,
+      "text": "BJHG欧美街头宽松纯色字母刺绣小高领卫衣潮男青年个性打底衫上衣",
+      "description": "This men’s oversized streetwear sweatshirt features minimalist letter embroidery and a mock neck, perfect for a casual, trendy layered look.",
+      "raw_response": "This men’s oversized streetwear sweatshirt features minimalist letter embroidery and a mock neck, perfect for a casual, trendy layered look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8337": {
+      "item_id": 8337,
+      "text": "【CEBOSTIN】她来听我的演唱会 0801A1215 链条单肩斜跨风琴方包",
+      "description": "This stylish chain-strap accordion crossbody bag is a versatile accessory, perfect for elevating any outfit with a chic, structured finish.",
+      "raw_response": "This stylish chain-strap accordion crossbody bag is a versatile accessory, perfect for elevating any outfit with a chic, structured finish.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8393": {
+      "item_id": 8393,
+      "text": "风衣女中长款衣香丽影2018春秋季新款英伦薄款韩版双排扣春季外套",
+      "description": "This stylish women's mid-length trench coat features a classic British-inspired double-breasted design, perfect for effortless layering during the spring and autumn seasons.",
+      "raw_response": "This stylish women's mid-length trench coat features a classic British-inspired double-breasted design, perfect for effortless layering during the spring and autumn seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8491": {
+      "item_id": 8491,
+      "text": "ins风美人鱼尾耳环女韩国气质简约潮人满镶钻后挂式珍珠耳钉E367",
+      "description": "These elegant, Korean-style mermaid tail ear studs feature sparkling pavé crystals and a chic pearl back-drop design for a sophisticated, trendy look.",
+      "raw_response": "These elegant, Korean-style mermaid tail ear studs feature sparkling pavé crystals and a chic pearl back-drop design for a sophisticated, trendy look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8500": {
+      "item_id": 8500,
+      "text": "澄心女子原创撞色棉麻大布袋子 超大容量文艺范单肩包长款布包",
+      "description": "This women’s oversized cotton-linen shoulder bag features a stylish color-block design, perfect for adding an artistic, casual touch to your everyday outfit.",
+      "raw_response": "This women’s oversized cotton-linen shoulder bag features a stylish color-block design, perfect for adding an artistic, casual touch to your everyday outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8548": {
+      "item_id": 8548,
+      "text": "HEYGIRL黑哥 金丝绒阔腿裤女 复古高腰垂感拖地裤休闲裤2018秋季",
+      "description": "These vintage-inspired high-waisted gold velvet wide-leg trousers offer a fluid, floor-length silhouette, perfect for a sophisticated autumn look.",
+      "raw_response": "These vintage-inspired high-waisted gold velvet wide-leg trousers offer a fluid, floor-length silhouette, perfect for a sophisticated autumn look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8719": {
+      "item_id": 8719,
+      "text": "特细出游拉菲草帽子 女士夏韩版 大檐沙滩帽防紫外线遮阳帽可折叠",
+      "description": "This foldable raffia straw hat for women features a wide brim, perfect for sun protection during summer beach outings and casual vacations.",
+      "raw_response": "This foldable raffia straw hat for women features a wide brim, perfect for sun protection during summer beach outings and casual vacations.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8795": {
+      "item_id": 8795,
+      "text": "【CEBOSTIN】Shapes / 1101A1312 拼色 牛皮麂皮手提包",
+      "description": "This stylish CEBOSTIN color-block handbag is crafted from premium leather and suede, offering a sophisticated finish to any ensemble.",
+      "raw_response": "This stylish CEBOSTIN color-block handbag is crafted from premium leather and suede, offering a sophisticated finish to any ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8911": {
+      "item_id": 8911,
+      "text": "卓诗尼2018冬靴新款粗高跟瘦瘦靴百搭长筒靴皮高筒靴女过膝长靴子",
+      "description": "These stylish women’s over-the-knee boots feature a chic block heel and sleek leather construction, perfect for elevating any winter ensemble.",
+      "raw_response": "These stylish women’s over-the-knee boots feature a chic block heel and sleek leather construction, perfect for elevating any winter ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "8973": {
+      "item_id": 8973,
+      "text": "EEKE Studio 925银爱心女款心形项链创意锁骨链颈链小众饰品礼物",
+      "description": "This elegant 925 sterling silver heart-shaped necklace for women adds a delicate, romantic touch to any outfit.",
+      "raw_response": "This elegant 925 sterling silver heart-shaped necklace for women adds a delicate, romantic touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "9247": {
+      "item_id": 9247,
+      "text": "春季2019新款韩版高腰破洞黑色九分打底休闲裤女学生修身铅笔裤子",
+      "description": "These black high-waisted distressed skinny pants for women offer a stylish, slim-fit look perfect for casual spring outfits.",
+      "raw_response": "These black high-waisted distressed skinny pants for women offer a stylish, slim-fit look perfect for casual spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "9336": {
+      "item_id": 9336,
+      "text": "凉鞋女2019夏季新款一字扣带高跟鞋韩版百搭中跟粗跟鞋子露趾女鞋",
+      "description": "These chic women's summer sandals feature a versatile ankle-strap design, a comfortable mid-block heel, and an open-toe silhouette for effortless style.",
+      "raw_response": "These chic women's summer sandals feature a versatile ankle-strap design, a comfortable mid-block heel, and an open-toe silhouette for effortless style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "9666": {
+      "item_id": 9666,
+      "text": "原创春夏性感包臀黑色显瘦OL高腰不规则荷叶边鱼尾半身裙中长款女",
+      "description": "This black, high-waisted midi skirt features a chic, irregular ruffled hem and a flattering, slim-fit silhouette perfect for professional spring and summer outfits.",
+      "raw_response": "This black, high-waisted midi skirt features a chic, irregular ruffled hem and a flattering, slim-fit silhouette perfect for professional spring and summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "9710": {
+      "item_id": 9710,
+      "text": "shevennie2018新款链条羊皮腰包女小香风斜挎包迷你小包包 女包特",
+      "description": "This chic, quilted lambskin belt bag features a sophisticated chain strap, perfect for adding a touch of luxury to any women's outfit.",
+      "raw_response": "This chic, quilted lambskin belt bag features a sophisticated chain strap, perfect for adding a touch of luxury to any women's outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "9773": {
+      "item_id": 9773,
+      "text": "Belle/百丽2017秋牛皮小白鞋厚底休闲女单鞋板鞋BSG22CM7",
+      "description": "These white Belle leather platform sneakers offer a stylish, casual look perfect for autumn outfits.",
+      "raw_response": "These white Belle leather platform sneakers offer a stylish, casual look perfect for autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "9874": {
+      "item_id": 9874,
+      "text": "Vans范斯官方正品 新款侧边条纹男子低帮帆布鞋",
+      "description": "These classic men’s low-top canvas sneakers feature the iconic side stripe, offering a versatile and stylish choice for any casual outfit.",
+      "raw_response": "These classic men’s low-top canvas sneakers feature the iconic side stripe, offering a versatile and stylish choice for any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10002": {
+      "item_id": 10002,
+      "text": "云上 小高领条纹包芯纱打底毛衣套头女宽松A7529",
+      "description": "This women’s mock-neck striped sweater is crafted from soft core-spun yarn, offering a relaxed, cozy fit perfect for effortless seasonal layering.",
+      "raw_response": "This women’s mock-neck striped sweater is crafted from soft core-spun yarn, offering a relaxed, cozy fit perfect for effortless seasonal layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10469": {
+      "item_id": 10469,
+      "text": "套头毛衣女宽松中长款秋冬季2018新款韩版过膝打底针织毛线连衣裙",
+      "description": "This cozy, oversized knit sweater dress features a relaxed, longline silhouette, perfect for effortless layering during the autumn and winter seasons.",
+      "raw_response": "This cozy, oversized knit sweater dress features a relaxed, longline silhouette, perfect for effortless layering during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10518": {
+      "item_id": 10518,
+      "text": "子墨家99足银手工纯银拉丝心经实心复古开口手镯禅意文艺民族风女",
+      "description": "This vintage-inspired, handcrafted 999 sterling silver open bangle features intricate heart sutra engravings, perfect for adding a zen, artisanal touch to any outfit.",
+      "raw_response": "This vintage-inspired, handcrafted 999 sterling silver open bangle features intricate heart sutra engravings, perfect for adding a zen, artisanal touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10519": {
+      "item_id": 10519,
+      "text": "FS2019冬季新款彩色格纹黄色格子宽松休闲oversize毛呢衬衫外套女",
+      "description": "This oversized, yellow plaid wool-blend shirt jacket offers a cozy, relaxed style perfect for winter layering.",
+      "raw_response": "This oversized, yellow plaid wool-blend shirt jacket offers a cozy, relaxed style perfect for winter layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10898": {
+      "item_id": 10898,
+      "text": "ZY喜哥 美到炸~一定要入手！2019新款网红针织开衫女拼色洋气上衣",
+      "description": "This stylish women's color-block knit cardigan is a trendy, versatile piece perfect for elevating your everyday seasonal wardrobe.",
+      "raw_response": "This stylish women's color-block knit cardigan is a trendy, versatile piece perfect for elevating your everyday seasonal wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10930": {
+      "item_id": 10930,
+      "text": "牛皮高级感洋气质感小ck限量星空限定小包包女2019新款链条斜挎包",
+      "description": "This premium cowhide crossbody bag features a chic, starry-inspired design with a sophisticated chain strap, perfect for elevating any stylish ensemble.",
+      "raw_response": "This premium cowhide crossbody bag features a chic, starry-inspired design with a sophisticated chain strap, perfect for elevating any stylish ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10940": {
+      "item_id": 10940,
+      "text": "银针五角星星夸张时尚大耳环夏天清新百搭韩国气质长款耳坠耳饰女",
+      "description": "These chic, oversized star-shaped drop earrings feature a fresh, Korean-inspired design, perfect for adding a stylish touch to your summer outfits.",
+      "raw_response": "These chic, oversized star-shaped drop earrings feature a fresh, Korean-inspired design, perfect for adding a stylish touch to your summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "10946": {
+      "item_id": 10946,
+      "text": "2019新款手表女士学生韩版简约休闲时尚潮流防水皮带石英表ins风",
+      "description": "This minimalist, Korean-style women's quartz watch features a sleek leather strap, perfect for adding a trendy, casual touch to any everyday outfit.",
+      "raw_response": "This minimalist, Korean-style women's quartz watch features a sleek leather strap, perfect for adding a trendy, casual touch to any everyday outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "11015": {
+      "item_id": 11015,
+      "text": "2019秋季英伦bf风oversize宽松显瘦chic黑色长款过膝风衣外套 女",
+      "description": "This black, oversized British-style trench coat offers a chic, relaxed silhouette, perfect for layering during the autumn season.",
+      "raw_response": "This black, oversized British-style trench coat offers a chic, relaxed silhouette, perfect for layering during the autumn season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "11069": {
+      "item_id": 11069,
+      "text": "劳士顿专柜正品女士手表女防水钨钢女表潮流时尚款女2019新款手链",
+      "description": "This stylish women's tungsten steel watch features a sleek, waterproof design, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This stylish women's tungsten steel watch features a sleek, waterproof design, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "11418": {
+      "item_id": 11418,
+      "text": "2019春季新款尖头铆钉韩版猫跟女鞋高跟鞋女细跟浅口时尚百搭单鞋",
+      "description": "These chic, pointed-toe kitten heels feature edgy stud detailing, offering a versatile and stylish finish to any spring ensemble.",
+      "raw_response": "These chic, pointed-toe kitten heels feature edgy stud detailing, offering a versatile and stylish finish to any spring ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "11423": {
+      "item_id": 11423,
+      "text": "烫社交女鞋黑色漆皮系带休闲布洛克女鞋厚底德比小皮鞋春季新款",
+      "description": "These black patent leather lace-up brogues feature a chunky platform sole, offering a stylish and versatile choice for your spring wardrobe.",
+      "raw_response": "These black patent leather lace-up brogues feature a chunky platform sole, offering a stylish and versatile choice for your spring wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "11777": {
+      "item_id": 11777,
+      "text": "烫社交女鞋深红色牛皮系带小皮鞋时尚休闲英伦风乐福鞋夏季新款",
+      "description": "These deep red leather lace-up loafers feature a chic British-inspired style, perfect for adding a sophisticated touch to your summer wardrobe.",
+      "raw_response": "These deep red leather lace-up loafers feature a chic British-inspired style, perfect for adding a sophisticated touch to your summer wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "11856": {
+      "item_id": 11856,
+      "text": "Mell 马蒂斯人像 小众法式不对称耳环夹女无耳洞高级设计感简约",
+      "description": "These chic, asymmetrical Matisse-inspired clip-on earrings feature a minimalist design, perfect for adding a sophisticated French touch to any ensemble.",
+      "raw_response": "These chic, asymmetrical Matisse-inspired clip-on earrings feature a minimalist design, perfect for adding a sophisticated French touch to any ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "11889": {
+      "item_id": 11889,
+      "text": "日系休闲裤收脚裤春季工装裤男生哈伦裤子宽松束脚裤男士小脚裤潮",
+      "description": "These Japanese-style men's casual cargo joggers feature a relaxed, tapered fit, perfect for a comfortable and trendy spring look.",
+      "raw_response": "These Japanese-style men's casual cargo joggers feature a relaxed, tapered fit, perfect for a comfortable and trendy spring look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "12037": {
+      "item_id": 12037,
+      "text": "白色高领毛衣女2017新款秋冬韩版百搭修身短款黑色套头打底针织衫",
+      "description": "This versatile, slim-fit turtleneck sweater in white or black is a chic, essential knit piece for your autumn and winter wardrobe.",
+      "raw_response": "This versatile, slim-fit turtleneck sweater in white or black is a chic, essential knit piece for your autumn and winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "12038": {
+      "item_id": 12038,
+      "text": "贝雷帽女秋冬羊毛帽韩版时尚礼帽百搭英伦八角帽潮鸭舌帽冬季女帽",
+      "description": "This stylish wool beret for women features a chic British-inspired design, perfect for adding a sophisticated touch to your autumn and winter outfits.",
+      "raw_response": "This stylish wool beret for women features a chic British-inspired design, perfect for adding a sophisticated touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "12124": {
+      "item_id": 12124,
+      "text": "一力米灰2018秋冬季真皮粗跟英伦黑色切尔西靴马丁靴短靴女鞋中跟",
+      "description": "These black leather Chelsea boots feature a chic block heel and classic British style, perfect for elevating your autumn and winter outfits.",
+      "raw_response": "These black leather Chelsea boots feature a chic block heel and classic British style, perfect for elevating your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "12173": {
+      "item_id": 12173,
+      "text": "贝雷帽女秋冬韩版日系百搭韩国英文字母黑色英伦八角帽南瓜画家帽",
+      "description": "This black Korean-style beret features chic letter detailing, offering a versatile, stylish accessory perfect for completing your autumn and winter outfits.",
+      "raw_response": "This black Korean-style beret features chic letter detailing, offering a versatile, stylish accessory perfect for completing your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "12279": {
+      "item_id": 12279,
+      "text": "勿上热风2018年春新款小清新女士平底单鞋浅口尖头休闲鞋H07W8107",
+      "description": "These women’s spring flats feature a chic, pointed-toe design in a fresh, casual style, perfect for effortless everyday wear.",
+      "raw_response": "These women’s spring flats feature a chic, pointed-toe design in a fresh, casual style, perfect for effortless everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "12682": {
+      "item_id": 12682,
+      "text": "星星耳坠女气质韩国百搭女生长款吊坠显脸瘦的耳环欧美夸张耳饰",
+      "description": "These chic, long star-drop earrings feature a bold, versatile design that adds a touch of glamour to any outfit.",
+      "raw_response": "These chic, long star-drop earrings feature a bold, versatile design that adds a touch of glamour to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "12828": {
+      "item_id": 12828,
+      "text": "韩国毛呢纯色复古鸭舌八角帽子男女秋冬文艺百搭保暖画家帽报童帽",
+      "description": "This cozy, solid-colored wool-blend newsboy cap features a vintage-inspired design, perfect for adding a stylish, warm touch to any autumn or winter outfit.",
+      "raw_response": "This cozy, solid-colored wool-blend newsboy cap features a vintage-inspired design, perfect for adding a stylish, warm touch to any autumn or winter outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13126": {
+      "item_id": 13126,
+      "text": "黑色复古修身羊毛呢外套加厚中长款呢子大衣秋冬季女装20199新款",
+      "description": "This black, vintage-inspired slim-fit wool coat features a thickened mid-length design, perfect for staying warm and stylish throughout the autumn and winter seasons.",
+      "raw_response": "This black, vintage-inspired slim-fit wool coat features a thickened mid-length design, perfect for staying warm and stylish throughout the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13154": {
+      "item_id": 13154,
+      "text": "张大奕 2018秋冬新款70%羊毛双面呢子大衣女中长款过膝毛呢外套",
+      "description": "This elegant women’s mid-length wool-blend coat features a double-faced construction, perfect for staying warm and stylish throughout the autumn and winter seasons.",
+      "raw_response": "This elegant women’s mid-length wool-blend coat features a double-faced construction, perfect for staying warm and stylish throughout the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13173": {
+      "item_id": 13173,
+      "text": "玩儿！固特异马丁靴英伦复古手工高帮头层牛皮伞兵靴工装男短靴子",
+      "description": "These men’s British-style vintage Goodyear-welted leather combat boots feature premium cowhide, perfect for adding a rugged, artisanal edge to any outfit.",
+      "raw_response": "These men’s British-style vintage Goodyear-welted leather combat boots feature premium cowhide, perfect for adding a rugged, artisanal edge to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13257": {
+      "item_id": 13257,
+      "text": "小清新学生日系水手服2018夏季新款韩版学院风短袖海军风连衣裙女",
+      "description": "This Japanese-style sailor dress features a fresh, collegiate aesthetic with short sleeves, perfect for a casual summer look.",
+      "raw_response": "This Japanese-style sailor dress features a fresh, collegiate aesthetic with short sleeves, perfect for a casual summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13295": {
+      "item_id": 13295,
+      "text": "子晴 复古刺绣毛衣女秋冬新款百搭气质宽松两面穿chic系带毛织衫",
+      "description": "This vintage-inspired women's sweater features elegant embroidery and a versatile reversible design, perfect for adding a chic, cozy touch to your autumn-winter wardrobe.",
+      "raw_response": "This vintage-inspired women's sweater features elegant embroidery and a versatile reversible design, perfect for adding a chic, cozy touch to your autumn-winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13508": {
+      "item_id": 13508,
+      "text": "不退不换！店主自留款~复古花朵闪钻珍珠流苏长款耳钉耳坠耳环女",
+      "description": "These vintage-inspired long drop earrings feature sparkling floral crystals and elegant pearls, perfect for adding a sophisticated touch to any occasion.",
+      "raw_response": "These vintage-inspired long drop earrings feature sparkling floral crystals and elegant pearls, perfect for adding a sophisticated touch to any occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13779": {
+      "item_id": 13779,
+      "text": "三彩2018夏装新品 纯棉印花T恤中袖字母百搭上衣直筒全棉套头衫女",
+      "description": "This women’s summer T-shirt features a casual, straight-fit silhouette in breathable cotton, accented with a stylish graphic print for versatile everyday wear.",
+      "raw_response": "This women’s summer T-shirt features a casual, straight-fit silhouette in breathable cotton, accented with a stylish graphic print for versatile everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13799": {
+      "item_id": 13799,
+      "text": "venuco小方包女2019新款迷你铆钉斜挎包韩版百搭时尚链条包女包小",
+      "description": "This stylish, Korean-inspired mini crossbody bag features chic stud detailing and a versatile chain strap, perfect for elevating any casual or evening outfit.",
+      "raw_response": "This stylish, Korean-inspired mini crossbody bag features chic stud detailing and a versatile chain strap, perfect for elevating any casual or evening outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13817": {
+      "item_id": 13817,
+      "text": "ALOHA STUDIO 露合制衣 飞飞袖交叉绑带星星长裙高腰V领连衣裙 女",
+      "description": "This women’s V-neck maxi dress features flutter sleeves, a cross-tie waist, and a charming star print, perfect for a stylish seasonal look.",
+      "raw_response": "This women’s V-neck maxi dress features flutter sleeves, a cross-tie waist, and a charming star print, perfect for a stylish seasonal look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13827": {
+      "item_id": 13827,
+      "text": "草帽大头围男士VH夏季英伦爵士帽潮人礼帽沙滩帽遮阳帽潮男女亲子",
+      "description": "This stylish British-inspired straw fedora is perfect for summer, offering sun protection and a trendy look for both men and women.",
+      "raw_response": "This stylish British-inspired straw fedora is perfect for summer, offering sun protection and a trendy look for both men and women.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "13869": {
+      "item_id": 13869,
+      "text": "2019新款chic潮尖头包头黄色细跟高跟凉鞋外穿穆勒鞋凉拖鞋女夏季",
+      "description": "These chic yellow pointed-toe stiletto mules feature a sleek design, perfect for elevating your summer wardrobe with a touch of modern elegance.",
+      "raw_response": "These chic yellow pointed-toe stiletto mules feature a sleek design, perfect for elevating your summer wardrobe with a touch of modern elegance.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "14115": {
+      "item_id": 14115,
+      "text": "衣品天成2019春新款牛仔裤子男生韩版直筒修身破洞乞丐潮男士青年",
+      "description": "These men's Korean-style slim-fit distressed denim jeans are a trendy choice for casual spring outfits.",
+      "raw_response": "These men's Korean-style slim-fit distressed denim jeans are a trendy choice for casual spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "14203": {
+      "item_id": 14203,
+      "text": "粗跟单鞋女真皮2019春秋英伦风女鞋中跟深口方头加绒单鞋女小皮鞋",
+      "description": "These British-style women’s block-heel pumps are crafted from genuine leather, featuring a square toe and comfortable mid-heel for spring and autumn wear.",
+      "raw_response": "These British-style women’s block-heel pumps are crafted from genuine leather, featuring a square toe and comfortable mid-heel for spring and autumn wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "14490": {
+      "item_id": 14490,
+      "text": "小白鞋女2019春季新款韩版百搭松糕鞋厚底增高休闲魔术贴单鞋2018",
+      "description": "These versatile white women's platform sneakers feature a trendy Korean-style velcro design, perfect for adding height and casual flair to your spring outfits.",
+      "raw_response": "These versatile white women's platform sneakers feature a trendy Korean-style velcro design, perfect for adding height and casual flair to your spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "14941": {
+      "item_id": 14941,
+      "text": "小香嬉皮包牛皮水桶包女2019新款单肩斜跨包菱格链条包流浪包女包",
+      "description": "This chic quilted leather hobo bag features a classic chain strap, offering a stylish and versatile option for any sophisticated everyday look.",
+      "raw_response": "This chic quilted leather hobo bag features a classic chain strap, offering a stylish and versatile option for any sophisticated everyday look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15061": {
+      "item_id": 15061,
+      "text": "巴掌家重工镶钻牛仔外套女装宽松百搭长袖流行上衣春季2019新款潮",
+      "description": "This trendy women's oversized denim jacket features intricate rhinestone embellishments, perfect for elevating your casual spring outfits with a touch of sparkle.",
+      "raw_response": "This trendy women's oversized denim jacket features intricate rhinestone embellishments, perfect for elevating your casual spring outfits with a touch of sparkle.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15223": {
+      "item_id": 15223,
+      "text": "包包女2019新款网红小黑包真皮鳄鱼纹链条包复古单肩包百搭斜挎包",
+      "description": "This chic black leather crossbody bag features a trendy crocodile texture and gold chain strap, perfect for adding a vintage touch to any outfit.",
+      "raw_response": "This chic black leather crossbody bag features a trendy crocodile texture and gold chain strap, perfect for adding a vintage touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15295": {
+      "item_id": 15295,
+      "text": "一字肩小清新白色连衣裙吊带裙女夏学生可爱仙女裙子2019夏装新款",
+      "description": "This charming white off-shoulder camisole dress features a fresh, feminine style perfect for summer, offering a cute and airy look for any occasion.",
+      "raw_response": "This charming white off-shoulder camisole dress features a fresh, feminine style perfect for summer, offering a cute and airy look for any occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15557": {
+      "item_id": 15557,
+      "text": "黑眼袋袋包包女士2019夏季新款单肩女包百搭ins斜挎包时尚小包潮",
+      "description": "This stylish 2019 summer women's shoulder bag features a versatile, trendy design perfect for completing any fashionable outfit.",
+      "raw_response": "This stylish 2019 summer women's shoulder bag features a versatile, trendy design perfect for completing any fashionable outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15614": {
+      "item_id": 15614,
+      "text": "金狐狸手提女包2019春夏新款时尚包包真皮斜挎大包软女士休闲单肩",
+      "description": "This stylish 2019 spring/summer women's genuine leather handbag features a versatile design, perfect for casual daily wear or sophisticated shoulder carry.",
+      "raw_response": "This stylish 2019 spring/summer women's genuine leather handbag features a versatile design, perfect for casual daily wear or sophisticated shoulder carry.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15706": {
+      "item_id": 15706,
+      "text": "黄一琳2018春装新款V领套头毛衣马甲宽松针织打底衫无袖背心女",
+      "description": "This women's V-neck sleeveless knit sweater vest in a loose, casual style is a versatile layering piece for your spring wardrobe.",
+      "raw_response": "This women's V-neck sleeveless knit sweater vest in a loose, casual style is a versatile layering piece for your spring wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15904": {
+      "item_id": 15904,
+      "text": "靴子女冬2018新款切尔西短靴女平底粗跟短筒马丁靴加绒棉鞋女秋冬",
+      "description": "These women's winter Chelsea boots feature a flat, chunky heel and plush lining, perfect for staying warm and stylish during the colder months.",
+      "raw_response": "These women's winter Chelsea boots feature a flat, chunky heel and plush lining, perfect for staying warm and stylish during the colder months.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "15940": {
+      "item_id": 15940,
+      "text": "YINGYING 秋冬新款 时尚五角星百搭项链颈链",
+      "description": "This stylish star-pendant necklace is a versatile accessory, perfect for elevating your autumn and winter outfits with a chic, modern touch.",
+      "raw_response": "This stylish star-pendant necklace is a versatile accessory, perfect for elevating your autumn and winter outfits with a chic, modern touch.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16270": {
+      "item_id": 16270,
+      "text": "平底鞋女2019新款春季软底鞋瓢鞋仙女时尚蝴蝶结水钻浅口尖头单鞋",
+      "description": "These chic women’s spring flats feature a pointed toe, delicate bow, and sparkling rhinestones, crafted with a soft sole for elegant, comfortable wear.",
+      "raw_response": "These chic women’s spring flats feature a pointed toe, delicate bow, and sparkling rhinestones, crafted with a soft sole for elegant, comfortable wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16299": {
+      "item_id": 16299,
+      "text": "WDY01048 茉莉雅集 英伦复古人字纹西装领澳洲羊毛双面呢大衣",
+      "description": "This British-inspired vintage wool coat features a classic herringbone pattern, notched lapels, and a premium double-faced construction for timeless seasonal elegance.",
+      "raw_response": "This British-inspired vintage wool coat features a classic herringbone pattern, notched lapels, and a premium double-faced construction for timeless seasonal elegance.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16384": {
+      "item_id": 16384,
+      "text": "@绿光 工装外套女春秋宽松连帽夹克反光字母帅气街头欧美风上衣潮",
+      "description": "This green, oversized hooded utility jacket features reflective lettering, offering a cool, street-style aesthetic perfect for transitional spring and autumn weather.",
+      "raw_response": "This green, oversized hooded utility jacket features reflective lettering, offering a cool, street-style aesthetic perfect for transitional spring and autumn weather.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16733": {
+      "item_id": 16733,
+      "text": "2018秋冬韩国羊羔毛做旧星星GGDB小脏鞋女真皮毛毛鞋加绒小白鞋女",
+      "description": "These women’s distressed leather sneakers feature cozy faux-shearling lining and star detailing, perfect for adding a trendy, casual touch to autumn-winter outfits.",
+      "raw_response": "These women’s distressed leather sneakers feature cozy faux-shearling lining and star detailing, perfect for adding a trendy, casual touch to autumn-winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16798": {
+      "item_id": 16798,
+      "text": "EEKE Studio 925银镀金不规则巴洛克珍珠耳环原创小众耳钉女耳饰",
+      "description": "These unique EEKE Studio irregular baroque pearl stud earrings are crafted from 925 silver with a gold-plated finish, perfect for adding elegant, artisanal flair.",
+      "raw_response": "These unique EEKE Studio irregular baroque pearl stud earrings are crafted from 925 silver with a gold-plated finish, perfect for adding elegant, artisanal flair.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16810": {
+      "item_id": 16810,
+      "text": "ins老爹鞋春季男鞋潮鞋2019新款英伦潮男鞋子网红百搭时尚运动鞋",
+      "description": "These trendy men's chunky sneakers feature a stylish British-inspired design, perfect for adding a fashionable, versatile touch to your spring outfits.",
+      "raw_response": "These trendy men's chunky sneakers feature a stylish British-inspired design, perfect for adding a fashionable, versatile touch to your spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16970": {
+      "item_id": 16970,
+      "text": "G2000衬衫男长袖防皱商务男装 工作休闲正装衣服修身薄款白色衬衣",
+      "description": "This white, slim-fit long-sleeve shirt is crafted from wrinkle-resistant fabric, offering a polished, professional look perfect for business or formal occasions.",
+      "raw_response": "This white, slim-fit long-sleeve shirt is crafted from wrinkle-resistant fabric, offering a polished, professional look perfect for business or formal occasions.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "16971": {
+      "item_id": 16971,
+      "text": "MG小象格子衬衫女2019新款潮心机小清新娃娃衫上衣设计感短袖衬衣",
+      "description": "This trendy women's short-sleeved plaid blouse features a fresh, doll-style design, perfect for adding a chic, youthful touch to your summer wardrobe.",
+      "raw_response": "This trendy women's short-sleeved plaid blouse features a fresh, doll-style design, perfect for adding a chic, youthful touch to your summer wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "17033": {
+      "item_id": 17033,
+      "text": "真皮老爹鞋女春季2019新款网红ins百搭休闲厚底小白内增高运动潮8",
+      "description": "These trendy white leather chunky sneakers for women feature a platform sole and hidden wedge, perfect for casual spring outfits.",
+      "raw_response": "These trendy white leather chunky sneakers for women feature a platform sole and hidden wedge, perfect for casual spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "17051": {
+      "item_id": 17051,
+      "text": "2019春秋新款真皮单鞋草编厚底松糕乐福鞋女厚底休闲一脚套懒人鞋",
+      "description": "These women’s spring/autumn leather loafers feature a stylish straw-trimmed platform sole, offering a comfortable and casual slip-on design for everyday wear.",
+      "raw_response": "These women’s spring/autumn leather loafers feature a stylish straw-trimmed platform sole, offering a comfortable and casual slip-on design for everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "17098": {
+      "item_id": 17098,
+      "text": "S17街头潮牌春2018新款欧美裙子中长款高腰不规则网纱拼接半身裙",
+      "description": "This trendy, high-waisted midi skirt features edgy mesh paneling, perfect for adding a street-style aesthetic to your spring wardrobe.",
+      "raw_response": "This trendy, high-waisted midi skirt features edgy mesh paneling, perfect for adding a street-style aesthetic to your spring wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "17213": {
+      "item_id": 17213,
+      "text": "日本潮牌 卡通手提包 迷你帆布袋 斜挎女包 帆布包 布包",
+      "description": "This Japanese-style mini canvas crossbody bag features a playful cartoon design, perfect for adding a casual, trendy touch to your everyday outfit.",
+      "raw_response": "This Japanese-style mini canvas crossbody bag features a playful cartoon design, perfect for adding a casual, trendy touch to your everyday outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "17577": {
+      "item_id": 17577,
+      "text": "茵曼2018夏装新款清新文艺范刺绣绣花牛仔半身裙A字型短裙一步裙",
+      "description": "This fresh, literary-style A-line denim mini skirt features delicate embroidery, perfect for a chic and casual summer look.",
+      "raw_response": "This fresh, literary-style A-line denim mini skirt features delicate embroidery, perfect for a chic and casual summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "17654": {
+      "item_id": 17654,
+      "text": "特价打折晓茉莉2019新款女镂空蕾丝拼接显瘦V领复古花连衣裙女夏",
+      "description": "This vintage-inspired women’s summer dress features elegant lace-paneled cutouts and a flattering V-neckline, perfect for a sophisticated seasonal look.",
+      "raw_response": "This vintage-inspired women’s summer dress features elegant lace-paneled cutouts and a flattering V-neckline, perfect for a sophisticated seasonal look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "17820": {
+      "item_id": 17820,
+      "text": "真皮厚底小白鞋女2018春秋季新款松糕底运动英伦单鞋百搭休闲增高",
+      "description": "These versatile white leather platform sneakers feature a stylish British-inspired design, perfect for adding height to your casual spring and autumn outfits.",
+      "raw_response": "These versatile white leather platform sneakers feature a stylish British-inspired design, perfect for adding height to your casual spring and autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18113": {
+      "item_id": 18113,
+      "text": "St&amp;Sat/星期六春秋新款原宿平底休闲运动女单鞋小白鞋2558",
+      "description": "These women’s white Harajuku-style flat sneakers are perfect for casual spring and autumn wear, offering a versatile, comfortable finish to any outfit.",
+      "raw_response": "These women’s white Harajuku-style flat sneakers are perfect for casual spring and autumn wear, offering a versatile, comfortable finish to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18239": {
+      "item_id": 18239,
+      "text": "ins老爹鞋女加绒厚底秋冬季2018新款运动鞋女韩版ulzzang原宿百搭",
+      "description": "These trendy, fleece-lined chunky sneakers feature a thick sole and Korean-inspired design, perfect for adding a stylish, versatile touch to your autumn-winter outfits.",
+      "raw_response": "These trendy, fleece-lined chunky sneakers feature a thick sole and Korean-inspired design, perfect for adding a stylish, versatile touch to your autumn-winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18325": {
+      "item_id": 18325,
+      "text": "S家原创女装2018冬季新款韩版宽松西装领外套中长款毛呢大衣女",
+      "description": "This stylish, oversized wool-blend coat features a classic lapel collar, perfect for elevating your winter wardrobe with a chic, Korean-inspired aesthetic.",
+      "raw_response": "This stylish, oversized wool-blend coat features a classic lapel collar, perfect for elevating your winter wardrobe with a chic, Korean-inspired aesthetic.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18334": {
+      "item_id": 18334,
+      "text": "deessesicile夏日新款复古时髦几何圆环白蝶贝925银针耳环/耳钉",
+      "description": "These chic, vintage-inspired geometric earrings feature white mother-of-pearl accents and 925 silver posts, perfect for elevating your summer style.",
+      "raw_response": "These chic, vintage-inspired geometric earrings feature white mother-of-pearl accents and 925 silver posts, perfect for elevating your summer style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18427": {
+      "item_id": 18427,
+      "text": "网红ins贝雷帽女秋冬韩版潮日系百搭英伦蓓蕾帽八角帽画家帽子女",
+      "description": "This stylish Korean-inspired wool beret is a versatile autumn and winter accessory, perfect for adding a chic, artistic touch to any outfit.",
+      "raw_response": "This stylish Korean-inspired wool beret is a versatile autumn and winter accessory, perfect for adding a chic, artistic touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18445": {
+      "item_id": 18445,
+      "text": "舒适纯皮小白鞋真皮平底鞋女百搭系带休闲鞋白色小皮鞋单鞋四季鞋",
+      "description": "These versatile white leather sneakers feature a comfortable flat sole and classic lace-up design, perfect for effortless everyday styling in any season.",
+      "raw_response": "These versatile white leather sneakers feature a comfortable flat sole and classic lace-up design, perfect for effortless everyday styling in any season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18564": {
+      "item_id": 18564,
+      "text": "【南风】经典复古豆腐包小方包包女2018新款时尚单肩包斜跨包小包",
+      "description": "This classic vintage-style small square shoulder bag for women features a chic, minimalist design perfect for elevating any everyday outfit.",
+      "raw_response": "This classic vintage-style small square shoulder bag for women features a chic, minimalist design perfect for elevating any everyday outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18620": {
+      "item_id": 18620,
+      "text": "素木撞色连帽拼接卫衣女秋冬2018新款韩版长袖宽松打底衫女1576",
+      "description": "This women's color-block hooded sweatshirt features a loose, Korean-style fit, perfect for layering during the autumn and winter seasons.",
+      "raw_response": "This women's color-block hooded sweatshirt features a loose, Korean-style fit, perfect for layering during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18706": {
+      "item_id": 18706,
+      "text": "mlb帽子女镶钻男春夏专柜正品新款洋基NY棒球帽小标百搭遮脸鸭舌",
+      "description": "This authentic MLB NY Yankees baseball cap features sparkling rhinestone detailing, offering a stylish, versatile accessory for spring and summer outfits.",
+      "raw_response": "This authentic MLB NY Yankees baseball cap features sparkling rhinestone detailing, offering a stylish, versatile accessory for spring and summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18769": {
+      "item_id": 18769,
+      "text": "男生裤子韩版潮流男春夏国潮束脚哈伦裤透气潮男款帅气宽松工装裤",
+      "description": "These breathable, loose-fit Korean-style cargo joggers for men feature a trendy streetwear aesthetic, perfect for casual spring and summer outfits.",
+      "raw_response": "These breathable, loose-fit Korean-style cargo joggers for men feature a trendy streetwear aesthetic, perfect for casual spring and summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18805": {
+      "item_id": 18805,
+      "text": "网红小皮鞋女2019春季新款小清新单鞋高跟鞋子百搭仙女鞋粗跟女鞋",
+      "description": "These chic, versatile women's block-heel pumps feature a fresh, minimalist style perfect for elevating your spring outfits with a touch of elegance.",
+      "raw_response": "These chic, versatile women's block-heel pumps feature a fresh, minimalist style perfect for elevating your spring outfits with a touch of elegance.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18827": {
+      "item_id": 18827,
+      "text": "Inkory三圆耳环 简约百搭几何圆圈大耳环网红耳夹女无耳洞cos风",
+      "description": "These minimalist geometric hoop earrings feature a chic, versatile design perfect for adding a modern touch to any outfit.",
+      "raw_response": "These minimalist geometric hoop earrings feature a chic, versatile design perfect for adding a modern touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "18848": {
+      "item_id": 18848,
+      "text": "红色木耳边波点雪纺连衣裙女中长款喇叭袖收腰内搭裙冬2018新款@",
+      "description": "This red polka-dot chiffon midi dress features elegant lettuce-edge detailing and flared sleeves, perfect for a stylish winter layered look.",
+      "raw_response": "This red polka-dot chiffon midi dress features elegant lettuce-edge detailing and flared sleeves, perfect for a stylish winter layered look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19021": {
+      "item_id": 19021,
+      "text": "大叔家2019春季新款脏脏鞋圆头系带做旧小白鞋平底星星学生板鞋女",
+      "description": "These women's distressed white sneakers feature a round toe, lace-up closure, and star detailing, perfect for a casual, trendy spring look.",
+      "raw_response": "These women's distressed white sneakers feature a round toe, lace-up closure, and star detailing, perfect for a casual, trendy spring look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19043": {
+      "item_id": 19043,
+      "text": "韩国露娜网红仿珍珠耳环 女式气质长款耳坠新款ins耳钉韩版耳饰品",
+      "description": "These elegant Korean-style long faux pearl drop earrings add a sophisticated, trendy touch to any women's outfit.",
+      "raw_response": "These elegant Korean-style long faux pearl drop earrings add a sophisticated, trendy touch to any women's outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19298": {
+      "item_id": 19298,
+      "text": "AbbottVintage「麋鹿」焦糖色牛皮竹节圆环手提包半圆斜挎包包邮",
+      "description": "This vintage-style caramel leather handbag features a unique bamboo ring handle and a chic half-moon silhouette, perfect for elevating any ensemble.",
+      "raw_response": "This vintage-style caramel leather handbag features a unique bamboo ring handle and a chic half-moon silhouette, perfect for elevating any ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19355": {
+      "item_id": 19355,
+      "text": "柒柒家2018新款春秋女韩版百搭上衣宽松刺绣棒球服薄短款外套外衣",
+      "description": "This women’s spring and autumn baseball jacket features a relaxed fit, stylish embroidery, and a versatile design, perfect for casual layering.",
+      "raw_response": "This women’s spring and autumn baseball jacket features a relaxed fit, stylish embroidery, and a versatile design, perfect for casual layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19371": {
+      "item_id": 19371,
+      "text": "忆奴娇 将离 纯银 饰品 水晶耳环 短款 简约时尚耳坠 气质耳饰",
+      "description": "These minimalist sterling silver crystal earrings feature a chic, short drop design, perfect for adding an elegant touch to any sophisticated ensemble.",
+      "raw_response": "These minimalist sterling silver crystal earrings feature a chic, short drop design, perfect for adding an elegant touch to any sophisticated ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19385": {
+      "item_id": 19385,
+      "text": "绽放的烟花 不规则金色珍珠耳环耳钉",
+      "description": "These irregular gold pearl stud earrings feature a firework-inspired design, adding a sophisticated and artistic touch to any ensemble.",
+      "raw_response": "These irregular gold pearl stud earrings feature a firework-inspired design, adding a sophisticated and artistic touch to any ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19468": {
+      "item_id": 19468,
+      "text": "可爱lo鞋日系 圆头娃娃鞋复古皮鞋学院风文艺 jk制服鞋 cos女仆鞋",
+      "description": "These vintage-inspired Japanese-style round-toe Mary Janes feature a classic aesthetic, perfect for completing your JK uniform or whimsical maid-inspired outfits.",
+      "raw_response": "These vintage-inspired Japanese-style round-toe Mary Janes feature a classic aesthetic, perfect for completing your JK uniform or whimsical maid-inspired outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19550": {
+      "item_id": 19550,
+      "text": "小瑞靓包 锁扣小方包包女2019新款简约复古链条包斜挎包迷你小包",
+      "description": "This minimalist vintage-style mini crossbody bag features a sleek lock closure and a chic chain strap, perfect for elevating any outfit.",
+      "raw_response": "This minimalist vintage-style mini crossbody bag features a sleek lock closure and a chic chain strap, perfect for elevating any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19726": {
+      "item_id": 19726,
+      "text": "绒面方扣乐福鞋英伦风女单鞋平底女鞋皮带扣秋季粗跟方头工作鞋女",
+      "description": "These chic suede loafers feature a square toe, buckle detail, and comfortable block heel, perfect for a sophisticated autumn workwear look.",
+      "raw_response": "These chic suede loafers feature a square toe, buckle detail, and comfortable block heel, perfect for a sophisticated autumn workwear look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19932": {
+      "item_id": 19932,
+      "text": "aza小包包新款潮女包ins时尚简约大气百搭chic迷你手提单肩斜挎包",
+      "description": "This chic, minimalist mini bag features a versatile design, perfect for adding a stylish, sophisticated touch to any outfit.",
+      "raw_response": "This chic, minimalist mini bag features a versatile design, perfect for adding a stylish, sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "19956": {
+      "item_id": 19956,
+      "text": "MG小象纯棉高腰直筒裤女2018新款宽松学生休闲长裤秋季chic风裤子",
+      "description": "These chic, high-waisted straight-leg cotton trousers for women offer a relaxed, casual fit perfect for autumn styling.",
+      "raw_response": "These chic, high-waisted straight-leg cotton trousers for women offer a relaxed, casual fit perfect for autumn styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20094": {
+      "item_id": 20094,
+      "text": "时尚手表女简约学生防水韩版潮流女表小表盘长方形手表皮带夜光",
+      "description": "This minimalist rectangular women's watch features a sleek leather strap and luminous dial, perfect for adding a chic, trendy touch to any outfit.",
+      "raw_response": "This minimalist rectangular women's watch features a sleek leather strap and luminous dial, perfect for adding a chic, trendy touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20116": {
+      "item_id": 20116,
+      "text": "马克华菲短裤男夏季潮流外穿休闲五分裤薄款韩版潮流宽松运动",
+      "description": "These men’s casual summer shorts feature a lightweight, loose-fit design in a trendy Korean style, perfect for comfortable everyday wear.",
+      "raw_response": "These men’s casual summer shorts feature a lightweight, loose-fit design in a trendy Korean style, perfect for comfortable everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20184": {
+      "item_id": 20184,
+      "text": "Z马克华菲男装2018春秋时尚后背动物刺绣棒球领夹克外套上衣",
+      "description": "This stylish men’s spring/autumn baseball jacket features a striking animal embroidery on the back, perfect for completing a modern, casual look.",
+      "raw_response": "This stylish men’s spring/autumn baseball jacket features a striking animal embroidery on the back, perfect for completing a modern, casual look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20209": {
+      "item_id": 20209,
+      "text": "爬梯女鞋2018冬季新款简约白色高跟短靴尖头细跟牛皮前拉链显瘦靴",
+      "description": "These minimalist white leather ankle boots feature a sleek pointed toe, slim high heel, and front zipper, perfect for a chic winter look.",
+      "raw_response": "These minimalist white leather ankle boots feature a sleek pointed toe, slim high heel, and front zipper, perfect for a chic winter look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20330": {
+      "item_id": 20330,
+      "text": "小白鞋女2019春季新款西班牙小众鞋百搭学生厚底内增高运动鞋板鞋",
+      "description": "These versatile women’s white platform sneakers feature a trendy hidden wedge, perfect for casual spring outfits and everyday student style.",
+      "raw_response": "These versatile women’s white platform sneakers feature a trendy hidden wedge, perfect for casual spring outfits and everyday student style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20408": {
+      "item_id": 20408,
+      "text": "【Aure Lee】草莓味奥利奥 A118025 真皮手提单肩包 斜跨女小方包",
+      "description": "This stylish Aure Lee leather square bag features a versatile design, perfect for carrying as a chic handbag or crossbody for any occasion.",
+      "raw_response": "This stylish Aure Lee leather square bag features a versatile design, perfect for carrying as a chic handbag or crossbody for any occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20440": {
+      "item_id": 20440,
+      "text": "2019春装新款女装春季上衣 韩版休闲宽松印花港风短袖T恤女春夏潮",
+      "description": "This casual, loose-fit women’s graphic T-shirt features a trendy Korean-style design, perfect for effortless spring and summer layering.",
+      "raw_response": "This casual, loose-fit women’s graphic T-shirt features a trendy Korean-style design, perfect for effortless spring and summer layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20715": {
+      "item_id": 20715,
+      "text": "Kipling凯浦林2018新款手提包女K13167大容量多功能单肩包猴子包",
+      "description": "This versatile Kipling women’s handbag features a spacious, multi-functional design, perfect for everyday use with its signature durable material and iconic monkey charm.",
+      "raw_response": "This versatile Kipling women’s handbag features a spacious, multi-functional design, perfect for everyday use with its signature durable material and iconic monkey charm.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20755": {
+      "item_id": 20755,
+      "text": "哈森  春休闲水钻皮带扣套脚方根平底深口单鞋女 HL77413",
+      "description": "These women’s spring loafers feature a chic square block heel, rhinestone buckle detail, and a comfortable slip-on design in premium leather.",
+      "raw_response": "These women’s spring loafers feature a chic square block heel, rhinestone buckle detail, and a comfortable slip-on design in premium leather.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20834": {
+      "item_id": 20834,
+      "text": "古祖祖九分休闲裤子女紧身2018新款秋季修身显瘦打底小脚黑色女裤",
+      "description": "These black, slim-fit cropped trousers for women offer a sleek, versatile silhouette perfect for casual autumn styling.",
+      "raw_response": "These black, slim-fit cropped trousers for women offer a sleek, versatile silhouette perfect for casual autumn styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20901": {
+      "item_id": 20901,
+      "text": "GXG男装 男士潮流多色长袖高领套头长袖T恤男#174834140",
+      "description": "This stylish men’s long-sleeve turtleneck pullover from GXG offers a versatile, modern look perfect for layering during the cooler seasons.",
+      "raw_response": "This stylish men’s long-sleeve turtleneck pullover from GXG offers a versatile, modern look perfect for layering during the cooler seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "20938": {
+      "item_id": 20938,
+      "text": "MYTASTE简约手提单肩包大容量水桶包休闲大包女百搭斜挎包牛皮",
+      "description": "This minimalist leather bucket bag offers a spacious, versatile design, perfect for elevating your everyday casual outfits with effortless style.",
+      "raw_response": "This minimalist leather bucket bag offers a spacious, versatile design, perfect for elevating your everyday casual outfits with effortless style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21025": {
+      "item_id": 21025,
+      "text": "honeyGIRL网红鞋子新款女鞋春季单鞋温柔鞋仙女平底鞋尖头鞋百搭",
+      "description": "These chic, pointed-toe women’s flats feature a gentle, versatile design perfect for effortless spring styling.",
+      "raw_response": "These chic, pointed-toe women’s flats feature a gentle, versatile design perfect for effortless spring styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21202": {
+      "item_id": 21202,
+      "text": "◆SRK◆复古文艺紫色格子绑带连衣裙中长款圆领棉麻收腰长裙女",
+      "description": "This vintage-inspired purple plaid midi dress is crafted from breathable cotton-linen, featuring a flattering waist-cinching tie and a classic round neckline.",
+      "raw_response": "This vintage-inspired purple plaid midi dress is crafted from breathable cotton-linen, featuring a flattering waist-cinching tie and a classic round neckline.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21365": {
+      "item_id": 21365,
+      "text": "Ins秋冬季麻花毛线帽针织帽子女韩版保暖时尚百搭款纯色网红冷帽",
+      "description": "This stylish, solid-colored cable-knit beanie for women is a cozy, versatile essential for staying warm during the autumn and winter seasons.",
+      "raw_response": "This stylish, solid-colored cable-knit beanie for women is a cozy, versatile essential for staying warm during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21393": {
+      "item_id": 21393,
+      "text": "现货36/39春季新款平底粗跟chin马丁靴真皮女鞋百搭短靴子英伦风",
+      "description": "These versatile British-style women's leather ankle boots feature a comfortable low block heel, perfect for effortless spring styling.",
+      "raw_response": "These versatile British-style women's leather ankle boots feature a comfortable low block heel, perfect for effortless spring styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21480": {
+      "item_id": 21480,
+      "text": "RAYSHOW高品质鹿皮绒字母绣花连帽卫衣外套 欧美情侣休闲百搭帽衫",
+      "description": "This premium faux suede hooded sweatshirt features stylish letter embroidery, offering a versatile, casual aesthetic perfect for any gender.",
+      "raw_response": "This premium faux suede hooded sweatshirt features stylish letter embroidery, offering a versatile, casual aesthetic perfect for any gender.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21544": {
+      "item_id": 21544,
+      "text": "哥弟女鞋2019春夏新款真皮厚底增高小白鞋网红松糕休闲板鞋910202",
+      "description": "These women's white leather platform sneakers from GEDI feature a trendy, casual style perfect for spring and summer outfits.",
+      "raw_response": "These women's white leather platform sneakers from GEDI feature a trendy, casual style perfect for spring and summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21710": {
+      "item_id": 21710,
+      "text": "the pool aoyama tote藤原浩托特包斜挎包ins单肩包wtaps visvim",
+      "description": "This versatile The Pool Aoyama canvas tote features a minimalist design, perfect for carrying daily essentials with effortless, street-style flair.",
+      "raw_response": "This versatile The Pool Aoyama canvas tote features a minimalist design, perfect for carrying daily essentials with effortless, street-style flair.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "21823": {
+      "item_id": 21823,
+      "text": "GENANX闪电潮牌低帮板鞋套脚一脚蹬嘻哈简约英伦休闲青年潮松糕鞋",
+      "description": "These minimalist, British-inspired slip-on sneakers feature a trendy platform sole, perfect for adding a casual, hip-hop edge to any youth-focused outfit.",
+      "raw_response": "These minimalist, British-inspired slip-on sneakers feature a trendy platform sole, perfect for adding a casual, hip-hop edge to any youth-focused outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "22106": {
+      "item_id": 22106,
+      "text": "海盗船银饰新款粉樱花耳钉女韩国气质银耳环时尚个性耳坠简约耳饰",
+      "description": "These elegant silver stud earrings feature a delicate pink cherry blossom design, perfect for adding a stylish, feminine touch to any outfit.",
+      "raw_response": "These elegant silver stud earrings feature a delicate pink cherry blossom design, perfect for adding a stylish, feminine touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "22149": {
+      "item_id": 22149,
+      "text": "ZENGLIU设计师粉色蝴蝶结耳夹无耳洞耳钉韩国气质少女心ins夹耳环",
+      "description": "These charming pink bow ear clips feature a delicate, feminine design, perfect for adding a sweet, stylish touch to any outfit.",
+      "raw_response": "These charming pink bow ear clips feature a delicate, feminine design, perfect for adding a sweet, stylish touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "22232": {
+      "item_id": 22232,
+      "text": "衬衫男ins潮宽松bf港风原宿ulzzang短袖韩版夏季五分袖中袖衬衣",
+      "description": "This men’s oversized short-sleeve shirt features a trendy Korean-inspired aesthetic, perfect for a relaxed, casual look during the summer season.",
+      "raw_response": "This men’s oversized short-sleeve shirt features a trendy Korean-inspired aesthetic, perfect for a relaxed, casual look during the summer season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "22892": {
+      "item_id": 22892,
+      "text": "小瑞靓包拼色菱格包包女2019新款简约百搭斜挎包单肩包小包包女包",
+      "description": "This stylish women's color-block quilted crossbody bag features a minimalist design, perfect for adding a chic, versatile touch to any outfit.",
+      "raw_response": "This stylish women's color-block quilted crossbody bag features a minimalist design, perfect for adding a chic, versatile touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "22897": {
+      "item_id": 22897,
+      "text": "韩都衣舍2018韩版女装夏装短袖网纱系带印花A字连衣裙EK7765囡",
+      "description": "This Korean-style women's A-line dress features a floral print, mesh detailing, and a tie-waist, perfect for a stylish summer look.",
+      "raw_response": "This Korean-style women's A-line dress features a floral print, mesh detailing, and a tie-waist, perfect for a stylish summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "22938": {
+      "item_id": 22938,
+      "text": "小卡西条纹拼色运动裤男秋季束脚休闲裤学生韩版宽松收口卫裤男潮",
+      "description": "These men’s autumn-inspired color-block striped joggers feature a relaxed, Korean-style fit, perfect for a casual, trendy look.",
+      "raw_response": "These men’s autumn-inspired color-block striped joggers feature a relaxed, Korean-style fit, perfect for a casual, trendy look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "23076": {
+      "item_id": 23076,
+      "text": "季初季百搭单肩包时尚2018秋冬新款韩版牛皮女士斜挎手提小方包",
+      "description": "This stylish 2018 autumn/winter Korean-style leather crossbody bag for women is a versatile, compact accessory perfect for completing any seasonal outfit.",
+      "raw_response": "This stylish 2018 autumn/winter Korean-style leather crossbody bag for women is a versatile, compact accessory perfect for completing any seasonal outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "23146": {
+      "item_id": 23146,
+      "text": "晶咕家胖mm中长款碎花仙女半身裙女2018新款韩版高腰a字百褶裙冬",
+      "description": "This floral A-line midi skirt features a high-waisted, pleated design, offering a feminine and stylish look perfect for winter outfits.",
+      "raw_response": "This floral A-line midi skirt features a high-waisted, pleated design, offering a feminine and stylish look perfect for winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "23211": {
+      "item_id": 23211,
+      "text": "颓废元素日系复古洗水做旧牛仔外套男装夜店潮流欧美朋克修身夹克",
+      "description": "This men’s Japanese-inspired vintage denim jacket features a distressed, washed finish, perfect for adding a rugged, punk-rock edge to your nighttime wardrobe.",
+      "raw_response": "This men’s Japanese-inspired vintage denim jacket features a distressed, washed finish, perfect for adding a rugged, punk-rock edge to your nighttime wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "23353": {
+      "item_id": 23353,
+      "text": "炉品工装裤男秋季潮牌宽松潮流束脚裤抽绳多口袋小脚休闲哈伦裤男",
+      "description": "These men’s autumn cargo joggers feature a relaxed, trendy fit with multiple pockets, a drawstring waist, and tapered cuffs for a casual streetwear look.",
+      "raw_response": "These men’s autumn cargo joggers feature a relaxed, trendy fit with multiple pockets, a drawstring waist, and tapered cuffs for a casual streetwear look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "23451": {
+      "item_id": 23451,
+      "text": "2018新款帆布鞋女鞋学生韩版百搭2019春季爆款运动高帮鞋女春板鞋",
+      "description": "These versatile high-top canvas sneakers for women feature a trendy Korean-inspired design, perfect for casual spring outfits and everyday student style.",
+      "raw_response": "These versatile high-top canvas sneakers for women feature a trendy Korean-inspired design, perfect for casual spring outfits and everyday student style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "23642": {
+      "item_id": 23642,
+      "text": "艾吉贝2018新款牛皮小圆包单肩斜挎森女系小包包迷你圆形复古女包",
+      "description": "This vintage-inspired mini round crossbody bag is crafted from genuine leather, offering a chic, forest-style accessory perfect for any casual occasion.",
+      "raw_response": "This vintage-inspired mini round crossbody bag is crafted from genuine leather, offering a chic, forest-style accessory perfect for any casual occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "23994": {
+      "item_id": 23994,
+      "text": "牧风 凹造型平顶草帽女夏天蝴蝶结麦秆草帽小清新太阳帽遮阳",
+      "description": "This chic women's straw flat-top hat features a delicate bow, perfect for adding a fresh, stylish touch to your summer sun-protection outfits.",
+      "raw_response": "This chic women's straw flat-top hat features a delicate bow, perfect for adding a fresh, stylish touch to your summer sun-protection outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "24105": {
+      "item_id": 24105,
+      "text": "日韩国木质五角星星气质耳钉毛球吊坠耳环耳坠流苏长款百搭饰品女",
+      "description": "These elegant, long-drop earrings feature wooden star studs and soft pom-pom tassels, perfect for adding a chic, versatile touch to any outfit.",
+      "raw_response": "These elegant, long-drop earrings feature wooden star studs and soft pom-pom tassels, perfect for adding a chic, versatile touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "24111": {
+      "item_id": 24111,
+      "text": "微笑向暖AWQ文艺复古高领后开祁加厚毛衣裙",
+      "description": "This vintage-inspired turtleneck sweater dress features a back-slit design and thick knit fabric, perfect for cozy autumn and winter styling.",
+      "raw_response": "This vintage-inspired turtleneck sweater dress features a back-slit design and thick knit fabric, perfect for cozy autumn and winter styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "24325": {
+      "item_id": 24325,
+      "text": "朴正义  春季新款中长款牛角扣毛呢外套女羊绒呢子大衣",
+      "description": "This women’s mid-length wool-blend duffle coat features a classic toggle closure, perfect for adding a sophisticated, cozy layer to your spring wardrobe.",
+      "raw_response": "This women’s mid-length wool-blend duffle coat features a classic toggle closure, perfect for adding a sophisticated, cozy layer to your spring wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "24617": {
+      "item_id": 24617,
+      "text": "2018春季新款韩版高腰毛边白色牛仔裤女喇叭裤九分裤微喇休闲裤子",
+      "description": "These white high-waisted cropped flare jeans feature a raw-hem finish, offering a chic, casual Korean-style look perfect for the spring season.",
+      "raw_response": "These white high-waisted cropped flare jeans feature a raw-hem finish, offering a chic, casual Korean-style look perfect for the spring season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "24740": {
+      "item_id": 24740,
+      "text": "施华洛世奇TOUGH项链仿水晶月亮星星项链女锁骨链气质首饰",
+      "description": "This elegant Swarovski crystal moon and star pendant necklace adds a touch of celestial charm to any women's ensemble.",
+      "raw_response": "This elegant Swarovski crystal moon and star pendant necklace adds a touch of celestial charm to any women's ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "24817": {
+      "item_id": 24817,
+      "text": "方头女鞋2019新款女春季百搭中跟奶奶鞋粗跟玛丽珍蝴蝶结仙女单鞋",
+      "description": "These chic women’s square-toe Mary Jane pumps feature a bow detail and comfortable block heel, perfect for versatile spring styling.",
+      "raw_response": "These chic women’s square-toe Mary Jane pumps feature a bow detail and comfortable block heel, perfect for versatile spring styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "24846": {
+      "item_id": 24846,
+      "text": "依鸽 新款时尚春秋季帽子女韩版小沿贝雷帽青年休闲帽秋冬天 8102",
+      "description": "This stylish Korean-inspired women's beret features a small brim, perfect for adding a chic, casual touch to your spring or autumn outfits.",
+      "raw_response": "This stylish Korean-inspired women's beret features a small brim, perfect for adding a chic, casual touch to your spring or autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25149": {
+      "item_id": 25149,
+      "text": "STUDIOMCC2018秋冬 巨显瘦小鸟腿修腿型弹力直筒黑色牛仔裤加绒女",
+      "description": "These black, fleece-lined straight-leg jeans for women offer a flattering, slim-fit silhouette, perfect for staying warm and stylish throughout the autumn and winter.",
+      "raw_response": "These black, fleece-lined straight-leg jeans for women offer a flattering, slim-fit silhouette, perfect for staying warm and stylish throughout the autumn and winter.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25348": {
+      "item_id": 25348,
+      "text": "韩国新款百搭气质耳环ins网红圆片拼接纯银女耳钉无耳洞耳夹R414",
+      "description": "These chic Korean-style sterling silver earrings feature a trendy circular patchwork design, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "These chic Korean-style sterling silver earrings feature a trendy circular patchwork design, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25360": {
+      "item_id": 25360,
+      "text": "【MS】2019春季撞色拼接气质百搭时尚喇叭袖荷叶边连衣裙k",
+      "description": "This stylish spring dress features a chic color-block design, elegant flared sleeves, and feminine ruffled details for a versatile, sophisticated look.",
+      "raw_response": "This stylish spring dress features a chic color-block design, elegant flared sleeves, and feminine ruffled details for a versatile, sophisticated look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25516": {
+      "item_id": 25516,
+      "text": "aza包包女新款女包潮韩版百搭斜挎包单肩包时尚手提包链条小包女",
+      "description": "This stylish Korean-inspired women's crossbody bag features a chic chain strap, perfect for adding a trendy, versatile touch to any outfit.",
+      "raw_response": "This stylish Korean-inspired women's crossbody bag features a chic chain strap, perfect for adding a trendy, versatile touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25538": {
+      "item_id": 25538,
+      "text": "草帽女夏小清新帽子春夏季文艺简约小花朵太阳帽可折叠遮阳帽",
+      "description": "This minimalist, floral-accented straw sun hat for women is a foldable, stylish accessory perfect for sunny spring and summer days.",
+      "raw_response": "This minimalist, floral-accented straw sun hat for women is a foldable, stylish accessory perfect for sunny spring and summer days.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25627": {
+      "item_id": 25627,
+      "text": "STACCATO/思加图春季绑带女鞋平底尖头女凉鞋9E501AK7",
+      "description": "These STACCATO spring flat sandals feature a chic pointed-toe design with elegant lace-up detailing, perfect for completing a sophisticated feminine look.",
+      "raw_response": "These STACCATO spring flat sandals feature a chic pointed-toe design with elegant lace-up detailing, perfect for completing a sophisticated feminine look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25657": {
+      "item_id": 25657,
+      "text": "黑色凉鞋女2018新款夏软妹平底松糕中跟原宿学生简约沙滩鞋厚底",
+      "description": "These minimalist black platform sandals for women feature a comfortable flat-to-mid heel, perfect for casual summer beach outings and student-inspired Harajuku style.",
+      "raw_response": "These minimalist black platform sandals for women feature a comfortable flat-to-mid heel, perfect for casual summer beach outings and student-inspired Harajuku style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "25709": {
+      "item_id": 25709,
+      "text": "秘密盒子 色调新款简约通勤玫瑰刺绣时尚气质中袖上衣雪纺衬衫女",
+      "description": "This elegant women’s chiffon blouse features delicate rose embroidery and a minimalist design, perfect for a sophisticated, professional commute.",
+      "raw_response": "This elegant women’s chiffon blouse features delicate rose embroidery and a minimalist design, perfect for a sophisticated, professional commute.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "26119": {
+      "item_id": 26119,
+      "text": "邪恶先生修脸日系纯色棉麻八角帽子女夏季文艺画家复古简约报童帽",
+      "description": "This minimalist Japanese-style cotton-linen newsboy cap in a solid hue offers a vintage, artistic touch perfect for summer outfits.",
+      "raw_response": "This minimalist Japanese-style cotton-linen newsboy cap in a solid hue offers a vintage, artistic touch perfect for summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "26217": {
+      "item_id": 26217,
+      "text": "Mbbcar欧美西海岸潮男猫须洗水马骝磨白蓝色赤耳丹宁九分牛仔裤男",
+      "description": "These men’s blue distressed selvedge denim jeans feature a cropped length and a rugged West Coast-inspired aesthetic, perfect for casual everyday wear.",
+      "raw_response": "These men’s blue distressed selvedge denim jeans feature a cropped length and a rugged West Coast-inspired aesthetic, perfect for casual everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "26430": {
+      "item_id": 26430,
+      "text": "2019新款平底鞋红色小皮鞋女漆皮百搭浅口方头平跟单鞋豆豆鞋瓢鞋",
+      "description": "These chic red patent leather flats feature a classic square-toe design, offering a versatile and comfortable finish for any casual or formal ensemble.",
+      "raw_response": "These chic red patent leather flats feature a classic square-toe design, offering a versatile and comfortable finish for any casual or formal ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "26743": {
+      "item_id": 26743,
+      "text": "小瑞靓包菱格链条包包女2019新款软皮手提单肩小包时尚百搭斜挎包",
+      "description": "This stylish women's quilted chain bag features soft leather, offering a versatile, chic look perfect for any occasion.",
+      "raw_response": "This stylish women's quilted chain bag features soft leather, offering a versatile, chic look perfect for any occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "27051": {
+      "item_id": 27051,
+      "text": "魔术贴小白鞋女2019春季新款韩版百搭网红板鞋厚底松糕增高休闲鞋",
+      "description": "These trendy white platform sneakers for women feature a convenient velcro closure, perfect for adding a stylish, elevated touch to any casual spring outfit.",
+      "raw_response": "These trendy white platform sneakers for women feature a convenient velcro closure, perfect for adding a stylish, elevated touch to any casual spring outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "27162": {
+      "item_id": 27162,
+      "text": "劳尔冬季原创简约黑色中长款棉衣日系宽松休闲加厚棉服外套男装",
+      "description": "This minimalist black mid-length puffer jacket features a relaxed Japanese-inspired fit, offering essential warmth and casual style for the winter season.",
+      "raw_response": "This minimalist black mid-length puffer jacket features a relaxed Japanese-inspired fit, offering essential warmth and casual style for the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "27166": {
+      "item_id": 27166,
+      "text": "港风韩风chic复古网红宽松格子高领假两件卫衣男连帽情侣外套男春",
+      "description": "This loose-fit, plaid-patterned mock-two-piece hoodie features a retro chic aesthetic, perfect for casual spring layering for both men and women.",
+      "raw_response": "This loose-fit, plaid-patterned mock-two-piece hoodie features a retro chic aesthetic, perfect for casual spring layering for both men and women.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "27234": {
+      "item_id": 27234,
+      "text": "苏安家 冬季bi不可少奶油色加绒加厚白色九分裤牛仔裤秋冬新款",
+      "description": "These cream-colored, fleece-lined cropped jeans offer essential warmth and style for your winter wardrobe.",
+      "raw_response": "These cream-colored, fleece-lined cropped jeans offer essential warmth and style for your winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "27875": {
+      "item_id": 27875,
+      "text": "YUBUER2019新款韩版气质白色V领连衣裙女春收腰中长款冷淡风裙子",
+      "description": "This elegant white V-neck midi dress features a flattering cinched waist, perfect for a sophisticated, minimalist spring look.",
+      "raw_response": "This elegant white V-neck midi dress features a flattering cinched waist, perfect for a sophisticated, minimalist spring look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28044": {
+      "item_id": 28044,
+      "text": "热风春新款小清新小白鞋女平底原宿鞋系带时尚女休闲鞋潮H14W7110",
+      "description": "These fresh, white lace-up sneakers for women feature a minimalist, casual style perfect for spring outfits.",
+      "raw_response": "These fresh, white lace-up sneakers for women feature a minimalist, casual style perfect for spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28080": {
+      "item_id": 28080,
+      "text": "切尔西短靴2018新款牛反绒磨砂皮短靴尖头中跟靴子粗跟马丁裸靴女",
+      "description": "These stylish women's Chelsea boots feature premium suede leather, a chic pointed toe, and a comfortable block heel, perfect for any seasonal outfit.",
+      "raw_response": "These stylish women's Chelsea boots feature premium suede leather, a chic pointed toe, and a comfortable block heel, perfect for any seasonal outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28081": {
+      "item_id": 28081,
+      "text": "Converse/匡威高帮经典帆布鞋常青款101009 101013 102307 101010",
+      "description": "Classic Converse high-top sneakers in durable canvas, featuring a timeless design perfect for casual, everyday wear.",
+      "raw_response": "Classic Converse high-top sneakers in durable canvas, featuring a timeless design perfect for casual, everyday wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28163": {
+      "item_id": 28163,
+      "text": "韩国夏季新品女包手工单肩包草编包绣字流苏休闲沙滩度假包手提包",
+      "description": "This handcrafted straw shoulder bag features charming embroidery and tassel details, perfect for a casual summer beach vacation or seaside getaway.",
+      "raw_response": "This handcrafted straw shoulder bag features charming embroidery and tassel details, perfect for a casual summer beach vacation or seaside getaway.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28212": {
+      "item_id": 28212,
+      "text": "加厚哈伦裤白色秋冬毛呢裤子女港味复古chic直筒韩版休闲裤",
+      "description": "These thick, white wool-blend harem pants feature a retro, chic straight-leg fit, perfect for staying stylish and cozy during the autumn and winter seasons.",
+      "raw_response": "These thick, white wool-blend harem pants feature a retro, chic straight-leg fit, perfect for staying stylish and cozy during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28286": {
+      "item_id": 28286,
+      "text": "高跟鞋女2019新款细跟尖头百搭单靴冬季瘦瘦马丁靴春秋款时尚短靴",
+      "description": "These stylish women's pointed-toe stiletto ankle boots feature a sleek design, perfect for elevating any outfit throughout the autumn and winter seasons.",
+      "raw_response": "These stylish women's pointed-toe stiletto ankle boots feature a sleek design, perfect for elevating any outfit throughout the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28427": {
+      "item_id": 28427,
+      "text": "菲色如华时尚新款牛皮女包宽肩带水桶包单肩包斜挎手提包大包包女",
+      "description": "This stylish women's leather bucket bag features a wide strap, offering a versatile, chic option for everyday wear or special occasions.",
+      "raw_response": "This stylish women's leather bucket bag features a wide strap, offering a versatile, chic option for everyday wear or special occasions.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28460": {
+      "item_id": 28460,
+      "text": "秋冬天女士甜美可爱耳朵加厚羊羔毛围巾帽子一体雷锋帽 保暖风雪",
+      "description": "Stay cozy this winter with this cute, plush lamb wool hooded scarf, featuring adorable ear details for a sweet, warm, and stylish look.",
+      "raw_response": "Stay cozy this winter with this cute, plush lamb wool hooded scarf, featuring adorable ear details for a sweet, warm, and stylish look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28519": {
+      "item_id": 28519,
+      "text": "小鹿要飞 新款秋冬双层白色网纱半身裙女小清新仙女裙打底长裙子",
+      "description": "This elegant white double-layered mesh midi skirt features a fresh, ethereal style, perfect for adding a feminine touch to your autumn and winter outfits.",
+      "raw_response": "This elegant white double-layered mesh midi skirt features a fresh, ethereal style, perfect for adding a feminine touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28543": {
+      "item_id": 28543,
+      "text": "秋冬中长款过膝毛衣裙高领针织连衣裙女打底宽松法式少女复古气质",
+      "description": "This French-inspired, oversized turtleneck knit sweater dress features a midi length, perfect for adding cozy, vintage-style elegance to your autumn and winter wardrobe.",
+      "raw_response": "This French-inspired, oversized turtleneck knit sweater dress features a midi length, perfect for adding cozy, vintage-style elegance to your autumn and winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28619": {
+      "item_id": 28619,
+      "text": "彩色毛毛大口袋黄金貂绒针织大衣外套中长款",
+      "description": "This colorful, mid-length faux mink knit coat features oversized pockets, offering a cozy and stylish layer for your seasonal wardrobe.",
+      "raw_response": "This colorful, mid-length faux mink knit coat features oversized pockets, offering a cozy and stylish layer for your seasonal wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28642": {
+      "item_id": 28642,
+      "text": "【南风】黑色流苏链条包包女2019新款秋冬百搭单肩包斜挎包小方包",
+      "description": "This versatile black crossbody bag features chic fringe and chain detailing, perfect for elevating your autumn and winter outfits with a stylish touch.",
+      "raw_response": "This versatile black crossbody bag features chic fringe and chain detailing, perfect for elevating your autumn and winter outfits with a stylish touch.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28754": {
+      "item_id": 28754,
+      "text": "【11.11零点6折清仓】衣品乐大码渐变色短袖雪纺连衣裙女夏2018",
+      "description": "This women's summer plus-size chiffon dress features a stylish gradient design, perfect for a breezy, elegant seasonal look.",
+      "raw_response": "This women's summer plus-size chiffon dress features a stylish gradient design, perfect for a breezy, elegant seasonal look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28813": {
+      "item_id": 28813,
+      "text": "于momo2018夏装新款漏锁骨上衣一字肩露肩吊带衬衫女设计感白衬衣",
+      "description": "This chic white off-shoulder blouse features a stylish collarbone-baring design, perfect for a sophisticated and breezy summer look.",
+      "raw_response": "This chic white off-shoulder blouse features a stylish collarbone-baring design, perfect for a sophisticated and breezy summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "28969": {
+      "item_id": 28969,
+      "text": "半拖鞋女夏外穿时尚水钻懒人凉拖百搭粗跟包头真皮韩版中跟穆勒鞋",
+      "description": "These stylish women’s leather mule sandals feature a chic rhinestone-embellished closed toe and a comfortable mid-block heel, perfect for versatile summer wear.",
+      "raw_response": "These stylish women’s leather mule sandals feature a chic rhinestone-embellished closed toe and a comfortable mid-block heel, perfect for versatile summer wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29143": {
+      "item_id": 29143,
+      "text": "初语帅气微弹牛仔裤女春秋季韩版显瘦小脚修身铅笔裤潮黑色长裤子",
+      "description": "These stylish black slim-fit skinny jeans for women feature a comfortable, slightly stretchy denim fabric, perfect for a chic spring or autumn look.",
+      "raw_response": "These stylish black slim-fit skinny jeans for women feature a comfortable, slightly stretchy denim fabric, perfect for a chic spring or autumn look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29172": {
+      "item_id": 29172,
+      "text": "MRS Studio高腰直筒复古牛仔裤女宽松2019春季新款小脚锥形哈伦裤",
+      "description": "These vintage-inspired high-waisted straight-leg jeans for women feature a relaxed, tapered fit, perfect for a stylish spring look.",
+      "raw_response": "These vintage-inspired high-waisted straight-leg jeans for women feature a relaxed, tapered fit, perfect for a stylish spring look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29258": {
+      "item_id": 29258,
+      "text": "Plover宽肩带相机包包女2019新款学生韩版时尚百搭单肩斜挎小方包",
+      "description": "This stylish, versatile women’s crossbody camera bag features a trendy wide strap, perfect for adding a chic, modern touch to any casual outfit.",
+      "raw_response": "This stylish, versatile women’s crossbody camera bag features a trendy wide strap, perfect for adding a chic, modern touch to any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29429": {
+      "item_id": 29429,
+      "text": "2件5折】冬季新款内里加磨绒加厚牛仔裤女弹力修身小脚裤长裤570K",
+      "description": "These women’s winter skinny jeans feature a fleece-lined, stretchy denim construction for warmth and a flattering, slim-fit silhouette.",
+      "raw_response": "These women’s winter skinny jeans feature a fleece-lined, stretchy denim construction for warmth and a flattering, slim-fit silhouette.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29475": {
+      "item_id": 29475,
+      "text": "鲜语格子西装外套女韩国英伦风大红色双面呢羊毛毛呢外套女中长款",
+      "description": "This vibrant red, mid-length wool-blend blazer features a classic British-inspired plaid pattern, perfect for adding a sophisticated, tailored touch to your seasonal wardrobe.",
+      "raw_response": "This vibrant red, mid-length wool-blend blazer features a classic British-inspired plaid pattern, perfect for adding a sophisticated, tailored touch to your seasonal wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29575": {
+      "item_id": 29575,
+      "text": "VSVELSUS2018新款单肩斜挎条纹链条小方包女包VA503902",
+      "description": "This stylish women's striped crossbody bag features a chic chain strap, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This stylish women's striped crossbody bag features a chic chain strap, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29701": {
+      "item_id": 29701,
+      "text": "淑女名媛心机裤子女夏2019新款高腰连体裤连衣裤显瘦长裤连体衣潮",
+      "description": "This chic, high-waisted women's jumpsuit features a flattering, slim-fit silhouette, perfect for a sophisticated summer look.",
+      "raw_response": "This chic, high-waisted women's jumpsuit features a flattering, slim-fit silhouette, perfect for a sophisticated summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29950": {
+      "item_id": 29950,
+      "text": "直降40元 58元包邮 狂欢再续 售完不补 MG小象高腰直筒阔腿休闲裤",
+      "description": "These high-waisted, straight-leg casual trousers feature a relaxed, wide-leg silhouette, perfect for effortless everyday styling.",
+      "raw_response": "These high-waisted, straight-leg casual trousers feature a relaxed, wide-leg silhouette, perfect for effortless everyday styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "29952": {
+      "item_id": 29952,
+      "text": "MUKOK时尚高领针织上衣女2018秋冬新款针织衫薄修身显瘦打底毛衣",
+      "description": "This MUKOK women’s slim-fit turtleneck knit sweater is a versatile, lightweight essential perfect for layering during the autumn and winter seasons.",
+      "raw_response": "This MUKOK women’s slim-fit turtleneck knit sweater is a versatile, lightweight essential perfect for layering during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "30015": {
+      "item_id": 30015,
+      "text": "马切达冬季加绒加厚运动裤日系宽松撞色卫裤小脚休闲裤束脚裤潮男",
+      "description": "These Japanese-style fleece-lined joggers for men feature a relaxed fit, color-block detailing, and ribbed cuffs, perfect for casual winter wear.",
+      "raw_response": "These Japanese-style fleece-lined joggers for men feature a relaxed fit, color-block detailing, and ribbed cuffs, perfect for casual winter wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "30134": {
+      "item_id": 30134,
+      "text": "杨姗姗Elwing原创设计新款女复古牛仔气质长袖中长款收腰连衣裙女",
+      "description": "This vintage-inspired denim midi dress features a flattering waist-cinching silhouette and long sleeves, perfect for a chic, timeless everyday look.",
+      "raw_response": "This vintage-inspired denim midi dress features a flattering waist-cinching silhouette and long sleeves, perfect for a chic, timeless everyday look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "30325": {
+      "item_id": 30325,
+      "text": "h家康康包头层牛皮手掌纹空姐包h扣女包小方包豆腐包h包包斜挎包",
+      "description": "This elegant leather crossbody bag features a signature H-clasp, offering a sophisticated, structured silhouette perfect for elevating any women's ensemble.",
+      "raw_response": "This elegant leather crossbody bag features a signature H-clasp, offering a sophisticated, structured silhouette perfect for elevating any women's ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "30745": {
+      "item_id": 30745,
+      "text": "劳士顿正品陶瓷女表 女士时尚潮流手表女2018新款防水腕表石英表",
+      "description": "This stylish women’s ceramic quartz watch features a sleek, waterproof design, perfect for adding a sophisticated touch to any modern outfit.",
+      "raw_response": "This stylish women’s ceramic quartz watch features a sleek, waterproof design, perfect for adding a sophisticated touch to any modern outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31032": {
+      "item_id": 31032,
+      "text": "许刘芒 皮面小白鞋女学生韩版百搭帆布鞋白色平底休闲板鞋ins女鞋",
+      "description": "These versatile white faux-leather sneakers feature a minimalist Korean-style design, perfect for casual everyday wear and student outfits.",
+      "raw_response": "These versatile white faux-leather sneakers feature a minimalist Korean-style design, perfect for casual everyday wear and student outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31186": {
+      "item_id": 31186,
+      "text": "小瑞靓包圆环拼色链条小包包女2019新款时尚单肩斜跨包小方包女包",
+      "description": "This stylish women's color-block crossbody bag features a chic ring detail and chain strap, perfect for elevating any modern outfit.",
+      "raw_response": "This stylish women's color-block crossbody bag features a chic ring detail and chain strap, perfect for elevating any modern outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31201": {
+      "item_id": 31201,
+      "text": "三彩2017冬装新品 复古灯芯绒毛球短裙荷叶边修身裙子包臀裙女",
+      "description": "This vintage-inspired women's corduroy mini skirt features playful pom-pom trim and a flattering ruffled, slim-fit silhouette, perfect for the winter season.",
+      "raw_response": "This vintage-inspired women's corduroy mini skirt features playful pom-pom trim and a flattering ruffled, slim-fit silhouette, perfect for the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31419": {
+      "item_id": 31419,
+      "text": "网红瘦瘦罗马高筒凉靴子女平底短靴夏季带粗跟网靴镂空长靴女凉鞋",
+      "description": "These chic, flat-heeled Roman-style summer boots feature a breathable mesh cutout design, perfect for adding a trendy, lightweight edge to your warm-weather outfits.",
+      "raw_response": "These chic, flat-heeled Roman-style summer boots feature a breathable mesh cutout design, perfect for adding a trendy, lightweight edge to your warm-weather outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31534": {
+      "item_id": 31534,
+      "text": "加绒单鞋女韩版百搭2018冬季鞋子毛毛鞋瓢鞋尖头平底鞋网红豆豆鞋",
+      "description": "These chic, fleece-lined pointed-toe flats for women feature a versatile Korean-inspired design, perfect for staying stylish and cozy throughout the winter season.",
+      "raw_response": "These chic, fleece-lined pointed-toe flats for women feature a versatile Korean-inspired design, perfect for staying stylish and cozy throughout the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31642": {
+      "item_id": 31642,
+      "text": "巴掌家欧洲站重工打底衫女装白色T恤长袖上衣宽松夏装2019新款潮",
+      "description": "This white long-sleeve T-shirt features intricate detailing, offering a relaxed, stylish fit perfect for summer layering.",
+      "raw_response": "This white long-sleeve T-shirt features intricate detailing, offering a relaxed, stylish fit perfect for summer layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31799": {
+      "item_id": 31799,
+      "text": "[VNOOK2018秋冬新款]重工高端拼接格纹翻领腰带长款风衣 女",
+      "description": "This sophisticated women’s long trench coat features premium patchwork plaid detailing, a classic collar, and a belted waist, perfect for the autumn/winter season.",
+      "raw_response": "This sophisticated women’s long trench coat features premium patchwork plaid detailing, a classic collar, and a belted waist, perfect for the autumn/winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "31851": {
+      "item_id": 31851,
+      "text": "羊羔毛豆豆鞋女冬加绒2018新款百搭瓢鞋韩版保暖棉鞋懒人毛毛鞋女",
+      "description": "These cozy, fleece-lined women's loafers feature a stylish, minimalist design perfect for staying warm and comfortable during the winter season.",
+      "raw_response": "These cozy, fleece-lined women's loafers feature a stylish, minimalist design perfect for staying warm and comfortable during the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32117": {
+      "item_id": 32117,
+      "text": "特步板鞋休闲鞋正品年春季时尚运动鞋情侣潮流潮流情侣款小白鞋",
+      "description": "These stylish Xtep unisex sneakers feature a classic white design, perfect for casual spring wear and everyday comfort.",
+      "raw_response": "These stylish Xtep unisex sneakers feature a classic white design, perfect for casual spring wear and everyday comfort.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32220": {
+      "item_id": 32220,
+      "text": "网红小包包2019新款潮韩版百搭个性时尚手提小清新少女包单肩斜挎",
+      "description": "This trendy, versatile Korean-style mini bag features a chic, youthful design perfect for adding a stylish touch to any casual outfit.",
+      "raw_response": "This trendy, versatile Korean-style mini bag features a chic, youthful design perfect for adding a stylish touch to any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32245": {
+      "item_id": 32245,
+      "text": "耳钉女气质韩国简约锆石网红纯银耳环甜美雪花水钻耳饰防过敏饰品",
+      "description": "These elegant, minimalist sterling silver snowflake stud earrings feature sparkling zircon stones, perfect for adding a sweet, sophisticated touch to any outfit.",
+      "raw_response": "These elegant, minimalist sterling silver snowflake stud earrings feature sparkling zircon stones, perfect for adding a sweet, sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32336": {
+      "item_id": 32336,
+      "text": "希野2018新款春秋装运动连帽宽松显瘦拼色休闲时尚bf风外套薄",
+      "description": "This stylish, oversized color-block hooded jacket features a relaxed BF-inspired fit, perfect for casual spring and autumn wear.",
+      "raw_response": "This stylish, oversized color-block hooded jacket features a relaxed BF-inspired fit, perfect for casual spring and autumn wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32465": {
+      "item_id": 32465,
+      "text": "正品聚利时复古小巧镶钻女士真皮潮表简约防水方形学生皮带手表女",
+      "description": "This elegant, vintage-inspired women’s square watch features a diamond-accented dial, genuine leather strap, and waterproof design for a sophisticated, minimalist look.",
+      "raw_response": "This elegant, vintage-inspired women’s square watch features a diamond-accented dial, genuine leather strap, and waterproof design for a sophisticated, minimalist look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32610": {
+      "item_id": 32610,
+      "text": "2018春新款 cachecache 欧美时尚潮流字母印花灯笼袖宽松长袖卫衣",
+      "description": "This trendy 2018 spring sweatshirt features a loose fit, lantern sleeves, and bold letter prints for a chic, casual European-inspired look.",
+      "raw_response": "This trendy 2018 spring sweatshirt features a loose fit, lantern sleeves, and bold letter prints for a chic, casual European-inspired look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32749": {
+      "item_id": 32749,
+      "text": "S家原创女装秋季2018新款欧美连帽卫衣裙中长款长袖宽松连衣裙女3",
+      "description": "This casual, long-sleeved hooded sweatshirt dress features a relaxed, mid-length fit, perfect for effortless autumn style.",
+      "raw_response": "This casual, long-sleeved hooded sweatshirt dress features a relaxed, mid-length fit, perfect for effortless autumn style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "32824": {
+      "item_id": 32824,
+      "text": "im向自制 秋季女百搭长袖衬衣韩版复古chic小清新格子bf风衬衫",
+      "description": "This women’s autumn long-sleeve plaid shirt features a vintage-inspired, Korean-style BF fit, perfect for creating a chic and versatile layered look.",
+      "raw_response": "This women’s autumn long-sleeve plaid shirt features a vintage-inspired, Korean-style BF fit, perfect for creating a chic and versatile layered look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "33709": {
+      "item_id": 33709,
+      "text": "BJHG春撞色工装夹克男潮日系OVERSIZE港风复古灯芯绒刺绣飞行外套",
+      "description": "This men’s oversized corduroy bomber jacket features a retro Japanese-inspired color-block design, perfect for adding a stylish, vintage edge to your spring outfits.",
+      "raw_response": "This men’s oversized corduroy bomber jacket features a retro Japanese-inspired color-block design, perfect for adding a stylish, vintage edge to your spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "33827": {
+      "item_id": 33827,
+      "text": "简约小巧气质耳钉2019新款潮耳环女小耳垂适合的耳饰网红个性耳坠",
+      "description": "These minimalist, chic stud earrings feature a trendy, compact design perfect for adding a sophisticated touch to any everyday outfit.",
+      "raw_response": "These minimalist, chic stud earrings feature a trendy, compact design perfect for adding a sophisticated touch to any everyday outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "33957": {
+      "item_id": 33957,
+      "text": "韩国微镶花朵大水滴形珍珠耳环优雅耳坠女长款配饰饰品气质名媛",
+      "description": "Elegant Korean-style long drop earrings featuring micro-paved floral accents and lustrous pearls, perfect for adding a sophisticated touch to any formal ensemble.",
+      "raw_response": "Elegant Korean-style long drop earrings featuring micro-paved floral accents and lustrous pearls, perfect for adding a sophisticated touch to any formal ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34006": {
+      "item_id": 34006,
+      "text": "尼尚手表男士机械表全自动时尚款潮流黑色多功能防水2019新款男表",
+      "description": "This stylish men’s automatic mechanical watch features a sleek black design, offering a versatile, waterproof accessory perfect for any modern occasion.",
+      "raw_response": "This stylish men’s automatic mechanical watch features a sleek black design, offering a versatile, waterproof accessory perfect for any modern occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34050": {
+      "item_id": 34050,
+      "text": "2019秋冬新款双面羊绒长款韩版毛呢大衣宝蓝色宽松毛呢外套潮男",
+      "description": "This royal blue, double-sided cashmere long coat for men features a loose, trendy Korean-style silhouette, perfect for the 2019 autumn/winter season.",
+      "raw_response": "This royal blue, double-sided cashmere long coat for men features a loose, trendy Korean-style silhouette, perfect for the 2019 autumn/winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34075": {
+      "item_id": 34075,
+      "text": "JACDBAG 2019新款斜挎草编包手提女包编织度假包藤编包ins小包包",
+      "description": "This stylish women's woven straw crossbody bag is the perfect accessory for a chic, summery vacation look.",
+      "raw_response": "This stylish women's woven straw crossbody bag is the perfect accessory for a chic, summery vacation look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34092": {
+      "item_id": 34092,
+      "text": "PU皮质新款黑色明星百搭休闲早春秋八角帽子女春夏韩版潮人画家帽",
+      "description": "This stylish black PU leather baker boy cap offers a chic, versatile look perfect for casual spring and autumn outfits.",
+      "raw_response": "This stylish black PU leather baker boy cap offers a chic, versatile look perfect for casual spring and autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34175": {
+      "item_id": 34175,
+      "text": "耳环女长款气质百搭网红2019新款潮韩国个性大气防过敏高级感耳钉",
+      "description": "These elegant, long-style Korean-inspired earrings feature a hypoallergenic design, perfect for adding a sophisticated and trendy touch to any outfit.",
+      "raw_response": "These elegant, long-style Korean-inspired earrings feature a hypoallergenic design, perfect for adding a sophisticated and trendy touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34279": {
+      "item_id": 34279,
+      "text": "高端定制 头层牛皮 2019春季平底鞋真皮板鞋运动单鞋百搭小白鞋女",
+      "description": "These premium, handcrafted white leather sneakers offer a versatile, flat-soled design perfect for effortless spring styling.",
+      "raw_response": "These premium, handcrafted white leather sneakers offer a versatile, flat-soled design perfect for effortless spring styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34793": {
+      "item_id": 34793,
+      "text": "RACE CHOICE 女包2019新款 复古帅气胸包多功能挎包真皮腰包潮女",
+      "description": "This stylish, vintage-inspired genuine leather chest bag for women offers a versatile, functional design perfect for completing any trendy casual outfit.",
+      "raw_response": "This stylish, vintage-inspired genuine leather chest bag for women offers a versatile, functional design perfect for completing any trendy casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "34914": {
+      "item_id": 34914,
+      "text": "高腰不规则半身裙女春2019新款韩版chic裙子短裙背带裙包臀裙夏季",
+      "description": "This chic, high-waisted irregular mini skirt features a trendy Korean-style design, perfect for adding a stylish touch to your spring and summer outfits.",
+      "raw_response": "This chic, high-waisted irregular mini skirt features a trendy Korean-style design, perfect for adding a stylish touch to your spring and summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "35019": {
+      "item_id": 35019,
+      "text": "2019春夏新款度假波西米星星沙滩平底鞋港味仙女绑带罗马凉鞋ins",
+      "description": "These bohemian-style flat sandals feature delicate lace-up detailing, perfect for a chic, breezy vacation look during the spring and summer seasons.",
+      "raw_response": "These bohemian-style flat sandals feature delicate lace-up detailing, perfect for a chic, breezy vacation look during the spring and summer seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "35556": {
+      "item_id": 35556,
+      "text": "一力米灰2018新款冬季真皮马衔扣平底懒人穆勒包头羊毛毛半拖鞋女",
+      "description": "These chic beige leather mule loafers feature a cozy wool lining, perfect for adding a sophisticated, comfortable touch to your winter wardrobe.",
+      "raw_response": "These chic beige leather mule loafers feature a cozy wool lining, perfect for adding a sophisticated, comfortable touch to your winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "35611": {
+      "item_id": 35611,
+      "text": "2019新款韩版毛毛小包包女时尚百搭迷你小方包chic链条单肩斜挎包",
+      "description": "This chic, Korean-style mini faux-fur crossbody bag features a stylish chain strap, perfect for adding a trendy, textured touch to any outfit.",
+      "raw_response": "This chic, Korean-style mini faux-fur crossbody bag features a stylish chain strap, perfect for adding a trendy, textured touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "35705": {
+      "item_id": 35705,
+      "text": "工装裤女松紧直筒2019新款宽松港风法式hiphop休闲抽绳束脚裤潮Bf",
+      "description": "These women’s loose-fit cargo pants feature a trendy, French-inspired hip-hop aesthetic with a comfortable drawstring waist and versatile straight-leg silhouette.",
+      "raw_response": "These women’s loose-fit cargo pants feature a trendy, French-inspired hip-hop aesthetic with a comfortable drawstring waist and versatile straight-leg silhouette.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "35749": {
+      "item_id": 35749,
+      "text": "2018秋冬新款后拉链尖头细跟超高跟鞋加绒弹力短靴女瘦腿短筒袜靴",
+      "description": "These sleek, fleece-lined stiletto sock boots feature a sharp pointed toe and back zipper, perfect for elevating your autumn and winter outfits.",
+      "raw_response": "These sleek, fleece-lined stiletto sock boots feature a sharp pointed toe and back zipper, perfect for elevating your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "36038": {
+      "item_id": 36038,
+      "text": "Danielwellington 丹尼尔惠灵顿DW手表女28mm简约时尚女表",
+      "description": "This minimalist 28mm Daniel Wellington women's watch features a sleek, stylish design perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This minimalist 28mm Daniel Wellington women's watch features a sleek, stylish design perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "36207": {
+      "item_id": 36207,
+      "text": "[RandomPiece] 超软糯澳洲进口全羊毛短款羊羔外套",
+      "description": "This ultra-soft, cropped Australian wool jacket offers a cozy, premium layer perfect for elevating your seasonal wardrobe with effortless style.",
+      "raw_response": "This ultra-soft, cropped Australian wool jacket offers a cozy, premium layer perfect for elevating your seasonal wardrobe with effortless style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "36695": {
+      "item_id": 36695,
+      "text": "马丁靴女英伦风2018新款春秋平底机车单靴韩版短筒百搭43大码短靴",
+      "description": "These women’s British-style flat ankle boots feature a versatile, edgy design perfect for spring and autumn outfits.",
+      "raw_response": "These women’s British-style flat ankle boots feature a versatile, edgy design perfect for spring and autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37013": {
+      "item_id": 37013,
+      "text": "2019春秋季新款高腰网红牛仔裤女膝盖破洞乞丐显瘦紧身小脚九分裤",
+      "description": "These high-waisted, distressed skinny jeans for women feature a flattering cropped fit, perfect for a stylish, casual look during the spring and autumn seasons.",
+      "raw_response": "These high-waisted, distressed skinny jeans for women feature a flattering cropped fit, perfect for a stylish, casual look during the spring and autumn seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37256": {
+      "item_id": 37256,
+      "text": "滕雨佳   修身t恤女显瘦韩范印花字母套头圆领短袖T恤女",
+      "description": "This slim-fit women's T-shirt features a stylish Korean-inspired letter print, a classic round neck, and short sleeves for a flattering, casual look.",
+      "raw_response": "This slim-fit women's T-shirt features a stylish Korean-inspired letter print, a classic round neck, and short sleeves for a flattering, casual look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37266": {
+      "item_id": 37266,
+      "text": "鲨鱼皮裤运动打底裤女外穿2018秋新款女士百搭黑色弹力小脚长裤",
+      "description": "These versatile black high-stretch leggings feature a sleek sharkskin-inspired finish, perfect for a stylish and comfortable athletic-inspired look this autumn.",
+      "raw_response": "These versatile black high-stretch leggings feature a sleek sharkskin-inspired finish, perfect for a stylish and comfortable athletic-inspired look this autumn.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37275": {
+      "item_id": 37275,
+      "text": "贝雷帽女秋冬韩版日系百搭复古羊毛呢画家帽英伦纯色蓓蕾帽子ins",
+      "description": "This chic wool-blend beret features a classic Japanese-inspired design, perfect for adding a vintage, versatile touch to your autumn and winter outfits.",
+      "raw_response": "This chic wool-blend beret features a classic Japanese-inspired design, perfect for adding a vintage, versatile touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37364": {
+      "item_id": 37364,
+      "text": "vcruan阿希哥 春秋装长裤美式复古型拼色水洗蓝好搭低腰牛仔裤",
+      "description": "These American vintage-style low-rise jeans feature a washed blue color-block design, perfect for effortless styling during the spring and autumn seasons.",
+      "raw_response": "These American vintage-style low-rise jeans feature a washed blue color-block design, perfect for effortless styling during the spring and autumn seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37448": {
+      "item_id": 37448,
+      "text": "女包2019新款徽章链条小方包百搭单肩斜挎包ins超火手提小包包",
+      "description": "This trendy 2019 women's small square shoulder bag features a chic badge design and versatile chain strap, perfect for any stylish occasion.",
+      "raw_response": "This trendy 2019 women's small square shoulder bag features a chic badge design and versatile chain strap, perfect for any stylish occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37494": {
+      "item_id": 37494,
+      "text": "VEGA CHANG阔腿裤女秋冬2018新款韩版宽松格子拼接高腰休闲裤长裤",
+      "description": "These women’s high-waisted wide-leg trousers feature a stylish plaid patchwork design, perfect for a chic, relaxed look during the autumn and winter seasons.",
+      "raw_response": "These women’s high-waisted wide-leg trousers feature a stylish plaid patchwork design, perfect for a chic, relaxed look during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37600": {
+      "item_id": 37600,
+      "text": "听风 冬季新款日系抽绳刺绣束脚加绒卫裤男 青少年收口小脚休闲裤",
+      "description": "These Japanese-style men's fleece-lined joggers feature drawstring detailing and embroidery, offering a cozy, casual look perfect for the winter season.",
+      "raw_response": "These Japanese-style men's fleece-lined joggers feature drawstring detailing and embroidery, offering a cozy, casual look perfect for the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "37748": {
+      "item_id": 37748,
+      "text": "小包包女ins铆钉宽肩带斜挎包2019新款韩版蝴蝶结手提单肩小方包",
+      "description": "This stylish Korean-inspired mini crossbody bag features chic stud detailing, a wide strap, and a playful bow, perfect for elevating any casual outfit.",
+      "raw_response": "This stylish Korean-inspired mini crossbody bag features chic stud detailing, a wide strap, and a playful bow, perfect for elevating any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38091": {
+      "item_id": 38091,
+      "text": "双面羊绒大衣女中长款2019新款流行阿尔巴卡羊驼绒羊毛呢外套",
+      "description": "This stylish women’s mid-length double-faced alpaca and wool coat offers a luxurious, warm layer perfect for the autumn and winter seasons.",
+      "raw_response": "This stylish women’s mid-length double-faced alpaca and wool coat offers a luxurious, warm layer perfect for the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38196": {
+      "item_id": 38196,
+      "text": "小瑞靓包银色小方包包迷你女2018新款单肩包时尚斜挎包链条小包包",
+      "description": "This stylish silver mini crossbody bag features a chic chain strap, perfect for adding a modern, metallic touch to any outfit.",
+      "raw_response": "This stylish silver mini crossbody bag features a chic chain strap, perfect for adding a modern, metallic touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38295": {
+      "item_id": 38295,
+      "text": "GBOY秋季潮流复古灯芯绒工装裤男日系青年宽松直筒多口袋休闲裤",
+      "description": "These men’s autumn corduroy cargo pants feature a relaxed, straight-leg fit and a vintage Japanese-inspired aesthetic, perfect for casual, multi-pocket utility styling.",
+      "raw_response": "These men’s autumn corduroy cargo pants feature a relaxed, straight-leg fit and a vintage Japanese-inspired aesthetic, perfect for casual, multi-pocket utility styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38301": {
+      "item_id": 38301,
+      "text": "2018春秋冬新款女鞋漆皮平底短筒松紧口英伦风短靴子百搭马丁靴潮",
+      "description": "These stylish women's black patent leather Chelsea boots feature a comfortable flat sole and a versatile British-inspired design, perfect for autumn and winter.",
+      "raw_response": "These stylish women's black patent leather Chelsea boots feature a comfortable flat sole and a versatile British-inspired design, perfect for autumn and winter.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38444": {
+      "item_id": 38444,
+      "text": "环球ins春季2019新款百搭小白鞋帆布鞋女学生韩版ulzzang秋板鞋",
+      "description": "These versatile white canvas sneakers feature a trendy Korean-style design, perfect for casual spring and autumn outfits for students.",
+      "raw_response": "These versatile white canvas sneakers feature a trendy Korean-style design, perfect for casual spring and autumn outfits for students.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38626": {
+      "item_id": 38626,
+      "text": "子晴 百搭秋冬新款女装拼接假两件宽松上衣长袖针织套头短款毛衣",
+      "description": "This stylish women’s autumn-winter knit sweater features a trendy layered-look design, relaxed fit, and long sleeves for effortless seasonal layering.",
+      "raw_response": "This stylish women’s autumn-winter knit sweater features a trendy layered-look design, relaxed fit, and long sleeves for effortless seasonal layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38634": {
+      "item_id": 38634,
+      "text": "【聚清仓  】运动风松紧腰绑带半身裙女春秋",
+      "description": "This sporty women's midi skirt features an elastic drawstring waist, perfect for casual spring and autumn outfits.",
+      "raw_response": "This sporty women's midi skirt features an elastic drawstring waist, perfect for casual spring and autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38923": {
+      "item_id": 38923,
+      "text": "VH女包2019新款时尚百搭拼色潮流单肩斜挎包蜜蜂刺绣牛皮手提包",
+      "description": "This stylish VH leather shoulder bag features trendy color-blocking and bee embroidery, perfect for adding a chic, versatile touch to any outfit.",
+      "raw_response": "This stylish VH leather shoulder bag features trendy color-blocking and bee embroidery, perfect for adding a chic, versatile touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "38960": {
+      "item_id": 38960,
+      "text": "CacheCache春新款棒球服女宽松bf复古港味chic休闲原宿绿色外套女",
+      "description": "This green, oversized baseball jacket features a retro, casual aesthetic, perfect for adding a chic, vintage-inspired touch to your spring wardrobe.",
+      "raw_response": "This green, oversized baseball jacket features a retro, casual aesthetic, perfect for adding a chic, vintage-inspired touch to your spring wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "39168": {
+      "item_id": 39168,
+      "text": "春季绒面尖头鞋低跟平底女单鞋交叉带铆钉浅口性感包头单鞋女百搭",
+      "description": "These chic spring suede flats feature a pointed toe, delicate crossover straps, and edgy stud detailing for a versatile, sophisticated look.",
+      "raw_response": "These chic spring suede flats feature a pointed toe, delicate crossover straps, and edgy stud detailing for a versatile, sophisticated look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "39252": {
+      "item_id": 39252,
+      "text": "显脸瘦的流苏耳坠999纯银耳环长款女 韩国气质时尚个性冷淡风耳饰",
+      "description": "These elegant 999 sterling silver long tassel earrings feature a minimalist Korean-inspired design, perfect for adding a sophisticated, face-slimming touch to any outfit.",
+      "raw_response": "These elegant 999 sterling silver long tassel earrings feature a minimalist Korean-inspired design, perfect for adding a sophisticated, face-slimming touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "39303": {
+      "item_id": 39303,
+      "text": "LMTNZD夏季原创休闲灰牛仔衬衫日系宽松复古做旧条纹潮衬衣男上衣",
+      "description": "This Japanese-style grey denim shirt features a relaxed, distressed striped design, perfect for a casual summer look for men.",
+      "raw_response": "This Japanese-style grey denim shirt features a relaxed, distressed striped design, perfect for a casual summer look for men.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "39400": {
+      "item_id": 39400,
+      "text": "阿迪达斯男鞋三叶草Tubular小椰子跑步鞋CQ0941 CQ0940 CG5512",
+      "description": "These Adidas Originals Tubular men’s sneakers feature a sleek, modern design, perfect for adding a sporty, stylish finish to your casual outfits.",
+      "raw_response": "These Adidas Originals Tubular men’s sneakers feature a sleek, modern design, perfect for adding a sporty, stylish finish to your casual outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "39521": {
+      "item_id": 39521,
+      "text": "三彩2017冬装新品 修身毛边磨白小脚裤百搭牛仔裤女D749620N40",
+      "description": "These women's slim-fit, distressed-hem skinny jeans in a versatile wash are a stylish essential for your winter wardrobe.",
+      "raw_response": "These women's slim-fit, distressed-hem skinny jeans in a versatile wash are a stylish essential for your winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "39809": {
+      "item_id": 39809,
+      "text": "巴掌家欧洲站2018冬装新款重工短款丝绒棉服女装宽松棉衣连帽外套",
+      "description": "This luxurious women’s velvet hooded puffer jacket features a relaxed fit, perfect for adding a chic, cozy layer to your winter wardrobe.",
+      "raw_response": "This luxurious women’s velvet hooded puffer jacket features a relaxed fit, perfect for adding a chic, cozy layer to your winter wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "39942": {
+      "item_id": 39942,
+      "text": "秋冬上新可爱毛绒小包包女2019新款潮韩版时尚百搭单肩斜挎毛毛包",
+      "description": "This trendy, Korean-style plush crossbody bag is a chic, versatile accessory perfect for adding a cozy touch to your autumn and winter outfits.",
+      "raw_response": "This trendy, Korean-style plush crossbody bag is a chic, versatile accessory perfect for adding a cozy touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "40020": {
+      "item_id": 40020,
+      "text": "XIAOYOUBAG手工亮片串珠链条包女2019新款斜挎包仙女包夏天小包包",
+      "description": "This elegant, handcrafted sequin-beaded crossbody bag features a chic chain strap, perfect for adding a touch of sparkle to your summer outfits.",
+      "raw_response": "This elegant, handcrafted sequin-beaded crossbody bag features a chic chain strap, perfect for adding a touch of sparkle to your summer outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "40030": {
+      "item_id": 40030,
+      "text": "包包女包新款2019夏季时尚百搭高级感洋气质感韩版真皮手提斜挎包",
+      "description": "This stylish, versatile women's leather handbag features a premium finish, perfect for elevating your summer outfits with a chic, sophisticated touch.",
+      "raw_response": "This stylish, versatile women's leather handbag features a premium finish, perfect for elevating your summer outfits with a chic, sophisticated touch.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "40063": {
+      "item_id": 40063,
+      "text": "辰未原创秋季男装侧边枫叶印花撞色夹克男日系潮流青少年翻领外套",
+      "description": "This Japanese-style men’s autumn jacket features a vibrant maple leaf side print and bold color-blocking, perfect for a trendy, casual seasonal look.",
+      "raw_response": "This Japanese-style men’s autumn jacket features a vibrant maple leaf side print and bold color-blocking, perfect for a trendy, casual seasonal look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "40293": {
+      "item_id": 40293,
+      "text": "pp home卫衣女春秋2019新款韩版圆领宽松中长款亮片白色套头上衣",
+      "description": "This white, loose-fit crewneck sweatshirt features stylish sequin detailing, perfect for a casual, trendy Korean-inspired look during the spring and autumn seasons.",
+      "raw_response": "This white, loose-fit crewneck sweatshirt features stylish sequin detailing, perfect for a casual, trendy Korean-inspired look during the spring and autumn seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "40422": {
+      "item_id": 40422,
+      "text": "冬季棉衣女ins中长款韩版宽松棉袄2018新款加厚潮bf棉服外套冬装",
+      "description": "Stay warm in this stylish, oversized mid-length women’s winter puffer coat, featuring a trendy Korean-inspired design perfect for cold-weather layering.",
+      "raw_response": "Stay warm in this stylish, oversized mid-length women’s winter puffer coat, featuring a trendy Korean-inspired design perfect for cold-weather layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "40440": {
+      "item_id": 40440,
+      "text": "大叔家2019春季新款浅口圆头金属蝴蝶结平底女鞋气质百搭平跟单鞋",
+      "description": "These chic women's spring flats feature a round toe, shallow cut, and elegant metallic bow detail, perfect for versatile everyday styling.",
+      "raw_response": "These chic women's spring flats feature a round toe, shallow cut, and elegant metallic bow detail, perfect for versatile everyday styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "40523": {
+      "item_id": 40523,
+      "text": "也桃 欧美原创几何极简耳环925银耳钉无耳洞耳夹气质三角圆形耳饰",
+      "description": "These minimalist geometric 925 silver earrings feature a sleek triangular and circular design, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "These minimalist geometric 925 silver earrings feature a sleek triangular and circular design, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "41230": {
+      "item_id": 41230,
+      "text": "原创潮牌个性网面织带拼接牛仔裤修身小脚裤男青年大口袋长裤百搭",
+      "description": "These slim-fit men’s jeans feature unique mesh and webbing paneling, offering a stylish, versatile look for casual urban wear.",
+      "raw_response": "These slim-fit men’s jeans feature unique mesh and webbing paneling, offering a stylish, versatile look for casual urban wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "41663": {
+      "item_id": 41663,
+      "text": "马切达原创冬季复古运动卫裤束脚裤潮流宽松加绒加厚小脚休闲裤男",
+      "description": "These men’s winter joggers feature a retro, loose-fit design in a thick, fleece-lined fabric, perfect for casual, trendy cold-weather styling.",
+      "raw_response": "These men’s winter joggers feature a retro, loose-fit design in a thick, fleece-lined fabric, perfect for casual, trendy cold-weather styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "41715": {
+      "item_id": 41715,
+      "text": "范智乔 露脐短袖女夏装圆领纯色短款t恤纯棉百搭修身显瘦韩范上衣",
+      "description": "This versatile, slim-fit cotton crop top features a classic crew neck and minimalist design, perfect for effortless summer styling.",
+      "raw_response": "This versatile, slim-fit cotton crop top features a classic crew neck and minimalist design, perfect for effortless summer styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "41777": {
+      "item_id": 41777,
+      "text": "两三事梵高正版授权内秀与外敛2018夏装新款印花绑带泡泡袖衬衫女",
+      "description": "This women’s summer blouse features a Van Gogh-inspired print, elegant puff sleeves, and a tie-front detail for a sophisticated, artistic look.",
+      "raw_response": "This women’s summer blouse features a Van Gogh-inspired print, elegant puff sleeves, and a tie-front detail for a sophisticated, artistic look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "41787": {
+      "item_id": 41787,
+      "text": "夸张刺绣燕子单只浮世绘耳环中国风耳饰搭配旗袍耳坠丢了一只耳环",
+      "description": "Exaggerated swallow-embroidered single earring featuring ukiyo-e style, perfect for pairing with traditional cheongsam for a unique, statement-making Chinese-inspired look.",
+      "raw_response": "Exaggerated swallow-embroidered single earring featuring ukiyo-e style, perfect for pairing with traditional cheongsam for a unique, statement-making Chinese-inspired look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "41866": {
+      "item_id": 41866,
+      "text": "小优家包包女2019新款宽带斜挎包女包撞色小方包上新小包包单肩包",
+      "description": "This stylish women's color-block crossbody bag features a trendy wide strap, perfect for adding a chic, modern touch to any casual outfit.",
+      "raw_response": "This stylish women's color-block crossbody bag features a trendy wide strap, perfect for adding a chic, modern touch to any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "41893": {
+      "item_id": 41893,
+      "text": "真皮休闲平底单鞋秋冬四季旅游鞋款豹纹系带板鞋低跟休闲运动潮鞋",
+      "description": "These stylish leopard-print leather sneakers feature a comfortable flat heel and lace-up design, perfect for casual everyday wear throughout the seasons.",
+      "raw_response": "These stylish leopard-print leather sneakers feature a comfortable flat heel and lace-up design, perfect for casual everyday wear throughout the seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42027": {
+      "item_id": 42027,
+      "text": "MASOOMAKE百搭中跟弹力套筒切尔西靴女马丁靴 2018新款秋冬短靴女",
+      "description": "These versatile women’s mid-heel Chelsea boots feature a sleek, elastic pull-on design, perfect for stylish autumn and winter wear.",
+      "raw_response": "These versatile women’s mid-heel Chelsea boots feature a sleek, elastic pull-on design, perfect for stylish autumn and winter wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42033": {
+      "item_id": 42033,
+      "text": "夏天高级感包包女百搭小ck限定洋气网红法国小众菱格链条包斜挎包",
+      "description": "This chic, quilted chain crossbody bag features a sophisticated French-inspired design, perfect for elevating your summer outfits with a touch of modern elegance.",
+      "raw_response": "This chic, quilted chain crossbody bag features a sophisticated French-inspired design, perfect for elevating your summer outfits with a touch of modern elegance.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42086": {
+      "item_id": 42086,
+      "text": "BEAMLIFE2018A/W原创欧美街拍复古粉紫色字母洗水刺绣鸭舌棒球帽",
+      "description": "This vintage-inspired pink-purple baseball cap features unique letter embroidery and a washed finish, perfect for completing a stylish, casual street-style look.",
+      "raw_response": "This vintage-inspired pink-purple baseball cap features unique letter embroidery and a washed finish, perfect for completing a stylish, casual street-style look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42132": {
+      "item_id": 42132,
+      "text": "二十八间冬装连帽情侣街头潮牌套头棉衣男士新款帅气休闲宽松外套",
+      "description": "This stylish, oversized hooded pullover jacket features a casual streetwear design, perfect for staying warm during the winter season.",
+      "raw_response": "This stylish, oversized hooded pullover jacket features a casual streetwear design, perfect for staying warm during the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42225": {
+      "item_id": 42225,
+      "text": "冬季中长款紫色丝绒加厚外套女欧洲站时尚刺绣潮牌宽松夹棉棉衣冬",
+      "description": "This stylish purple velvet mid-length winter coat features intricate embroidery and a cozy quilted lining, perfect for a trendy, oversized seasonal look.",
+      "raw_response": "This stylish purple velvet mid-length winter coat features intricate embroidery and a cozy quilted lining, perfect for a trendy, oversized seasonal look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42268": {
+      "item_id": 42268,
+      "text": "【南风】复古经典牛皮斜跨包女2019新款包包女包单肩包真皮小方包",
+      "description": "This vintage-inspired women’s leather crossbody bag features a classic, compact design, perfect for adding a sophisticated touch to any outfit.",
+      "raw_response": "This vintage-inspired women’s leather crossbody bag features a classic, compact design, perfect for adding a sophisticated touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42277": {
+      "item_id": 42277,
+      "text": "欧洲站女鞋2019春季新款圆头平底休闲鞋透气百搭小白鞋真皮板鞋潮",
+      "description": "These stylish white leather flat sneakers for women offer a breathable, versatile design perfect for casual spring outfits.",
+      "raw_response": "These stylish white leather flat sneakers for women offer a breathable, versatile design perfect for casual spring outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42302": {
+      "item_id": 42302,
+      "text": "巴掌家欧洲站重工烫钻高腰牛仔裤女春装2019新款时尚百搭浅色裤子",
+      "description": "These stylish light-wash high-waisted jeans for women feature intricate rhinestone detailing, perfect for elevating your spring wardrobe with a touch of glamour.",
+      "raw_response": "These stylish light-wash high-waisted jeans for women feature intricate rhinestone detailing, perfect for elevating your spring wardrobe with a touch of glamour.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42339": {
+      "item_id": 42339,
+      "text": "微笑向暖复古斜襟刺绣长裙剪花雪纺连衣裙春装2019流行裙子仙女裙",
+      "description": "This vintage-inspired chiffon maxi dress features delicate embroidery and a classic side-button closure, perfect for a romantic, ethereal spring look.",
+      "raw_response": "This vintage-inspired chiffon maxi dress features delicate embroidery and a classic side-button closure, perfect for a romantic, ethereal spring look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42446": {
+      "item_id": 42446,
+      "text": "莎莱茜夏季新款板鞋男士透明个性休闲鞋轻便潮流男鞋百搭夏天潮鞋",
+      "description": "These lightweight, transparent-detail men’s sneakers offer a trendy, versatile style perfect for casual summer wear.",
+      "raw_response": "These lightweight, transparent-detail men’s sneakers offer a trendy, versatile style perfect for casual summer wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42491": {
+      "item_id": 42491,
+      "text": "韩都衣舍2019春装新款女装韩版宽松长袖连帽套头加绒卫衣IG6431僥",
+      "description": "This cozy, oversized women’s hooded sweatshirt features a fleece lining and a trendy Korean-style design, perfect for casual spring layering.",
+      "raw_response": "This cozy, oversized women’s hooded sweatshirt features a fleece lining and a trendy Korean-style design, perfect for casual spring layering.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42622": {
+      "item_id": 42622,
+      "text": "TATA/他她秋街拍小白鞋韩版学生系带女单鞋R2X13AM7",
+      "description": "These stylish white sneakers for women feature a classic lace-up design, perfect for casual autumn street style and everyday student wear.",
+      "raw_response": "These stylish white sneakers for women feature a classic lace-up design, perfect for casual autumn street style and everyday student wear.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42630": {
+      "item_id": 42630,
+      "text": "小白鞋女2019洋气新款春季西班牙小众鞋绸缎鞋帆布鞋韩版小脏鞋女",
+      "description": "These stylish women's spring sneakers feature a chic satin finish and a trendy, casual aesthetic perfect for completing any modern outfit.",
+      "raw_response": "These stylish women's spring sneakers feature a chic satin finish and a trendy, casual aesthetic perfect for completing any modern outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42657": {
+      "item_id": 42657,
+      "text": "草帽子女夏天韩版小清新百搭防晒遮阳帽可折叠大沿海边度假沙滩帽",
+      "description": "This stylish, foldable wide-brim straw hat for women offers chic sun protection, perfect for summer beach vacations and casual sunny outings.",
+      "raw_response": "This stylish, foldable wide-brim straw hat for women offers chic sun protection, perfect for summer beach vacations and casual sunny outings.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "42805": {
+      "item_id": 42805,
+      "text": "爱知季尖头单鞋高跟鞋女细跟新款春秋v口真皮浅口女巫复古奶奶鞋",
+      "description": "These elegant pointed-toe stiletto pumps feature a vintage-inspired V-cut design in premium leather, perfect for elevating your spring and autumn ensembles.",
+      "raw_response": "These elegant pointed-toe stiletto pumps feature a vintage-inspired V-cut design in premium leather, perfect for elevating your spring and autumn ensembles.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43215": {
+      "item_id": 43215,
+      "text": "范思蓝恩纯棉白色T恤女夏装2018新款女短袖简约韩范字母印花体恤",
+      "description": "This minimalist white cotton T-shirt for women features a chic letter print, perfect for a stylish and casual summer look.",
+      "raw_response": "This minimalist white cotton T-shirt for women features a chic letter print, perfect for a stylish and casual summer look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43306": {
+      "item_id": 43306,
+      "text": "色璞优雅帽子女夏天日式遮阳帽手工编织渔夫帽旅行防晒草帽太阳帽",
+      "description": "This elegant, handcrafted Japanese-style straw bucket hat offers stylish sun protection, perfect for summer travel and sunny outdoor occasions.",
+      "raw_response": "This elegant, handcrafted Japanese-style straw bucket hat offers stylish sun protection, perfect for summer travel and sunny outdoor occasions.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43495": {
+      "item_id": 43495,
+      "text": "NOTHOMME潮牌夏季宽松版故障艺术印花红色短袖男情侣款街头T恤tee",
+      "description": "This red, loose-fit short-sleeve T-shirt features a glitch art print, perfect for a casual, streetwear-inspired summer look for men and couples.",
+      "raw_response": "This red, loose-fit short-sleeve T-shirt features a glitch art print, perfect for a casual, streetwear-inspired summer look for men and couples.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43591": {
+      "item_id": 43591,
+      "text": "INCA复古水桶包女单肩斜挎简约百搭港风少女ins韩版2018新款",
+      "description": "This vintage-inspired bucket bag features a minimalist, versatile design, perfect for adding a chic, retro touch to any casual outfit.",
+      "raw_response": "This vintage-inspired bucket bag features a minimalist, versatile design, perfect for adding a chic, retro touch to any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43622": {
+      "item_id": 43622,
+      "text": "2018秋装新款韩版高腰显瘦钉珠微喇叭浅色牛仔裤女学生百搭九分裤",
+      "description": "These light-wash, high-waisted cropped flare jeans feature delicate bead embellishments, offering a stylish, slim-fit look perfect for casual autumn outfits.",
+      "raw_response": "These light-wash, high-waisted cropped flare jeans feature delicate bead embellishments, offering a stylish, slim-fit look perfect for casual autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43777": {
+      "item_id": 43777,
+      "text": "MEET秋冬时尚保暖帽子 韩版貉子大毛球羊毛牛绒毛线护耳针织帽女",
+      "description": "Stay warm this autumn and winter in this stylish Korean-inspired women's wool-blend knit hat, featuring a cozy ear-flap design and plush raccoon fur pom-pom.",
+      "raw_response": "Stay warm this autumn and winter in this stylish Korean-inspired women's wool-blend knit hat, featuring a cozy ear-flap design and plush raccoon fur pom-pom.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43844": {
+      "item_id": 43844,
+      "text": "秋冬加厚纯色百搭堆堆毛线帽子潮女卷边休闲街头保暖光板针织帽男",
+      "description": "This cozy, solid-colored knit beanie features a stylish rolled cuff, perfect for staying warm during the autumn and winter seasons.",
+      "raw_response": "This cozy, solid-colored knit beanie features a stylish rolled cuff, perfect for staying warm during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43901": {
+      "item_id": 43901,
+      "text": "Ayuko 针织外套女2018秋季新款时尚条纹针织开衫薄款针织上衣外",
+      "description": "This stylish women’s striped knit cardigan from Ayuko is a lightweight, fashionable choice for your autumn wardrobe.",
+      "raw_response": "This stylish women’s striped knit cardigan from Ayuko is a lightweight, fashionable choice for your autumn wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "43996": {
+      "item_id": 43996,
+      "text": "钱夫人CHINSTUDIO网红同款烟灰色高腰牛仔裤女春秋紧身九分小脚裤",
+      "description": "These smoke-grey, high-waisted skinny jeans feature a cropped length, offering a sleek, versatile silhouette perfect for spring and autumn styling.",
+      "raw_response": "These smoke-grey, high-waisted skinny jeans feature a cropped length, offering a sleek, versatile silhouette perfect for spring and autumn styling.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "44036": {
+      "item_id": 44036,
+      "text": "女人双面羊绒大衣赫本风过膝中长款韩版2018秋冬季新款毛呢子外套",
+      "description": "This elegant, knee-length double-faced wool coat features a classic Hepburn-inspired silhouette, perfect for sophisticated layering during the autumn and winter seasons.",
+      "raw_response": "This elegant, knee-length double-faced wool coat features a classic Hepburn-inspired silhouette, perfect for sophisticated layering during the autumn and winter seasons.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "44136": {
+      "item_id": 44136,
+      "text": "黑色春季网红毛衣女2019新款洋气喇叭长袖短款套头紧身性感打底衫",
+      "description": "This black, slim-fit cropped sweater features trendy flared sleeves, perfect for a chic and sexy spring look.",
+      "raw_response": "This black, slim-fit cropped sweater features trendy flared sleeves, perfect for a chic and sexy spring look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "44425": {
+      "item_id": 44425,
+      "text": "2019新款短裤女夏季纯棉松紧腰运动宽松裤子阔腿裤休闲裤白色热裤",
+      "description": "These white cotton wide-leg shorts feature a comfortable elastic waistband, perfect for a relaxed, sporty look during the summer season.",
+      "raw_response": "These white cotton wide-leg shorts feature a comfortable elastic waistband, perfect for a relaxed, sporty look during the summer season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "44638": {
+      "item_id": 44638,
+      "text": "ZENGLIU睡觉不用摘的耳钉女气质韩国个性百搭小耳骨耳饰网红耳环",
+      "description": "These chic, versatile Korean-style stud earrings are designed for comfortable, everyday wear, adding a touch of effortless elegance to any outfit.",
+      "raw_response": "These chic, versatile Korean-style stud earrings are designed for comfortable, everyday wear, adding a touch of effortless elegance to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "44835": {
+      "item_id": 44835,
+      "text": "万里马欧美秋冬新款女包真皮手提包时尚女士包包单肩斜挎包杀手包",
+      "description": "This stylish leather handbag features a versatile design, perfect for elevating your autumn and winter outfits with a sophisticated, modern touch.",
+      "raw_response": "This stylish leather handbag features a versatile design, perfect for elevating your autumn and winter outfits with a sophisticated, modern touch.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "44913": {
+      "item_id": 44913,
+      "text": "帽子女夏天沙滩帽海边度假遮阳帽女防晒遮脸太阳帽小清新大沿草帽",
+      "description": "This stylish women's straw sun hat features a wide brim, perfect for summer beach vacations and effective sun protection with a fresh aesthetic.",
+      "raw_response": "This stylish women's straw sun hat features a wide brim, perfect for summer beach vacations and effective sun protection with a fresh aesthetic.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "44926": {
+      "item_id": 44926,
+      "text": "Converse匡威1970s三星标白色高帮低帮男女帆布鞋162056C 162065C",
+      "description": "Classic unisex Converse 1970s canvas sneakers in white, featuring the iconic三星标 design for a timeless, versatile look suitable for any casual occasion.",
+      "raw_response": "Classic unisex Converse 1970s canvas sneakers in white, featuring the iconic三星标 design for a timeless, versatile look suitable for any casual occasion.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "45072": {
+      "item_id": 45072,
+      "text": "[娜茉官方]陈妍希我们来了同款正品珠宝耳环耳钉珍珠贝壳青金拼石",
+      "description": "Elegant pearl and lapis lazuli shell earrings, featuring a sophisticated design inspired by celebrity style, perfect for adding a refined touch to any ensemble.",
+      "raw_response": "Elegant pearl and lapis lazuli shell earrings, featuring a sophisticated design inspired by celebrity style, perfect for adding a refined touch to any ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "45439": {
+      "item_id": 45439,
+      "text": "帽子女秋冬天狐狸毛球棒球帽韩版加厚仿水貂绒时尚百搭鸭舌帽潮",
+      "description": "This stylish women's faux mink baseball cap features a chic fox fur pom-pom, perfect for adding warmth and flair to your autumn-winter outfits.",
+      "raw_response": "This stylish women's faux mink baseball cap features a chic fox fur pom-pom, perfect for adding warmth and flair to your autumn-winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "45441": {
+      "item_id": 45441,
+      "text": "大叔家保暖做旧星星脏鞋女秋冬新款毛毛鞋系带厚毛棉鞋加绒小白鞋",
+      "description": "These women’s distressed star-print sneakers feature a cozy faux-fur lining, perfect for adding a trendy, warm touch to your autumn and winter outfits.",
+      "raw_response": "These women’s distressed star-print sneakers feature a cozy faux-fur lining, perfect for adding a trendy, warm touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "45588": {
+      "item_id": 45588,
+      "text": "洋气 网红同款ins贝雷帽复古豹纹画家帽百搭港风个性蓓蕾帽女秋冬",
+      "description": "This chic, leopard-print beret features a vintage-inspired design, perfect for adding a stylish, trendy touch to your autumn and winter outfits.",
+      "raw_response": "This chic, leopard-print beret features a vintage-inspired design, perfect for adding a stylish, trendy touch to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "45750": {
+      "item_id": 45750,
+      "text": "鞋大师2019春新款阿希哥同款复古真皮系带小皮鞋女英伦牛津鞋单鞋",
+      "description": "These vintage-inspired women’s leather oxford shoes feature a classic lace-up design, perfect for adding a sophisticated, British-style touch to your spring wardrobe.",
+      "raw_response": "These vintage-inspired women’s leather oxford shoes feature a classic lace-up design, perfect for adding a sophisticated, British-style touch to your spring wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "45758": {
+      "item_id": 45758,
+      "text": "韩国一款两戴珍珠纯银气质女耳环简约网红耳钉百搭无耳洞耳夹R440",
+      "description": "These versatile Korean-style sterling silver pearl earrings feature a chic, minimalist design suitable for both pierced and non-pierced ears.",
+      "raw_response": "These versatile Korean-style sterling silver pearl earrings feature a chic, minimalist design suitable for both pierced and non-pierced ears.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "45998": {
+      "item_id": 45998,
+      "text": "RACE CHOICE 新款复古设计感醋酸几何手工镀金耳环chic金属风耳饰",
+      "description": "These chic, vintage-inspired geometric earrings feature a gold-plated finish and acetate accents, perfect for adding a sophisticated touch to any ensemble.",
+      "raw_response": "These chic, vintage-inspired geometric earrings feature a gold-plated finish and acetate accents, perfect for adding a sophisticated touch to any ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "46159": {
+      "item_id": 46159,
+      "text": "ins小白鞋女春季百搭基础皮面学生鞋子平底单鞋真皮板鞋女鞋休闲",
+      "description": "These versatile white leather sneakers for women feature a classic flat design, perfect for casual spring outfits and everyday student style.",
+      "raw_response": "These versatile white leather sneakers for women feature a classic flat design, perfect for casual spring outfits and everyday student style.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "46210": {
+      "item_id": 46210,
+      "text": "包法利夫人情人节生日礼物星辰水晶女韩版简约个性新款时尚手链",
+      "description": "This minimalist, Korean-style crystal star bracelet adds a touch of elegant, modern charm to any outfit, perfect for gifting or special occasions.",
+      "raw_response": "This minimalist, Korean-style crystal star bracelet adds a touch of elegant, modern charm to any outfit, perfect for gifting or special occasions.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "46256": {
+      "item_id": 46256,
+      "text": "TATA/他她秋撞色系带方跟小黑皮鞋女单鞋2HC84CM7",
+      "description": "These stylish women's black leather lace-up shoes feature a chic color-block design and comfortable block heels, perfect for autumn outfits.",
+      "raw_response": "These stylish women's black leather lace-up shoes feature a chic color-block design and comfortable block heels, perfect for autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "46353": {
+      "item_id": 46353,
+      "text": "牛仔衬衫女设计感小众心机上衣春季中长款长袖法式复古韩版衬衣",
+      "description": "This French-inspired denim shirt features a unique, vintage-style design, perfect for elevating your spring wardrobe with a chic, layered look.",
+      "raw_response": "This French-inspired denim shirt features a unique, vintage-style design, perfect for elevating your spring wardrobe with a chic, layered look.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "46410": {
+      "item_id": 46410,
+      "text": "打底裤女冬季加绒2019新款高腰显瘦外穿铅笔小脚黑色杨幂同款裤子",
+      "description": "These black, high-waisted fleece-lined leggings for women offer a slim, pencil-fit silhouette, perfect for staying warm and stylish throughout the winter season.",
+      "raw_response": "These black, high-waisted fleece-lined leggings for women offer a slim, pencil-fit silhouette, perfect for staying warm and stylish throughout the winter season.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "46919": {
+      "item_id": 46919,
+      "text": "小香风包包2019新款丝绒酒神包简约链条网红小黑包单肩斜挎女包潮",
+      "description": "This chic black velvet chain bag features a sophisticated, minimalist design, perfect for adding a touch of elegance to any stylish outfit.",
+      "raw_response": "This chic black velvet chain bag features a sophisticated, minimalist design, perfect for adding a touch of elegance to any stylish outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "46920": {
+      "item_id": 46920,
+      "text": "欧美鱼嘴鞋露趾凉鞋女2019夏季新款细跟针织松紧弹力罗马高跟凉靴",
+      "description": "These chic European-style peep-toe stiletto sandals feature a breathable knit construction and elastic fit, perfect for elevating your summer wardrobe.",
+      "raw_response": "These chic European-style peep-toe stiletto sandals feature a breathable knit construction and elastic fit, perfect for elevating your summer wardrobe.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47142": {
+      "item_id": 47142,
+      "text": "原创新款港风斜挎可爱少女心爱心型口金包 迷你小包包宽肩带女包",
+      "description": "This cute, heart-shaped crossbody bag features a stylish Hong Kong-inspired design with a wide strap, perfect for adding a playful touch to any outfit.",
+      "raw_response": "This cute, heart-shaped crossbody bag features a stylish Hong Kong-inspired design with a wide strap, perfect for adding a playful touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47227": {
+      "item_id": 47227,
+      "text": "牛仔裤女九分裤欧洲站2019春秋新款时尚刺绣潮牌百搭小脚裤铅笔裤",
+      "description": "These stylish women's cropped skinny jeans feature trendy embroidery, perfect for adding a chic, versatile touch to your spring and autumn outfits.",
+      "raw_response": "These stylish women's cropped skinny jeans feature trendy embroidery, perfect for adding a chic, versatile touch to your spring and autumn outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47294": {
+      "item_id": 47294,
+      "text": "MOERCC2018新款单肩包女士手提包真皮休闲斜挎包牛皮复古简约女包",
+      "description": "This vintage-inspired women’s leather shoulder bag features a minimalist design, perfect for adding a sophisticated touch to any casual outfit.",
+      "raw_response": "This vintage-inspired women’s leather shoulder bag features a minimalist design, perfect for adding a sophisticated touch to any casual outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47428": {
+      "item_id": 47428,
+      "text": "D与格 星星小脏鞋秋季女2018新款韩版休闲运动鞋深口系带板鞋",
+      "description": "These stylish women's star-patterned sneakers feature a trendy distressed finish, perfect for casual autumn outfits with their comfortable lace-up design.",
+      "raw_response": "These stylish women's star-patterned sneakers feature a trendy distressed finish, perfect for casual autumn outfits with their comfortable lace-up design.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47430": {
+      "item_id": 47430,
+      "text": "2019春秋新款黑色高领毛衣女修身显瘦长袖套头纯色针织打底衫",
+      "description": "This sleek black turtleneck sweater for women features a slim-fit, long-sleeve design in soft knit fabric, perfect for effortless layering in spring and autumn.",
+      "raw_response": "This sleek black turtleneck sweater for women features a slim-fit, long-sleeve design in soft knit fabric, perfect for effortless layering in spring and autumn.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47550": {
+      "item_id": 47550,
+      "text": "高级感洋气小ck亮片限定星空百搭小包包女2019新款质感链条斜挎包",
+      "description": "This chic, limited-edition sequined crossbody bag features a sophisticated chain strap, perfect for adding a touch of sparkle to any stylish ensemble.",
+      "raw_response": "This chic, limited-edition sequined crossbody bag features a sophisticated chain strap, perfect for adding a touch of sparkle to any stylish ensemble.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47575": {
+      "item_id": 47575,
+      "text": "库茵 金缕衣 金丝草腰条拉菲草平沿帽遮阳帽太阳帽防晒帽子女春夏",
+      "description": "This stylish women's raffia straw flat-brim sun hat features elegant gold-thread detailing, perfect for chic spring and summer sun protection.",
+      "raw_response": "This stylish women's raffia straw flat-brim sun hat features elegant gold-thread detailing, perfect for chic spring and summer sun protection.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47761": {
+      "item_id": 47761,
+      "text": "戈美其2018夏季新款一字扣带包头凉鞋女尖头细跟高跟鞋通勤女鞋子",
+      "description": "These elegant women's pointed-toe stiletto sandals feature a chic ankle strap, perfect for a sophisticated summer commute.",
+      "raw_response": "These elegant women's pointed-toe stiletto sandals feature a chic ankle strap, perfect for a sophisticated summer commute.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "47831": {
+      "item_id": 47831,
+      "text": "豆豆鞋女秋冬加绒平底棉鞋2018新款可爱毛毛鞋真皮百搭一脚蹬女鞋",
+      "description": "These cozy, fur-lined leather loafers for women feature a cute, slip-on design, perfect for adding warmth and style to your autumn and winter outfits.",
+      "raw_response": "These cozy, fur-lined leather loafers for women feature a cute, slip-on design, perfect for adding warmth and style to your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "48098": {
+      "item_id": 48098,
+      "text": "【商场同款】太平鸟男装青年白色圆领打底衫休闲长袖T恤B1DC84X11",
+      "description": "A versatile white long-sleeve crewneck T-shirt for men, crafted for casual everyday wear with a clean, minimalist aesthetic.",
+      "raw_response": "A versatile white long-sleeve crewneck T-shirt for men, crafted for casual everyday wear with a clean, minimalist aesthetic.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "48186": {
+      "item_id": 48186,
+      "text": "MOON17F/W韩版复古街头抹茶绿软顶字母鸭舌帽小清新弯檐棒球帽子",
+      "description": "This vintage-inspired matcha green baseball cap features a soft crown and embroidered lettering, perfect for adding a fresh, street-style touch to any outfit.",
+      "raw_response": "This vintage-inspired matcha green baseball cap features a soft crown and embroidered lettering, perfect for adding a fresh, street-style touch to any outfit.",
+      "model": "gemini-3.1-flash-lite-preview"
+    },
+    "48327": {
+      "item_id": 48327,
+      "text": "网红瘦瘦靴粗跟短靴女2018秋冬新款百搭后拉链靴子英伦中跟马丁靴",
+      "description": "These versatile women’s British-style mid-heel ankle boots feature a sleek back-zipper design, perfect for elevating your autumn and winter outfits.",
+      "raw_response": "These versatile women’s British-style mid-heel ankle boots feature a sleek back-zipper design, perfect for elevating your autumn and winter outfits.",
+      "model": "gemini-3.1-flash-lite-preview"
+    }
+  }
+}

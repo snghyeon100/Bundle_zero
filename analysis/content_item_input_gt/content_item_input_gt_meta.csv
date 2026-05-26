@@ -1,0 +1,3 @@
+﻿dataset,space,source,embedding_dim,num_items,samples_built,samples_used,samples_skipped
+pog,content_item,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\datasets\pog\content_feature.pt,768,48676,8411,8411,0
+pog_dense,content_item,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\datasets\pog_dense\content_feature.pt,768,31217,9185,9185,0

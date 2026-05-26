@@ -315,6 +315,23 @@ Fashion semantic tag files:
     - `category_completion_selfsup_summary.csv`
     - `summary.md`
 
+- `analysis/category_graph_space/`
+  - Non-LLM category graph completion analysis.
+  - Builds bundle-category and category-category graphs:
+    - `BI`: bundle-item matrix.
+    - `IC`: item-category matrix.
+    - `BC = BI @ IC`: bundle-category matrix.
+    - `CC = BC^T @ BC`: category-category co-occurrence graph.
+  - Important files:
+    - `category_graph_completion_summary_all.csv`
+    - `category_graph_stats_all.csv`
+    - `category_method_quadrants_all.csv`
+    - `summary.md`
+
+- `datasets/pog/category_graph/` and `datasets/pog_dense/category_graph/`
+  - Stored category graph matrices generated from train/full splits.
+  - Includes count and binary variants of `BI`, `IC`, `BC`, and `CC`.
+
 ## 5. Important Result CSV Mapping
 
 ### POG-dense method mapping
@@ -579,6 +596,60 @@ Interpretation:
 - Confidence works much better than lift/PMI, meaning the frequent category templates are not just noise; they are useful priors in this dataset.
 - This supports a method direction based on category completion priors rather than category embedding similarity.
 
+### Non-LLM C-C category graph completion
+
+In addition to direct category-set confidence, we built an explicit category graph from bundle-item and item-category matrices:
+
+```text
+BI: bundle-item matrix
+IC: item-category matrix
+BC = BI @ IC
+CC = BC^T @ BC
+```
+
+Interpretation:
+
+- `BC` represents which categories appear in each bundle.
+- `CC` represents how often two categories co-occur in the same train bundle.
+- Count and binary variants were both built.
+  - Count keeps repeated category counts inside a bundle.
+  - Binary clips bundle-category membership to 0/1.
+- Since repeated-category bundle rate is almost zero, count and binary results are nearly identical.
+
+For test completion, given observed input category set `S`, each candidate category `c` is scored by averaging pairwise conditional category co-occurrence:
+
+```text
+score(c | S) = average_{s in S} P(c | s)
+P(c | s) = CC[s, c] / sum_{c'} CC[s, c']
+```
+
+This is different from `set_direct_confidence`.
+
+- `CC graph` methods use pairwise `s`-`c` co-occurrence and average over `s in S`.
+- `set_direct_confidence` checks whether the whole observed category set `S` appears with `c`:
+
+```text
+score(c | S) = count_train(S union {c}) / count_train(S)
+```
+
+Full-test split results, no LLM:
+
+- `pog`:
+  - `graph_conditional_count`: hit@1 0.461, hit@3 0.760, hit@5 0.868, MRR 0.635
+  - `graph_conditional_binary`: hit@1 0.461, hit@3 0.760, hit@5 0.869, MRR 0.634
+  - `text_centroid_similarity`: hit@1 0.008, hit@3 0.029
+
+- `pog_dense`:
+  - `graph_conditional_count`: hit@1 0.450, hit@3 0.767, hit@5 0.851, MRR 0.627
+  - `graph_conditional_binary`: hit@1 0.450, hit@3 0.767, hit@5 0.851, MRR 0.627
+  - `text_centroid_similarity`: hit@1 0.001, hit@3 0.008
+
+Implication:
+
+- Category completion is strong even without an LLM.
+- The useful signal is structural category complementarity, not semantic category similarity.
+- This supports category-aware prompt methods, although current representative-item verbalizations did not transfer the signal strongly to LLM accuracy.
+
 Methodology implication:
 
 - Prompting the LLM with raw numeric counts/probabilities may look ad-hoc.
@@ -702,6 +773,37 @@ Notes:
 - It does not directly encode category co-occurrence.
 - Runs with this option enabled include `CATITEMAUG_` in the output filename.
 
+#### Category-name item text augmentation
+
+Implemented as `use_category_name_aug`.
+
+Design:
+
+- Use the generated human-readable category names from `analysis/category_names/gemini/<dataset>/category_names.json`.
+- For each input/candidate item, detect its category from `item_info.json`.
+- Append the selected category-name field as natural text.
+- This gives the LLM an explicit semantic label without exposing numeric category IDs.
+
+Config:
+
+```yaml
+use_category_name_aug: false
+category_name_aug_apply_to: both  # inputs | candidates | both
+category_name_field: category_name_en  # category_name_en | category_name_ko | short_description_en
+category_name_root: ./analysis/category_names/gemini
+```
+
+Prompt form:
+
+```text
+{item title} [Additional context: Item category: {generated category name}.]
+```
+
+Notes:
+
+- Runs with this option enabled include `CATNAMEAUG_` in the output filename.
+- Result CSVs save `cfg_use_category_name_aug`, `cfg_category_name_aug_apply_to`, `cfg_category_name_field`, and `cfg_category_name_root`.
+
 #### Pairwise category co-occurrence item augmentation
 
 Implemented as `input_category_co_occur`.
@@ -721,14 +823,21 @@ Config:
 ```yaml
 input_category_co_occur: true
 input_category_co_occur_apply_to: inputs  # inputs | candidates | both
+input_category_co_occur_verbalization: representative_items  # representative_items | category_names
 input_category_co_occur_top_k: 3
 input_category_co_occur_rep_items_per_category: 1
 ```
 
-Prompt form:
+Prompt form with `representative_items`:
 
 ```text
 {item title} [Additional context: Category context: this item's category often appears with the following other categories, each represented by one example item: {rep item 1}; {rep item 2}; {rep item 3}.]
+```
+
+Prompt form with `category_names`:
+
+```text
+{item title} [Additional context: Category context: this item's category often appears with these other categories: {category name 1}; {category name 2}; {category name 3}.]
 ```
 
 Apply-to variants:
@@ -741,10 +850,11 @@ Notes:
 
 - This method is closer to the strong category co-occurrence signal observed in self-supervised analysis than same-category examples.
 - It uses pairwise category co-occurrence, not the full input-set completion score `score(c | S)`.
-- Runs with this option enabled include `INPCATCOOC_` in the output filename.
+- Runs with this option enabled include `INPCATCOOC_` in the output filename for representative-item verbalization and `INPCATNAMECOOC_` for category-name verbalization.
 - Result CSVs save:
   - `cfg_input_category_co_occur`
   - `cfg_input_category_co_occur_apply_to`
+  - `cfg_input_category_co_occur_verbalization`
   - `cfg_input_category_co_occur_top_k`
   - `cfg_input_category_co_occur_rep_items_per_category`
 
@@ -753,12 +863,13 @@ Implementation files:
 - `src/dataset.py`
   - Builds category pair co-occurrence counts from `bi_train.txt`.
   - Reuses category representative item ranking.
+  - Loads generated category names when `use_category_name_aug` is enabled or when co-occurrence verbalization is `category_names`.
   - Adds item-level category co-occurrence context according to `input_category_co_occur_apply_to`.
 - `src/main.py`
   - Saves the new config fields.
-  - Adds `INPCATCOOC_` to result filenames.
+  - Adds `CATNAMEAUG_`, `INPCATCOOC_`, or `INPCATNAMECOOC_` to result filenames.
 - `config.yaml`
-  - Added same-category and pairwise category co-occurrence augmentation options.
+  - Added same-category, generated category-name, and pairwise category co-occurrence augmentation options.
 
 ## 7. Current Issues Or Cautions
 
@@ -938,8 +1049,18 @@ Run pairwise category co-occurrence item augmentation:
 use_category_item_text_aug: false
 input_category_co_occur: true
 input_category_co_occur_apply_to: inputs  # inputs | candidates | both
+input_category_co_occur_verbalization: representative_items  # representative_items | category_names
 input_category_co_occur_top_k: 3
 input_category_co_occur_rep_items_per_category: 1
+```
+
+Run generated category-name augmentation:
+
+```yaml
+use_category_name_aug: true
+category_name_aug_apply_to: both  # inputs | candidates | both
+category_name_field: category_name_en
+category_name_root: ./analysis/category_names/gemini
 ```
 
 Then run:
@@ -1017,3 +1138,275 @@ python src\analyze_rule_based_baselines.py --csv results\spotify\results_spotify
    - `input_category_co_occur_apply_to: both`
    - `use_category_item_text_aug: true` with `category_item_aug_apply_to: both`
    - Compare these against `use_category_completion_prior_desc` and base.
+
+## 10. 2026-05-25 Updates: Category/Neighborhood Summary Methods
+
+### POG input count / latest result sanity
+
+- Latest POG result checked: `results/pog/results_pog_CATSUM_HN_C10_T5_20260525_151003.csv`.
+- Rows: 250.
+- Input item count distribution:
+  - 1 input item: 115 samples.
+  - 2 input items: 135 samples.
+  - 3+ input items: 0 samples.
+- Latest CATSUM hit by input count:
+  - 1 input item: 33/115 = 28.70%.
+  - 2 input items: 34/135 = 25.19%.
+  - overall: 67/250 = 26.80%.
+- Unique input items in that latest POG result: 375.
+
+### `cc_retrieval_context_k`
+
+- Added support for retrieving multiple C-C completion train outfits.
+- Config:
+
+```yaml
+use_cc_retrieval_context: false
+cc_retrieval_context_k: 3
+cc_retrieval_context_seed: 45
+cc_retrieval_overlap_weight: 1.0
+cc_retrieval_extra_weight: 1.0
+```
+
+- `src/dataset.py` now returns plural metadata such as:
+  - `cc_retrieval_context_bundle_ids`
+  - `cc_retrieval_context_scores`
+  - `cc_retrieval_context_overlap_counts`
+  - `cc_retrieval_context_extra_priors`
+  - `cc_retrieval_context_jaccards`
+  - `cc_retrieval_context_item_texts_by_bundle`
+  - `cc_retrieval_context_selected_count`
+- Existing single first-result metadata is preserved for backward compatibility.
+
+### Category names as category prior verbalization
+
+- Category names were generated under:
+
+```text
+analysis/category_names/gemini/{pog,pog_dense}/category_names.json
+```
+
+- Added config:
+
+```yaml
+category_prior_verbalization: category_names  # representative_items | category_names
+category_name_root: ./analysis/category_names/gemini
+category_name_field: category_name_en
+```
+
+- When `use_category_completion_prior_desc: true` and `category_prior_verbalization: category_names`, the prior now inserts human-readable category names instead of representative item titles.
+- Filename prefix becomes `CATPRIORNAME_` for category-name prior runs.
+
+### CATSUM: category evidence summary
+
+- Added candidate-agnostic category evidence summary method.
+- Config:
+
+```yaml
+use_category_evidence_summary: false
+category_evidence_summary_k: 5
+category_evidence_summary_include_evidence: false
+category_evidence_summary_model: ""  # empty = use main model
+category_evidence_summary_api_key_env: ""  # empty = use main client
+category_evidence_summary_max_output_tokens: 180
+```
+
+- Retrieval:
+  - Uses train outfit category sets.
+  - Prioritizes full input category set evidence, then pairwise, then single-category fallback.
+  - Evidence block contains category names, not item titles.
+- Summary agent prompt asks for 2-4 sentences about likely missing roles/categories and duplicate roles to avoid.
+- Final selector receives:
+
+```text
+Historical category summary:
+...
+Use this as a soft historical hint, while still choosing the candidate that best completes the given items.
+```
+
+- Separate summary API key support is available via `category_evidence_summary_api_key_env`.
+- Filename prefix: `CATSUM_`.
+- Observed POG run was weak: overall hit rate around 0.2680, likely because the summary is candidate-agnostic and too generic.
+
+### Important method decision
+
+- Candidate-agnostic category summary is probably not enough.
+- Better multi-agent directions discussed:
+  - Candidate-aware category evidence summary.
+  - Candidate-aware co-occurrence summary.
+  - Input-item neighborhood summary.
+- Current implemented next method is input-item neighborhood summary:
+
+```text
+input item text
++ exact IB x BI co-affiliated items
++ title text embedding I-I'-B soft co-affiliated items
+-> summary agent
+-> item-level neighborhood summary
+-> append to input item text in final selector prompt
+```
+
+### Title-only description cache: generated but not the intended method
+
+- A title-only description generator was first created:
+
+```text
+analyzer_utility/generate_input_item_descriptions_gemini.py
+```
+
+- It generated descriptions from item title only:
+
+```text
+item title -> Gemini -> concise product description
+```
+
+- Completed cache:
+
+```text
+analysis/input_item_descriptions/gemini/pog/input_item_descriptions.json
+```
+
+- Count: 375 cached input items.
+- This cache is not the intended neighborhood-summary method. It should be treated as a possible ablation only.
+
+### Correct method: input item neighborhood summary
+
+- Added script:
+
+```text
+analyzer_utility/generate_input_item_neighborhood_summaries_gemini.py
+```
+
+- For each unique input item, the script builds:
+  - Input item title.
+  - Exact co-affiliated items from `IB x BI`.
+  - Soft co-affiliated items from title text embedding based `I-I'-B`.
+- Existing title-text I-I'-B mapping is used:
+
+```text
+datasets/pog/item_smoothing_i2bprime_text_top1.json
+```
+
+- No new OpenAI embedding cache is needed for this method.
+- Default evidence size:
+
+```text
+exact IB x BI top-k: 5
+soft I-I'-B top-k: 5
+```
+
+- Summary prompt constraints:
+  - Do not choose an answer.
+  - Do not mention candidates.
+  - Do not invent unsupported facts.
+  - Treat soft evidence as approximate.
+  - Return one concise English sentence under 35 words.
+
+- Output cache path:
+
+```text
+analysis/input_item_neighborhood_summaries/gemini/pog/input_item_descriptions.json
+```
+
+- Output field:
+
+```text
+summary
+```
+
+- This correct neighborhood summary cache has not been generated yet at the time of this note.
+
+### API key behavior for neighborhood summary generation
+
+- Default single-key option:
+
+```text
+--api-key-env GEMINI_API_KEY_2
+```
+
+- Multi-key fallback option:
+
+```text
+--api-key-envs GEMINI_API_KEY,GEMINI_API_KEY_2,GEMINI_API_KEY_3
+```
+
+- The first key in `--api-key-envs` is used first.
+- Error handling:
+  - `high demand`, `overloaded`, `503`, `unavailable`: retry the same key.
+  - `quota`, `429`, `resource_exhausted`, `rate limit`: switch to the next key.
+
+### Command to generate the correct neighborhood summaries
+
+Run from repo root:
+
+```powershell
+python analyzer_utility\generate_input_item_neighborhood_summaries_gemini.py `
+  --dataset pog `
+  --result-csv results\pog\results_pog_CATSUM_HN_C10_T5_20260525_151003.csv `
+  --soft-source item_smoothing_text `
+  --api-key-envs GEMINI_API_KEY,GEMINI_API_KEY_2,GEMINI_API_KEY_3 `
+  --model gemini-3.1-flash-lite-preview `
+  --sleep 1.0
+```
+
+Equivalent one-line command:
+
+```powershell
+python analyzer_utility\generate_input_item_neighborhood_summaries_gemini.py --dataset pog --result-csv results\pog\results_pog_CATSUM_HN_C10_T5_20260525_151003.csv --soft-source item_smoothing_text --api-key-envs GEMINI_API_KEY,GEMINI_API_KEY_2,GEMINI_API_KEY_3 --model gemini-3.1-flash-lite-preview --sleep 1.0
+```
+
+### Config to append generated neighborhood summaries to input item text
+
+After the correct cache is generated, use:
+
+```yaml
+use_input_item_description_aug: true
+input_item_description_cache_root: ./analysis/input_item_neighborhood_summaries/gemini
+input_item_description_field: summary
+```
+
+- The final prompt input item becomes:
+
+```text
+{original input item title} [Additional context: Generated item summary: {summary}.]
+```
+
+- For the clean first experiment, keep other contexts off:
+
+```yaml
+use_category_evidence_summary: false
+use_cc_retrieval_context: false
+use_cooccurrence: false
+use_soft_cooccurrence: false
+use_item_bundle_affiliation_desc: false
+use_bundle_graph_context: false
+use_category_completion_prior_desc: false
+use_category_item_text_aug: false
+use_category_name_aug: false
+input_category_co_occur: false
+```
+
+### Additional implementation notes
+
+- `config.yaml` now defaults the input description root to the intended neighborhood-summary cache:
+
+```yaml
+use_input_item_description_aug: false
+input_item_description_cache_root: ./analysis/input_item_neighborhood_summaries/gemini
+input_item_description_field: summary
+```
+
+- `src/dataset.py` loads `input_item_descriptions.json` from that root and appends the configured field only for `role == "input"`.
+- `src/main.py` records these fields in result CSV:
+  - `cfg_use_input_item_description_aug`
+  - `cfg_input_item_description_cache_root`
+  - `cfg_input_item_description_field`
+- Result filename gets `INPDESC_` when this augmentation is enabled.
+
+### Verification already run
+
+```powershell
+venv\Scripts\python.exe -m py_compile src\dataset.py src\main.py analyzer_utility\generate_input_item_descriptions_gemini.py analyzer_utility\generate_input_item_neighborhood_summaries_gemini.py
+```
+
+- `git diff --check` was also run for the touched files; only CRLF warnings appeared.

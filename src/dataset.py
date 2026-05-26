@@ -36,6 +36,12 @@ class BundleZeroShotDataset:
         self.num_token = conf["num_token"]
         self.seed = conf.get("seed", 45)
         self.shuffle_seed = conf.get("shuffle_seed", 45)
+        if conf.get("use_fixed_test_split", False):
+            self.test_input_file = conf.get("test_input_file", "bi_fix_test_input.txt")
+            self.test_gt_file = conf.get("test_gt_file", "bi_fix_test_gt.txt")
+        else:
+            self.test_input_file = conf.get("test_input_file", "bi_test_input.txt")
+            self.test_gt_file = conf.get("test_gt_file", "bi_test_gt.txt")
         self.use_item_bundle_affiliation_desc = conf.get("use_item_bundle_affiliation_desc", False)
         self.item_bundle_affiliation_k = conf.get("item_bundle_affiliation_k", 3)
         self.item_bundle_affiliation_alpha = conf.get("item_bundle_affiliation_alpha", 0.5)
@@ -69,15 +75,50 @@ class BundleZeroShotDataset:
         self.bundle_graph_train_items = {}
         self.bundle_graph_train_bundle_ids = np.array([], dtype=np.int32)
         self.bundle_graph_item_idf = None
+        self.use_ui_category_purchase_prior = conf.get("use_ui_category_purchase_prior", False)
+        self.ui_category_purchase_prior_top_k = conf.get("ui_category_purchase_prior_top_k", 5)
+        self.ui_category_purchase_prior_min_support = conf.get("ui_category_purchase_prior_min_support", 1)
+        self.ui_category_purchase_category_counts = Counter()
+        self.ui_category_purchase_pair_counts = defaultdict(Counter)
+        self.ui_category_purchase_num_users = 0
+        self.use_input_item_description_aug = conf.get("use_input_item_description_aug", False)
+        self.input_item_description_cache_root = conf.get(
+            "input_item_description_cache_root",
+            os.path.join("analysis", "input_item_descriptions", "gemini")
+        )
+        self.input_item_description_field = conf.get("input_item_description_field", "description")
+        self.input_item_descriptions_by_item = {}
+        self.use_category_evidence_summary = conf.get("use_category_evidence_summary", False)
+        self.category_evidence_summary_k = conf.get("category_evidence_summary_k", 5)
+        self.category_evidence_summary_include_evidence = conf.get("category_evidence_summary_include_evidence", False)
+        self.use_cc_retrieval_context = conf.get("use_cc_retrieval_context", False)
+        self.cc_retrieval_context_k = conf.get("cc_retrieval_context_k", 1)
+        self.cc_retrieval_context_seed = conf.get("cc_retrieval_context_seed", self.seed)
+        self.cc_retrieval_overlap_weight = conf.get("cc_retrieval_overlap_weight", 1.0)
+        self.cc_retrieval_extra_weight = conf.get("cc_retrieval_extra_weight", 1.0)
+        self.cc_retrieval_train_bundle_items = {}
+        self.cc_retrieval_train_categories = {}
         self.use_category_completion_prior_desc = conf.get("use_category_completion_prior_desc", False)
         self.use_category_item_text_aug = conf.get("use_category_item_text_aug", False)
         self.category_item_aug_apply_to = conf.get("category_item_aug_apply_to", "both")
         self.category_item_aug_rep_items_per_category = conf.get("category_item_aug_rep_items_per_category", 2)
+        self.use_category_name_aug = conf.get("use_category_name_aug", False)
+        self.category_name_aug_apply_to = conf.get("category_name_aug_apply_to", "both")
+        self.category_name_field = conf.get("category_name_field", "category_name_en")
+        self.category_name_root = conf.get(
+            "category_name_root",
+            os.path.join("analysis", "category_names", "gemini")
+        )
         self.input_category_co_occur = conf.get("input_category_co_occur", False)
         self.input_category_co_occur_apply_to = conf.get("input_category_co_occur_apply_to", "inputs")
+        self.input_category_co_occur_verbalization = conf.get(
+            "input_category_co_occur_verbalization",
+            "representative_items"
+        )
         self.input_category_co_occur_top_k = conf.get("input_category_co_occur_top_k", 3)
         self.input_category_co_occur_rep_items_per_category = conf.get("input_category_co_occur_rep_items_per_category", 1)
         self.category_prior_top_k = conf.get("category_prior_top_k", 3)
+        self.category_prior_verbalization = conf.get("category_prior_verbalization", "representative_items")
         self.category_prior_rep_items_per_category = conf.get("category_prior_rep_items_per_category", 3)
         self.category_prior_min_support = conf.get("category_prior_min_support", 3)
         self.category_prior_max_itemset_size = conf.get("category_prior_max_itemset_size", 6)
@@ -99,6 +140,7 @@ class BundleZeroShotDataset:
         self.category_prior_item_category_field = None
         self.category_prior_train_items_by_category = defaultdict(list)
         self.category_prior_ranked_rep_items_by_category = {}
+        self.category_names_by_category = {}
         
         # Load counts
         count_path = os.path.join(self.path, self.name, 'count.json')
@@ -112,9 +154,16 @@ class BundleZeroShotDataset:
         with open(info_path, 'r', encoding='utf-8') as f:
             self.item_info = json.loads(f.read())
 
-        # Load Test Graphics
-        self.b_i_pairs_i = list2pairs(os.path.join(self.path, self.name, 'bi_test_input.txt'))
-        self.b_i_pairs_gt = list2pairs(os.path.join(self.path, self.name, 'bi_test_gt.txt'))
+        # Load test split. Fixed split files hold out exactly one GT item per bundle.
+        test_input_path = os.path.join(self.path, self.name, self.test_input_file)
+        test_gt_path = os.path.join(self.path, self.name, self.test_gt_file)
+        if not os.path.exists(test_input_path):
+            raise FileNotFoundError(f"Test input file not found: {test_input_path}")
+        if not os.path.exists(test_gt_path):
+            raise FileNotFoundError(f"Test GT file not found: {test_gt_path}")
+        print(f"[Test Split] input={self.test_input_file}, gt={self.test_gt_file}")
+        self.b_i_pairs_i = list2pairs(test_input_path)
+        self.b_i_pairs_gt = list2pairs(test_gt_path)
         np.random.shuffle(self.b_i_pairs_gt) # Shuffle GT for testing sequence
         
         self.b_i_graph_i = pairs2csr(self.b_i_pairs_i, (self.num_bundles, self.num_items))
@@ -166,9 +215,55 @@ class BundleZeroShotDataset:
                     f"{self.bundle_graph_context_soft_source}"
                 )
 
-        if self.use_category_completion_prior_desc or self.use_category_item_text_aug or self.input_category_co_occur:
+        if self.use_input_item_description_aug:
+            self._load_input_item_descriptions()
+            print(
+                f"[Input Item Description] Loaded {len(self.input_item_descriptions_by_item)} "
+                f"cached item descriptions"
+            )
+
+        if self.use_cc_retrieval_context or self.use_category_evidence_summary:
+            self._build_cc_retrieval_context_index()
+            print(f"[C-C Retrieval Context] Loaded {len(self.cc_retrieval_train_bundle_items)} train bundles from bi_train.txt")
+
+        if (
+            self.use_category_evidence_summary
+            or self.use_category_completion_prior_desc
+            or self.use_category_item_text_aug
+            or self.use_category_name_aug
+            or self.input_category_co_occur
+            or self.use_cc_retrieval_context
+            or self.use_ui_category_purchase_prior
+        ):
             self._build_category_completion_prior()
-            self._build_category_representative_index()
+            if self.use_ui_category_purchase_prior:
+                self._build_ui_category_purchase_prior()
+            if (
+                (
+                    self.use_category_completion_prior_desc
+                    and self._category_prior_uses_representative_items()
+                )
+                or self.use_category_item_text_aug
+                or (
+                    self.input_category_co_occur
+                    and self._input_category_co_occur_uses_representative_items()
+                )
+            ):
+                self._build_category_representative_index()
+            if (
+                self.use_category_name_aug
+                or self.use_category_evidence_summary
+                or self.use_ui_category_purchase_prior
+                or (
+                    self.use_category_completion_prior_desc
+                    and self._category_prior_uses_category_names()
+                )
+                or (
+                    self.input_category_co_occur
+                    and self._input_category_co_occur_uses_category_names()
+                )
+            ):
+                self._load_category_names()
             print(
                 f"[Category Context] Loaded {len(self.category_prior_categories)} categories "
                 f"from bi_train.txt using field={self.category_prior_item_category_field}"
@@ -317,11 +412,183 @@ class BundleZeroShotDataset:
                     self.category_prior_itemset_counts[size][self._category_key(combo)] += 1
         self.category_prior_categories = sorted(self.category_prior_train_category_counts)
 
+    def _build_ui_category_purchase_prior(self):
+        ui_path = os.path.join(self.path, self.name, "ui_full.txt")
+        if not os.path.exists(ui_path):
+            print(f"[Warning] ui_full.txt not found: {ui_path}")
+            return
+
+        with open(ui_path, "r", encoding="utf-8") as f:
+            for line in f:
+                vals = [int(v) for v in line.strip().split(", ") if v]
+                if len(vals) < 2:
+                    continue
+                unique_items = list(dict.fromkeys(vals[1:]))
+                categories = self._items_to_unique_categories(unique_items)
+                if not categories:
+                    continue
+                self.ui_category_purchase_num_users += 1
+                for category in categories:
+                    self.ui_category_purchase_category_counts[category] += 1
+                for cat_a, cat_b in combinations(categories, 2):
+                    self.ui_category_purchase_pair_counts[cat_a][cat_b] += 1
+                    self.ui_category_purchase_pair_counts[cat_b][cat_a] += 1
+
+    def _ui_category_purchase_support(self, input_categories, candidate_category):
+        scores = []
+        pair_counts = []
+        for input_category in input_categories:
+            denom = self.ui_category_purchase_category_counts.get(input_category, 0)
+            pair_count = self.ui_category_purchase_pair_counts[input_category].get(candidate_category, 0)
+            if denom <= 0:
+                continue
+            scores.append(pair_count / denom)
+            pair_counts.append(pair_count)
+        if not scores:
+            return 0.0, 0
+        return float(np.mean(scores)), int(sum(pair_counts))
+
+    def retrieve_ui_category_purchase_prior_context(self, sample):
+        if (
+            not self.use_ui_category_purchase_prior
+            or "spotify" in self.name
+            or int(self.ui_category_purchase_prior_top_k) <= 0
+        ):
+            return None
+
+        input_indices = [int(i) for i in sample.get("input_indices", [])]
+        input_categories = self._items_to_unique_categories(input_indices)
+        if not input_categories:
+            return None
+
+        input_set = set(input_categories)
+        min_support = int(self.ui_category_purchase_prior_min_support)
+        scored = []
+        for category in sorted(self.ui_category_purchase_category_counts):
+            if category in input_set:
+                continue
+            score, pair_support = self._ui_category_purchase_support(input_categories, category)
+            if pair_support < min_support or score <= 0:
+                continue
+            scored.append((category, score, pair_support, self.ui_category_purchase_category_counts[category]))
+
+        scored.sort(key=lambda x: (-x[1], -x[2], -x[3], x[0]))
+        top = scored[:int(self.ui_category_purchase_prior_top_k)]
+        if not top:
+            return None
+
+        input_category_names = [self._category_display_name(category) for category in input_categories]
+        top_category_names = [self._category_display_name(category) for category, _, _, _ in top]
+        lines = [
+            "Aggregate user-purchase category prior:",
+            (
+                "Users who purchased items in the input categories frequently also purchased "
+                "items from these categories:"
+            ),
+        ]
+        for idx, (category, score, pair_support, category_support) in enumerate(top, start=1):
+            lines.append(f"{idx}. {self._category_display_name(category)}")
+        lines.append(
+            "Use this only as a soft category-level signal from aggregate user behavior. "
+            "The selected item should still complete the outfit without duplicating an input category."
+        )
+
+        return {
+            "context_block": "\n".join(lines) + "\n\n",
+            "metadata": {
+                "ui_category_purchase_prior_input_categories": json.dumps(input_categories, ensure_ascii=False),
+                "ui_category_purchase_prior_input_category_names": json.dumps(input_category_names, ensure_ascii=False),
+                "ui_category_purchase_prior_top_categories": json.dumps([category for category, _, _, _ in top], ensure_ascii=False),
+                "ui_category_purchase_prior_top_category_names": json.dumps(top_category_names, ensure_ascii=False),
+                "ui_category_purchase_prior_scores": json.dumps([score for _, score, _, _ in top], ensure_ascii=False),
+                "ui_category_purchase_prior_pair_supports": json.dumps([pair_support for _, _, pair_support, _ in top], ensure_ascii=False),
+                "ui_category_purchase_prior_category_supports": json.dumps([category_support for _, _, _, category_support in top], ensure_ascii=False),
+                "ui_category_purchase_prior_selected_count": int(len(top)),
+            },
+        }
+
     def _resolve_repo_relative_path(self, path):
         if os.path.isabs(path):
             return path
         repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
         return os.path.join(repo_root, path)
+
+    def _load_input_item_descriptions(self):
+        desc_path = os.path.join(
+            self._resolve_repo_relative_path(self.input_item_description_cache_root),
+            self.name,
+            "input_item_descriptions.json"
+        )
+        if not os.path.exists(desc_path):
+            raise FileNotFoundError(
+                f"Input item description cache not found: {desc_path}. "
+                "Run analyzer_utility/generate_input_item_descriptions_gemini.py first."
+            )
+
+        with open(desc_path, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+        records = raw.get("items", raw)
+        descriptions = {}
+        for item_id, record in records.items():
+            if isinstance(record, dict):
+                text = record.get(self.input_item_description_field, "")
+            else:
+                text = record
+            text = self._clean_inline_text(text)
+            if text:
+                descriptions[int(item_id)] = text
+        self.input_item_descriptions_by_item = descriptions
+
+    def _input_item_description_aug_text(self, item_id):
+        description = self.input_item_descriptions_by_item.get(int(item_id), "")
+        if not description:
+            return ""
+        label = "Generated item summary"
+        if "description" in str(self.input_item_description_field).lower():
+            label = "Generated item description"
+        return f"{label}: {description}."
+
+    def _load_category_names(self):
+        names_path = os.path.join(
+            self._resolve_repo_relative_path(self.category_name_root),
+            self.name,
+            "category_names.json"
+        )
+        if not os.path.exists(names_path):
+            raise FileNotFoundError(
+                f"Category name file not found: {names_path}. "
+                "Run analyzer_utility/generate_category_names_gemini.py first, "
+                "or disable use_category_name_aug / category-name co-occurrence verbalization."
+            )
+
+        with open(names_path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        records = payload.get("categories", payload if isinstance(payload, list) else [])
+        self.category_names_by_category = {
+            str(record.get("category_id", "")).strip(): record
+            for record in records
+            if str(record.get("category_id", "")).strip()
+        }
+        print(
+            f"[Category Names] Loaded {len(self.category_names_by_category)} names "
+            f"from {names_path} using field={self.category_name_field}"
+        )
+
+    def _category_display_name(self, category):
+        record = self.category_names_by_category.get(str(category))
+        if not record:
+            return ""
+        fields = [
+            self.category_name_field,
+            "category_name_en",
+            "category_name_ko",
+            "short_description_en",
+        ]
+        for field in fields:
+            value = record.get(field)
+            if value is not None and str(value).strip():
+                return self._clean_inline_text(value)
+        return ""
 
     def _load_category_prior_item_embeddings(self):
         cache_root = self._resolve_repo_relative_path(self.category_prior_item_embedding_cache_root)
@@ -452,6 +719,43 @@ class BundleZeroShotDataset:
         rep_text = "; ".join(self._clean_inline_text(self.get_item_text(j)) for j in rep_items)
         return f"Item Category examples: {rep_text}."
 
+    def _category_name_aug_enabled_for_role(self, role):
+        if not self.use_category_name_aug:
+            return False
+        apply_to = str(self.category_name_aug_apply_to).strip().lower()
+        if apply_to == "both":
+            return role in {"input", "candidate"}
+        if apply_to in {"inputs", "input"}:
+            return role == "input"
+        if apply_to in {"candidates", "candidate"}:
+            return role == "candidate"
+        return False
+
+    def _category_name_aug_text(self, item_id):
+        if "spotify" in self.name:
+            return ""
+        category = self._get_item_category(item_id)
+        if not category:
+            return ""
+        name = self._category_display_name(category)
+        if not name:
+            return ""
+        return f"Item category: {name}."
+
+    def _input_category_co_occur_uses_category_names(self):
+        mode = str(self.input_category_co_occur_verbalization).strip().lower()
+        return mode in {"category_names", "category_name", "names", "name"}
+
+    def _input_category_co_occur_uses_representative_items(self):
+        return not self._input_category_co_occur_uses_category_names()
+
+    def _category_prior_uses_category_names(self):
+        mode = str(self.category_prior_verbalization).strip().lower()
+        return mode in {"category_names", "category_name", "names", "name"}
+
+    def _category_prior_uses_representative_items(self):
+        return not self._category_prior_uses_category_names()
+
     def _input_category_co_occur_text(self, item_id, exclude_items):
         if "spotify" in self.name:
             return ""
@@ -468,6 +772,25 @@ class BundleZeroShotDataset:
         )
         if not neighbors:
             return ""
+
+        if self._input_category_co_occur_uses_category_names():
+            names = []
+            selected_categories = 0
+            for neighbor_category, _ in neighbors:
+                name = self._category_display_name(neighbor_category)
+                if not name:
+                    continue
+                names.append(name)
+                selected_categories += 1
+                if selected_categories >= top_k:
+                    break
+
+            if not names:
+                return ""
+            return (
+                "Category context: this item's category often appears with these "
+                f"other categories: {'; '.join(names)}."
+            )
 
         rep_texts = []
         selected_categories = 0
@@ -519,6 +842,14 @@ class BundleZeroShotDataset:
         )
 
         context_sentences = []
+        if role == "input" and self.use_input_item_description_aug:
+            description_text = self._input_item_description_aug_text(item_id)
+            if description_text:
+                context_sentences.append(description_text)
+        if self._category_name_aug_enabled_for_role(role):
+            category_name_text = self._category_name_aug_text(item_id)
+            if category_name_text:
+                context_sentences.append(category_name_text)
         if self._category_item_aug_enabled_for_role(role):
             category_text = self._category_item_aug_text(
                 item_id,
@@ -559,8 +890,10 @@ class BundleZeroShotDataset:
                     "category_prior_observed_support": int(observed_support),
                     "category_prior_top_categories": json.dumps([], ensure_ascii=False),
                     "category_prior_top_scores": json.dumps([], ensure_ascii=False),
+                    "category_prior_top_category_names": json.dumps([], ensure_ascii=False),
                     "category_prior_rep_item_ids": json.dumps([], ensure_ascii=False),
                     "category_prior_rep_item_texts": json.dumps([], ensure_ascii=False),
+                    "category_prior_verbalization": self.category_prior_verbalization,
                     "category_prior_coverage": 0,
                 }
             }
@@ -568,29 +901,48 @@ class BundleZeroShotDataset:
         ranked = sorted(scores.items(), key=lambda x: (-x[1], x[0]))
         top = ranked[:int(self.category_prior_top_k)]
         exclude_items = set(input_indices) | set(candidate_indices)
-        lines = [
-            "Additional outfit context:",
-            "The current outfit is commonly completed by item categories similar to the examples below.",
-        ]
+        if self._category_prior_uses_category_names():
+            lines = [
+                "Additional outfit context:",
+                "The current outfit is commonly completed by the following item categories.",
+            ]
+        else:
+            lines = [
+                "Additional outfit context:",
+                "The current outfit is commonly completed by item categories similar to the examples below.",
+            ]
         top_categories = []
         top_scores = []
+        top_category_names = []
         rep_item_ids_by_category = []
         rep_item_texts_by_category = []
 
         for idx, (category, score) in enumerate(top, start=1):
-            rep_items = self._representative_items_for_category(category, exclude_items)
-            if not rep_items:
-                continue
-            rep_texts = [self._clean_inline_text(self.get_item_text(item_id)) for item_id in rep_items]
-            lines.append(f"{idx}. Similar category examples: {'; '.join(rep_texts)}.")
+            category_name = self._category_display_name(category)
+            if self._category_prior_uses_category_names():
+                if not category_name:
+                    continue
+                lines.append(f"{idx}. {category_name}.")
+                rep_items = []
+                rep_texts = []
+            else:
+                rep_items = self._representative_items_for_category(category, exclude_items)
+                if not rep_items:
+                    continue
+                rep_texts = [self._clean_inline_text(self.get_item_text(item_id)) for item_id in rep_items]
+                lines.append(f"{idx}. Similar category examples: {'; '.join(rep_texts)}.")
             top_categories.append(category)
             top_scores.append(float(score))
+            top_category_names.append(category_name)
             rep_item_ids_by_category.append(rep_items)
             rep_item_texts_by_category.append(rep_texts)
 
         if not top_categories:
             return None
-        lines.append("Use these examples only as a soft hint about plausible missing item types.")
+        if self._category_prior_uses_category_names():
+            lines.append("Use these categories only as a soft hint about plausible missing item types.")
+        else:
+            lines.append("Use these examples only as a soft hint about plausible missing item types.")
         return {
             "context_block": "\n".join(lines) + "\n\n",
             "metadata": {
@@ -598,17 +950,166 @@ class BundleZeroShotDataset:
                 "category_prior_observed_support": int(observed_support),
                 "category_prior_top_categories": json.dumps(top_categories, ensure_ascii=False),
                 "category_prior_top_scores": json.dumps(top_scores, ensure_ascii=False),
+                "category_prior_top_category_names": json.dumps(top_category_names, ensure_ascii=False),
                 "category_prior_rep_item_ids": json.dumps(rep_item_ids_by_category, ensure_ascii=False),
                 "category_prior_rep_item_texts": json.dumps(rep_item_texts_by_category, ensure_ascii=False),
+                "category_prior_verbalization": self.category_prior_verbalization,
                 "category_prior_coverage": 1,
             }
+        }
+
+    def retrieve_category_evidence_summary_context(self, sample):
+        if (
+            not self.use_category_evidence_summary
+            or "spotify" in self.name
+            or not self.cc_retrieval_train_categories
+            or int(self.category_evidence_summary_k) <= 0
+        ):
+            return None
+
+        input_indices = [int(i) for i in sample.get("input_indices", [])]
+        input_categories = self._items_to_unique_categories(input_indices)
+        if not input_categories:
+            return None
+
+        input_category_set = set(input_categories)
+        input_category_names = [
+            self._category_display_name(category) or str(category)
+            for category in input_categories
+        ]
+
+        subset_specs = []
+        max_size = len(input_categories)
+        for size in range(max_size, 0, -1):
+            for combo in combinations(input_categories, size):
+                combo_set = set(combo)
+                if size == max_size:
+                    level = "full-match"
+                elif size == 2:
+                    level = "pair-match"
+                elif size == 1:
+                    level = "single-match"
+                else:
+                    level = f"{size}-category-match"
+                subset_specs.append((level, combo_set))
+
+        selected = []
+        selected_bundle_ids = set()
+        selected_category_keys = set()
+        rng = np.random.default_rng(
+            int(sample.get("bundle_id", 0)) + int(self.cc_retrieval_context_seed)
+        )
+
+        for level, subset in subset_specs:
+            candidates = []
+            for bundle_id, categories in self.cc_retrieval_train_categories.items():
+                if int(bundle_id) in selected_bundle_ids:
+                    continue
+                if not subset.issubset(categories):
+                    continue
+                extra_categories = sorted(categories - input_category_set)
+                if not extra_categories:
+                    continue
+                extra_prior = sum(
+                    self._cc_completion_prior(sorted(subset), category)
+                    for category in extra_categories
+                )
+                union_count = len(input_category_set | categories)
+                jaccard = len(input_category_set & categories) / union_count if union_count else 0.0
+                candidates.append((bundle_id, extra_prior, jaccard, extra_categories))
+
+            if not candidates:
+                continue
+
+            tie_breaks = rng.random(len(candidates))
+            ranked = sorted(
+                range(len(candidates)),
+                key=lambda idx: (
+                    -candidates[idx][1],
+                    -candidates[idx][2],
+                    tie_breaks[idx],
+                )
+            )
+            for idx in ranked:
+                bundle_id, extra_prior, jaccard, extra_categories = candidates[idx]
+                categories = sorted(self.cc_retrieval_train_categories.get(bundle_id, []))
+                category_key = self._category_key(categories)
+                if category_key in selected_category_keys:
+                    continue
+                category_names = [
+                    self._category_display_name(category) or str(category)
+                    for category in categories
+                ]
+                matched_categories = sorted(subset)
+                matched_names = [
+                    self._category_display_name(category) or str(category)
+                    for category in matched_categories
+                ]
+                extra_names = [
+                    self._category_display_name(category) or str(category)
+                    for category in extra_categories
+                ]
+                selected.append({
+                    "bundle_id": int(bundle_id),
+                    "match_level": level,
+                    "matched_categories": matched_categories,
+                    "matched_category_names": matched_names,
+                    "extra_categories": extra_categories,
+                    "extra_category_names": extra_names,
+                    "bundle_categories": categories,
+                    "bundle_category_names": category_names,
+                    "extra_prior": float(extra_prior),
+                    "jaccard": float(jaccard),
+                })
+                selected_bundle_ids.add(int(bundle_id))
+                selected_category_keys.add(category_key)
+                if len(selected) >= int(self.category_evidence_summary_k):
+                    break
+            if len(selected) >= int(self.category_evidence_summary_k):
+                break
+
+        if not selected:
+            return None
+
+        lines = [
+            "Input category names:",
+            *[f"- {name}" for name in input_category_names],
+            "",
+            "Retrieved historical outfit category evidence:",
+        ]
+        for idx, example in enumerate(selected, start=1):
+            lines.append(
+                f"{idx}. [{example['match_level']}] "
+                f"matched input categories: {'; '.join(example['matched_category_names'])}."
+            )
+            lines.append(
+                f"   completed outfit categories: {'; '.join(example['bundle_category_names'])}."
+            )
+        evidence_block = "\n".join(lines)
+
+        return {
+            "evidence_block": evidence_block,
+            "metadata": {
+                "category_evidence_summary_input_categories": json.dumps(input_categories, ensure_ascii=False),
+                "category_evidence_summary_input_category_names": json.dumps(input_category_names, ensure_ascii=False),
+                "category_evidence_summary_bundle_ids": json.dumps([row["bundle_id"] for row in selected], ensure_ascii=False),
+                "category_evidence_summary_match_levels": json.dumps([row["match_level"] for row in selected], ensure_ascii=False),
+                "category_evidence_summary_matched_category_names": json.dumps([row["matched_category_names"] for row in selected], ensure_ascii=False),
+                "category_evidence_summary_extra_category_names": json.dumps([row["extra_category_names"] for row in selected], ensure_ascii=False),
+                "category_evidence_summary_bundle_category_names": json.dumps([row["bundle_category_names"] for row in selected], ensure_ascii=False),
+                "category_evidence_summary_extra_priors": json.dumps([row["extra_prior"] for row in selected], ensure_ascii=False),
+                "category_evidence_summary_jaccards": json.dumps([row["jaccard"] for row in selected], ensure_ascii=False),
+                "category_evidence_summary_selected_count": int(len(selected)),
+            },
         }
 
     def _soft_mapping_path(self, source):
         file_by_source = {
             "item_smoothing_text": "item_smoothing_i2bprime_text_top1.json",
+            "item_smoothing_text_input_desc": "item_smoothing_i2bprime_text_input_desc_top1.json",
             "item_smoothing_bi_lgcn": "item_smoothing_i2bprime_bi_lgcn_top1.json",
             "bundle_smoothing_text": "bundle_smoothing_i2bprime_text_top1.json",
+            "bundle_smoothing_text_input_desc": "bundle_smoothing_i2bprime_text_input_desc_top1.json",
             "bundle_smoothing_bi_lgcn": "bundle_smoothing_i2bprime_bi_lgcn_top1.json",
         }
         if source not in file_by_source:
@@ -662,6 +1163,15 @@ class BundleZeroShotDataset:
         item_freq = np.asarray(self.bundle_graph_train_matrix.sum(axis=0)).ravel()
         num_train_bundles = len(self.bundle_graph_train_items)
         self.bundle_graph_item_idf = np.log((num_train_bundles + 1.0) / (item_freq + 1.0))
+
+    def _build_cc_retrieval_context_index(self):
+        """Build train-only bundle category sets for C-C completion retrieval."""
+        self.cc_retrieval_train_bundle_items = self._load_train_bundle_items()
+        self.cc_retrieval_train_categories = {}
+        for bundle_id, items in self.cc_retrieval_train_bundle_items.items():
+            categories = self._items_to_unique_categories(items)
+            if categories:
+                self.cc_retrieval_train_categories[int(bundle_id)] = set(categories)
 
     def _build_item_user_copurchase_matrix(self):
         """Build item-item co-purchase counts from user-item interactions."""
@@ -856,6 +1366,145 @@ class BundleZeroShotDataset:
             "context_block": "\n".join(lines) + "\n\n",
             "examples": examples,
             "metadata": metadata,
+        }
+
+    def _cc_completion_prior(self, input_categories, category):
+        scores = []
+        for input_category in input_categories:
+            denom = self.category_prior_train_category_counts.get(input_category, 0)
+            if denom <= 0:
+                continue
+            scores.append(self.category_pair_cooccur_counts[input_category].get(category, 0) / denom)
+        if not scores:
+            return 0.0
+        return float(np.mean(scores))
+
+    def retrieve_cc_retrieval_context(self, sample):
+        if (
+            not self.use_cc_retrieval_context
+            or "spotify" in self.name
+            or not self.cc_retrieval_train_categories
+            or int(self.cc_retrieval_context_k) <= 0
+        ):
+            return None
+
+        input_indices = [int(i) for i in sample.get("input_indices", [])]
+        input_categories = set(self._items_to_unique_categories(input_indices))
+        if not input_categories:
+            return None
+
+        scored = []
+        input_categories_sorted = sorted(input_categories)
+        for bundle_id, categories in self.cc_retrieval_train_categories.items():
+            overlap_count = len(input_categories & categories)
+            extra_categories = sorted(categories - input_categories)
+            if overlap_count < 1 or not extra_categories:
+                continue
+            extra_prior = sum(
+                self._cc_completion_prior(input_categories_sorted, category)
+                for category in extra_categories
+            )
+            union_count = len(input_categories | categories)
+            jaccard = overlap_count / union_count if union_count else 0.0
+            score = (
+                float(self.cc_retrieval_overlap_weight) * overlap_count
+                + float(self.cc_retrieval_extra_weight) * extra_prior
+            )
+            if score <= 0:
+                continue
+            scored.append((bundle_id, score, overlap_count, extra_prior, jaccard, extra_categories))
+
+        if not scored:
+            return None
+
+        rng = np.random.default_rng(
+            int(sample.get("bundle_id", 0)) + int(self.cc_retrieval_context_seed)
+        )
+        tie_breaks = rng.random(len(scored))
+        ranked_indices = sorted(
+            range(len(scored)),
+            key=lambda idx: (
+                -scored[idx][1],
+                -scored[idx][3],
+                -scored[idx][2],
+                -scored[idx][4],
+                tie_breaks[idx],
+            )
+        )
+
+        selected = []
+        for idx in ranked_indices:
+            bundle_id, score, overlap_count, extra_prior, jaccard, extra_categories = scored[idx]
+            items = self.cc_retrieval_train_bundle_items.get(bundle_id, [])
+            item_texts = [self._clean_inline_text(self.get_item_text(item_id)) for item_id in items]
+            if not item_texts:
+                continue
+            selected.append({
+                "bundle_id": int(bundle_id),
+                "score": float(score),
+                "overlap_count": int(overlap_count),
+                "extra_prior": float(extra_prior),
+                "jaccard": float(jaccard),
+                "extra_categories": extra_categories,
+                "bundle_categories": sorted(self.cc_retrieval_train_categories.get(bundle_id, [])),
+                "items": [int(i) for i in items],
+                "item_texts": item_texts,
+            })
+            if len(selected) >= int(self.cc_retrieval_context_k):
+                break
+
+        if not selected:
+            return None
+
+        header = (
+            "\nHistorical examples of completed outfits with similar category patterns:"
+            if len(selected) > 1
+            else "\nHistorical example of a completed outfit with a similar category pattern:"
+        )
+        lines = [header]
+        for idx, example in enumerate(selected, start=1):
+            prefix = f"{idx}. " if len(selected) > 1 else ""
+            lines.append(f"{prefix}{'; '.join(example['item_texts'])}")
+        context_block = "\n".join(lines) + "\n"
+
+        first = selected[0]
+        best = scored[ranked_indices[0]]
+        tie_count = sum(
+            1
+            for row in scored
+            if row[1] == best[1]
+            and row[3] == best[3]
+            and row[2] == best[2]
+            and row[4] == best[4]
+        )
+        return {
+            "context_block": context_block,
+            "metadata": {
+                "cc_retrieval_context_bundle_id": int(first["bundle_id"]),
+                "cc_retrieval_context_score": float(first["score"]),
+                "cc_retrieval_context_overlap_count": int(first["overlap_count"]),
+                "cc_retrieval_context_extra_prior": float(first["extra_prior"]),
+                "cc_retrieval_context_jaccard": float(first["jaccard"]),
+                "cc_retrieval_context_bundle_ids": json.dumps([row["bundle_id"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_scores": json.dumps([row["score"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_overlap_counts": json.dumps([row["overlap_count"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_extra_priors": json.dumps([row["extra_prior"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_jaccards": json.dumps([row["jaccard"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_input_categories": json.dumps(sorted(input_categories), ensure_ascii=False),
+                "cc_retrieval_context_extra_categories": json.dumps(first["extra_categories"], ensure_ascii=False),
+                "cc_retrieval_context_extra_categories_by_bundle": json.dumps([row["extra_categories"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_bundle_categories": json.dumps(
+                    first["bundle_categories"],
+                    ensure_ascii=False
+                ),
+                "cc_retrieval_context_bundle_categories_by_bundle": json.dumps([row["bundle_categories"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_item_ids": json.dumps(first["items"], ensure_ascii=False),
+                "cc_retrieval_context_item_texts": json.dumps(first["item_texts"], ensure_ascii=False),
+                "cc_retrieval_context_item_ids_by_bundle": json.dumps([row["items"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_item_texts_by_bundle": json.dumps([row["item_texts"] for row in selected], ensure_ascii=False),
+                "cc_retrieval_context_selected_count": int(len(selected)),
+                "cc_retrieval_context_tie_count": int(tie_count),
+            },
         }
 
     def get_cooccurrence_stats(self, input_indices, candidate_indices):

@@ -38,6 +38,14 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
     print(f"  [True Option] {sample.get('true_option_char')} | True Item ID: {sample.get('true_indice')}")
     print(f"  [Input Item IDs] {sample.get('input_indices')}")
     print(f"  [Candidate Item IDs] {sample.get('candidate_indices')}")
+    print(f"  [Input Item Description Aug Enabled] {conf.get('use_input_item_description_aug', False)}")
+    if conf.get("use_input_item_description_aug", False):
+        print(f"  [Input Item Description root] {conf.get('input_item_description_cache_root', '')}")
+        print(f"  [Input Item Description field] {conf.get('input_item_description_field', '')}")
+    print(f"  [UI Category Purchase Prior Enabled] {conf.get('use_ui_category_purchase_prior', False)}")
+    if conf.get("use_ui_category_purchase_prior", False):
+        print(f"  [UI Category Purchase Prior top-k] {conf.get('ui_category_purchase_prior_top_k', '')}")
+        print(f"  [UI Category Purchase Prior min support] {conf.get('ui_category_purchase_prior_min_support', '')}")
     print(f"  [Co-occurrence Enabled] {conf.get('use_cooccurrence', False)}")
     print(f"  [Soft Co-occurrence Enabled] {conf.get('use_soft_cooccurrence', False)}")
     if conf.get("use_soft_cooccurrence", False):
@@ -64,18 +72,37 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
         if conf.get("bundle_graph_context_use_soft", False):
             print(f"  [Bundle Graph Context Soft Source] {conf.get('bundle_graph_context_soft_source', '')}")
             print(f"  [Bundle Graph Context Soft Alpha] {conf.get('bundle_graph_context_soft_alpha', '')}")
+    print(f"  [Category Evidence Summary Enabled] {conf.get('use_category_evidence_summary', False)}")
+    if conf.get("use_category_evidence_summary", False):
+        print(f"  [Category Evidence Summary k] {conf.get('category_evidence_summary_k', '')}")
+        print(f"  [Category Evidence Summary include evidence] {conf.get('category_evidence_summary_include_evidence', False)}")
+        print(f"  [Category Evidence Summary model] {conf.get('category_evidence_summary_model', '') or conf.get('model', '')}")
+        print(f"  [Category Evidence Summary API key env] {conf.get('category_evidence_summary_api_key_env', '') or 'main client'}")
+    print(f"  [C-C Retrieval Context Enabled] {conf.get('use_cc_retrieval_context', False)}")
+    if conf.get("use_cc_retrieval_context", False):
+        print(f"  [C-C Retrieval Context k] {conf.get('cc_retrieval_context_k', '')}")
+        print(f"  [C-C Retrieval Context Seed] {conf.get('cc_retrieval_context_seed', '')}")
+        print(f"  [C-C Retrieval Overlap Weight] {conf.get('cc_retrieval_overlap_weight', '')}")
+        print(f"  [C-C Retrieval Extra Weight] {conf.get('cc_retrieval_extra_weight', '')}")
     print(f"  [Category Completion Prior Enabled] {conf.get('use_category_completion_prior_desc', False)}")
     if conf.get("use_category_completion_prior_desc", False):
         print(f"  [Category Prior top-k] {conf.get('category_prior_top_k', '')}")
+        print(f"  [Category Prior verbalization] {conf.get('category_prior_verbalization', '')}")
         print(f"  [Representative items/category] {conf.get('category_prior_rep_items_per_category', '')}")
         print(f"  [Category Prior min support] {conf.get('category_prior_min_support', '')}")
     print(f"  [Category Item Text Aug Enabled] {conf.get('use_category_item_text_aug', False)}")
     if conf.get("use_category_item_text_aug", False):
         print(f"  [Category Item Aug apply-to] {conf.get('category_item_aug_apply_to', '')}")
         print(f"  [Category Item Aug reps/category] {conf.get('category_item_aug_rep_items_per_category', '')}")
+    print(f"  [Category Name Aug Enabled] {conf.get('use_category_name_aug', False)}")
+    if conf.get("use_category_name_aug", False):
+        print(f"  [Category Name Aug apply-to] {conf.get('category_name_aug_apply_to', '')}")
+        print(f"  [Category Name field] {conf.get('category_name_field', '')}")
+        print(f"  [Category Name root] {conf.get('category_name_root', '')}")
     print(f"  [Input Category Co-occur Enabled] {conf.get('input_category_co_occur', False)}")
     if conf.get("input_category_co_occur", False):
         print(f"  [Input Category Co-occur apply-to] {conf.get('input_category_co_occur_apply_to', '')}")
+        print(f"  [Input Category Co-occur verbalization] {conf.get('input_category_co_occur_verbalization', '')}")
         print(f"  [Input Category Co-occur top-k] {conf.get('input_category_co_occur_top_k', '')}")
         print(f"  [Input Category Co-occur reps/category] {conf.get('input_category_co_occur_rep_items_per_category', '')}")
     print("\n[DEBUG] First Question:")
@@ -90,7 +117,10 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
 def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
                     use_cooccurrence=False, use_soft_cooccurrence=False, soft_cooccurrence_source="",
                     icl_example=None, user_context_block="", bundle_graph_context_block="",
-                    category_prior_context_block="", use_image_category_completion_prompt=False):
+                    category_prior_context_block="", ui_category_purchase_prior_block="",
+                    cc_retrieval_context_block="",
+                    category_evidence_summary_block="",
+                    use_image_category_completion_prompt=False):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -128,6 +158,19 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
                 "overall compatibility in style, season, gender, color, and occasion.\n"
             )
 
+    if cc_retrieval_context_block:
+        question_block = (
+            f"Question: Given the partial {b_name}: {input_str}."
+            f"{cc_retrieval_context_block}"
+            f"Which candidate {i_name} should be included into this {b_name}?\n"
+        )
+    else:
+        question_block = (
+            f"Question: Given the partial {b_name}: {input_str}, "
+            f"which candidate {i_name} should be included into this {b_name}?\n"
+        )
+
+
     cf_legend = ""
     if use_cooccurrence or use_soft_cooccurrence:
         history_name = "past playlists" if "spotify" in dataset_name else "past outfits"
@@ -151,16 +194,100 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"{image_instruction}"
         f"{cf_legend}"
         f"{icl_block}"
-        f"Question: Given the partial {b_name}: {input_str}, which candidate {i_name} should be included into this {b_name}?\n"
+        f"{question_block}"
         f"{user_context_block}"
         f"{bundle_graph_context_block}"
+        f"{ui_category_purchase_prior_block}"
         f"{category_prior_context_block}"
+        f"{category_evidence_summary_block}"
         f"Options: {target_str}\n"
         #f"First, analyze the overall combination and coherence of the items in the {b_name}. Then, choose the candidate {i_name} that best completes the set."
         #f"{extra_instruction}"
         f"Your answer should indicate your choice with a single letter (e.g., \u201cA,\u201d \u201cB,\u201d \u201cC,\u201d etc.).\nChoice: "
     )
     return prompt
+
+def generate_category_evidence_summary_prompt(dataset_name, evidence_block):
+    b_name = "music playlist" if "spotify" in dataset_name else "fashion outfit"
+    return (
+        "You are a careful assistant summarizing train-set historical category evidence for a "
+        f"{b_name} completion task.\n"
+        "You will see only input category names and retrieved historical outfit category evidence. "
+        "Do not choose an answer and do not mention candidate options. "
+        "Summarize the likely missing item roles/categories as a soft historical prior. "
+        "Also mention likely duplicate roles to avoid when clear.\n\n"
+        f"{evidence_block}\n\n"
+        "Write 2-4 concise sentences. Start directly with the summary."
+    )
+
+def format_category_evidence_summary_block(summary_text, evidence_block="", include_evidence=False):
+    summary_text = str(summary_text).strip()
+    if not summary_text:
+        return ""
+    lines = [
+        "Historical category summary:",
+        summary_text,
+    ]
+    if include_evidence and evidence_block:
+        lines.extend([
+            "",
+            "Retrieved category evidence used for the summary:",
+            evidence_block.strip(),
+        ])
+    lines.append("Use this as a soft historical hint, while still choosing the candidate that best completes the given items.")
+    return "\n".join(lines) + "\n\n"
+
+async def generate_category_evidence_summary_async(client, model, conf, evidence_block, sample_idx=0, total=0):
+    prompt = generate_category_evidence_summary_prompt(conf["dataset"], evidence_block)
+    summary_model = conf.get("category_evidence_summary_model") or model
+    max_tokens = int(conf.get("category_evidence_summary_max_output_tokens", 180))
+    max_retries = 5
+    base_delay = 10
+    for attempt in range(max_retries):
+        try:
+            res = await client.aio.models.generate_content(
+                model=summary_model,
+                contents=prompt,
+                config={"temperature": 0.0, "max_output_tokens": max_tokens}
+            )
+            raw_text = res.text if res.text else ""
+            return raw_text.strip(), raw_text, prompt
+        except Exception as e:
+            err_str = str(e).lower()
+            if "429" in err_str or "503" in err_str or "quota" in err_str or "demand" in err_str or "overloaded" in err_str:
+                if attempt < max_retries - 1:
+                    wait_time = base_delay * (attempt + 1)
+                    short_err = str(e).replace('\n', ' ')[:150]
+                    prefix = f"[{sample_idx+1}/{total}] " if total else ""
+                    print(f"{prefix}Summary API Error: {short_err}... | Retrying in {wait_time}s... (Attempt {attempt+1}/{max_retries})")
+                    await asyncio.sleep(wait_time)
+                    continue
+            return "", str(e), prompt
+    return "", "", prompt
+
+def generate_category_evidence_summary_sync(client, model, conf, evidence_block):
+    prompt = generate_category_evidence_summary_prompt(conf["dataset"], evidence_block)
+    summary_model = conf.get("category_evidence_summary_model") or model
+    max_tokens = int(conf.get("category_evidence_summary_max_output_tokens", 180))
+    max_retries = 5
+    base_delay = 10
+    for attempt in range(max_retries):
+        try:
+            res = client.models.generate_content(
+                model=summary_model,
+                contents=prompt,
+                config={"temperature": 0.0, "max_output_tokens": max_tokens}
+            )
+            raw_text = res.text if res.text else ""
+            return raw_text.strip(), raw_text, prompt
+        except Exception as e:
+            err_str = str(e).lower()
+            if "429" in err_str or "503" in err_str or "quota" in err_str or "demand" in err_str or "overloaded" in err_str:
+                if attempt < max_retries - 1:
+                    time.sleep(base_delay * (attempt + 1))
+                    continue
+            return "", str(e), prompt
+    return "", "", prompt
 
 def add_cooccurrence_to_options(sample, dataset, conf):
     if (
@@ -312,10 +439,20 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df['cfg_toy_eval'] = conf.get("toy_eval", "")
     df['cfg_seed'] = conf.get("seed", "")
     df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
+    df['cfg_use_fixed_test_split'] = conf.get("use_fixed_test_split", False)
+    df['cfg_test_input_file'] = conf.get("test_input_file", "")
+    df['cfg_test_gt_file'] = conf.get("test_gt_file", "")
     df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
+    df['cfg_use_hard_negative_effective'] = conf.get("use_hard_negative", False) and not conf.get("use_fixed_test_split", False)
     df['cfg_use_cooccurrence'] = conf.get("use_cooccurrence", False)
     df['cfg_use_soft_cooccurrence'] = conf.get("use_soft_cooccurrence", False)
     df['cfg_soft_cooccurrence_source'] = conf.get("soft_cooccurrence_source", "")
+    df['cfg_use_input_item_description_aug'] = conf.get("use_input_item_description_aug", False)
+    df['cfg_input_item_description_cache_root'] = conf.get("input_item_description_cache_root", "")
+    df['cfg_input_item_description_field'] = conf.get("input_item_description_field", "")
+    df['cfg_use_ui_category_purchase_prior'] = conf.get("use_ui_category_purchase_prior", False)
+    df['cfg_ui_category_purchase_prior_top_k'] = conf.get("ui_category_purchase_prior_top_k", "")
+    df['cfg_ui_category_purchase_prior_min_support'] = conf.get("ui_category_purchase_prior_min_support", "")
     df['cfg_use_icl_retrieval'] = conf.get("use_icl_retrieval", False)
     df['cfg_icl_retrieval_method'] = conf.get("icl_retrieval_method", "")
     df['cfg_use_user_context'] = conf.get("use_user_context", False)
@@ -337,15 +474,32 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     df['cfg_bundle_graph_context_use_soft'] = conf.get("bundle_graph_context_use_soft", False)
     df['cfg_bundle_graph_context_soft_source'] = conf.get("bundle_graph_context_soft_source", "")
     df['cfg_bundle_graph_context_soft_alpha'] = conf.get("bundle_graph_context_soft_alpha", "")
+    df['cfg_use_category_evidence_summary'] = conf.get("use_category_evidence_summary", False)
+    df['cfg_category_evidence_summary_k'] = conf.get("category_evidence_summary_k", "")
+    df['cfg_category_evidence_summary_include_evidence'] = conf.get("category_evidence_summary_include_evidence", False)
+    df['cfg_category_evidence_summary_model'] = conf.get("category_evidence_summary_model", "")
+    df['cfg_category_evidence_summary_api_key_env'] = conf.get("category_evidence_summary_api_key_env", "")
+    df['cfg_category_evidence_summary_max_output_tokens'] = conf.get("category_evidence_summary_max_output_tokens", "")
+    df['cfg_use_cc_retrieval_context'] = conf.get("use_cc_retrieval_context", False)
+    df['cfg_cc_retrieval_context_k'] = conf.get("cc_retrieval_context_k", "")
+    df['cfg_cc_retrieval_context_seed'] = conf.get("cc_retrieval_context_seed", "")
+    df['cfg_cc_retrieval_overlap_weight'] = conf.get("cc_retrieval_overlap_weight", "")
+    df['cfg_cc_retrieval_extra_weight'] = conf.get("cc_retrieval_extra_weight", "")
     df['cfg_use_category_completion_prior_desc'] = conf.get("use_category_completion_prior_desc", False)
     df['cfg_use_category_item_text_aug'] = conf.get("use_category_item_text_aug", False)
     df['cfg_category_item_aug_apply_to'] = conf.get("category_item_aug_apply_to", "")
     df['cfg_category_item_aug_rep_items_per_category'] = conf.get("category_item_aug_rep_items_per_category", "")
+    df['cfg_use_category_name_aug'] = conf.get("use_category_name_aug", False)
+    df['cfg_category_name_aug_apply_to'] = conf.get("category_name_aug_apply_to", "")
+    df['cfg_category_name_field'] = conf.get("category_name_field", "")
+    df['cfg_category_name_root'] = conf.get("category_name_root", "")
     df['cfg_input_category_co_occur'] = conf.get("input_category_co_occur", False)
     df['cfg_input_category_co_occur_apply_to'] = conf.get("input_category_co_occur_apply_to", "")
+    df['cfg_input_category_co_occur_verbalization'] = conf.get("input_category_co_occur_verbalization", "")
     df['cfg_input_category_co_occur_top_k'] = conf.get("input_category_co_occur_top_k", "")
     df['cfg_input_category_co_occur_rep_items_per_category'] = conf.get("input_category_co_occur_rep_items_per_category", "")
     df['cfg_category_prior_top_k'] = conf.get("category_prior_top_k", "")
+    df['cfg_category_prior_verbalization'] = conf.get("category_prior_verbalization", "")
     df['cfg_category_prior_rep_items_per_category'] = conf.get("category_prior_rep_items_per_category", "")
     df['cfg_category_prior_min_support'] = conf.get("category_prior_min_support", "")
     df['cfg_category_prior_embedding_model'] = conf.get("category_prior_embedding_model", "")
@@ -355,6 +509,8 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     cooc_str = "COOC_" if conf.get("use_cooccurrence", False) else ""
     soft_source = conf.get("soft_cooccurrence_source", "")
     soft_cooc_str = f"SOFTCOOC_{soft_source}_" if conf.get("use_soft_cooccurrence", False) else ""
+    input_desc_str = "INPDESC_" if conf.get("use_input_item_description_aug", False) else ""
+    ui_cat_purchase_str = "UICATPUR_" if conf.get("use_ui_category_purchase_prior", False) else ""
     hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
     icl_str = "ICL_" if conf.get("use_icl_retrieval", False) else ""
     user_str = "USER_" if conf.get("use_user_context", False) else ""
@@ -367,11 +523,21 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
         bundle_ctx_str = f"BGRAPH_SOFT_{conf.get('bundle_graph_context_soft_source', '')}_"
     else:
         bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
+    category_evidence_summary_str = "CATSUM_" if conf.get("use_category_evidence_summary", False) else ""
+    cc_retrieval_str = "CCRET_" if conf.get("use_cc_retrieval_context", False) else ""
     category_prior_str = "CATPRIOR_" if conf.get("use_category_completion_prior_desc", False) else ""
+    if conf.get("use_category_completion_prior_desc", False) and str(conf.get("category_prior_verbalization", "")).strip().lower() in {"category_names", "category_name", "names", "name"}:
+        category_prior_str = "CATPRIORNAME_"
     category_item_aug_str = "CATITEMAUG_" if conf.get("use_category_item_text_aug", False) else ""
-    input_category_co_occur_str = "INPCATCOOC_" if conf.get("input_category_co_occur", False) else ""
+    category_name_aug_str = "CATNAMEAUG_" if conf.get("use_category_name_aug", False) else ""
+    input_category_co_occur_str = ""
+    if conf.get("input_category_co_occur", False):
+        if str(conf.get("input_category_co_occur_verbalization", "")).strip().lower() in {"category_names", "category_name", "names", "name"}:
+            input_category_co_occur_str = "INPCATNAMECOOC_"
+        else:
+            input_category_co_occur_str = "INPCATCOOC_"
     partial_str = "" if is_final else "_partial"
-    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{category_prior_str}{category_item_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
+    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{input_desc_str}{ui_cat_purchase_str}{category_evidence_summary_str}{cc_retrieval_str}{category_prior_str}{category_item_aug_str}{category_name_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
     tmp_path = f"{save_path}.tmp"
     last_error = None
     for attempt in range(5):
@@ -387,7 +553,7 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
         raise last_error
     return save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_mask.sum()
 
-async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None, icl_retriever=None, user_context_retriever=None):
+async def process_sync_samples(client, model, samples, conf, timestamp, initial_results=None, start_idx=0, dataset=None, icl_retriever=None, user_context_retriever=None, summary_client=None):
     results = initial_results if initial_results is not None else []
 
     print(f">>> Processing {len(samples)} remaining samples sequentially to avoid rate limits...")
@@ -459,6 +625,22 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             print(f"  [Context Text] {console_safe_text(bundle_graph_context_block[:1000])}...")
             print("-" * 50 + "\n")
 
+        ui_category_purchase_prior = None
+        ui_category_purchase_prior_block = ""
+        if conf.get("use_ui_category_purchase_prior", False) and dataset is not None:
+            ui_category_purchase_prior = dataset.retrieve_ui_category_purchase_prior_context(sample)
+            if ui_category_purchase_prior is not None:
+                ui_category_purchase_prior_block = ui_category_purchase_prior["context_block"]
+                sample.update(ui_category_purchase_prior["metadata"])
+
+        if idx == 0 and ui_category_purchase_prior is not None:
+            print("\n[DEBUG] UI Category Purchase Prior Check (First Sample):")
+            print(f"  [Input Categories] {ui_category_purchase_prior['metadata'].get('ui_category_purchase_prior_input_category_names', '')}")
+            print(f"  [Top Categories] {ui_category_purchase_prior['metadata'].get('ui_category_purchase_prior_top_category_names', '')}")
+            print(f"  [Scores] {ui_category_purchase_prior['metadata'].get('ui_category_purchase_prior_scores', '')}")
+            print(f"  [Context Text] {console_safe_text(ui_category_purchase_prior_block[:1000])}...")
+            print("-" * 50 + "\n")
+
         category_prior_context = None
         category_prior_context_block = ""
         if conf.get("use_category_completion_prior_desc", False) and dataset is not None:
@@ -471,9 +653,62 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             print("\n[DEBUG] Category Completion Prior Check (First Sample):")
             print(f"  [Observed Categories] {category_prior_context['metadata'].get('category_prior_observed_categories', '')}")
             print(f"  [Observed Support] {category_prior_context['metadata'].get('category_prior_observed_support', '')}")
+            print(f"  [Verbalization] {category_prior_context['metadata'].get('category_prior_verbalization', '')}")
             print(f"  [Top Categories] {category_prior_context['metadata'].get('category_prior_top_categories', '')}")
+            print(f"  [Top Category Names] {category_prior_context['metadata'].get('category_prior_top_category_names', '')}")
             print(f"  [Representative Item IDs] {category_prior_context['metadata'].get('category_prior_rep_item_ids', '')}")
             print(f"  [Context Text] {console_safe_text(category_prior_context_block[:1000])}...")
+            print("-" * 50 + "\n")
+
+        cc_retrieval_context = None
+        cc_retrieval_context_block = ""
+        if conf.get("use_cc_retrieval_context", False) and dataset is not None:
+            cc_retrieval_context = dataset.retrieve_cc_retrieval_context(sample)
+            if cc_retrieval_context is not None:
+                cc_retrieval_context_block = cc_retrieval_context["context_block"]
+                sample.update(cc_retrieval_context["metadata"])
+
+        if idx == 0 and cc_retrieval_context is not None:
+            print("\n[DEBUG] C-C Retrieval Context Check (First Sample):")
+            print(f"  [Bundle IDs] {cc_retrieval_context['metadata'].get('cc_retrieval_context_bundle_ids', '')}")
+            print(f"  [Scores] {cc_retrieval_context['metadata'].get('cc_retrieval_context_scores', '')}")
+            print(f"  [Overlap Counts] {cc_retrieval_context['metadata'].get('cc_retrieval_context_overlap_counts', '')}")
+            print(f"  [Extra Priors] {cc_retrieval_context['metadata'].get('cc_retrieval_context_extra_priors', '')}")
+            print(f"  [Jaccards] {cc_retrieval_context['metadata'].get('cc_retrieval_context_jaccards', '')}")
+            print(f"  [Context Text] {console_safe_text(cc_retrieval_context_block[:1000])}...")
+            print("-" * 50 + "\n")
+
+        category_evidence_summary_context = None
+        category_evidence_summary_block = ""
+        if conf.get("use_category_evidence_summary", False) and dataset is not None:
+            category_evidence_summary_context = dataset.retrieve_category_evidence_summary_context(sample)
+            if category_evidence_summary_context is not None:
+                evidence_block = category_evidence_summary_context["evidence_block"]
+                sample.update(category_evidence_summary_context["metadata"])
+                sample["category_evidence_summary_evidence"] = evidence_block
+                summary_text, summary_raw, summary_prompt = await generate_category_evidence_summary_async(
+                    summary_client or client,
+                    model,
+                    conf,
+                    evidence_block,
+                    sample_idx=current_idx,
+                    total=total_samples_len,
+                )
+                sample["category_evidence_summary"] = summary_text
+                sample["category_evidence_summary_raw_response"] = summary_raw
+                sample["category_evidence_summary_prompt"] = summary_prompt
+                category_evidence_summary_block = format_category_evidence_summary_block(
+                    summary_text,
+                    evidence_block=evidence_block,
+                    include_evidence=conf.get("category_evidence_summary_include_evidence", False),
+                )
+
+        if idx == 0 and category_evidence_summary_context is not None:
+            print("\n[DEBUG] Category Evidence Summary Check (First Sample):")
+            print(f"  [Selected Count] {category_evidence_summary_context['metadata'].get('category_evidence_summary_selected_count', '')}")
+            print(f"  [Match Levels] {category_evidence_summary_context['metadata'].get('category_evidence_summary_match_levels', '')}")
+            print(f"  [Summary] {console_safe_text(sample.get('category_evidence_summary', '')[:1000])}...")
+            print(f"  [Evidence Text] {console_safe_text(sample.get('category_evidence_summary_evidence', '')[:1000])}...")
             print("-" * 50 + "\n")
         
         text_prompt = generate_prompt(
@@ -485,7 +720,10 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             icl_example=icl_example,
             user_context_block=user_context_block,
             bundle_graph_context_block=bundle_graph_context_block,
+            ui_category_purchase_prior_block=ui_category_purchase_prior_block,
             category_prior_context_block=category_prior_context_block,
+            cc_retrieval_context_block=cc_retrieval_context_block,
+            category_evidence_summary_block=category_evidence_summary_block,
             use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False)
         )
 
@@ -583,7 +821,7 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             
     return results
 
-def process_batch_samples(client, model, samples, conf, dataset=None):
+def process_batch_samples(client, model, samples, conf, dataset=None, summary_client=None):
     print(">>> 1. Creating JSONL for Batch API...")
     jsonl_path = os.path.join(conf["output_dir"], f"batch_requests_{conf['dataset']}.jsonl")
     
@@ -599,6 +837,13 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 if bundle_graph_context is not None:
                     bundle_graph_context_block = bundle_graph_context["context_block"]
                     sample.update(bundle_graph_context["metadata"])
+            ui_category_purchase_prior = None
+            ui_category_purchase_prior_block = ""
+            if conf.get("use_ui_category_purchase_prior", False) and dataset is not None:
+                ui_category_purchase_prior = dataset.retrieve_ui_category_purchase_prior_context(sample)
+                if ui_category_purchase_prior is not None:
+                    ui_category_purchase_prior_block = ui_category_purchase_prior["context_block"]
+                    sample.update(ui_category_purchase_prior["metadata"])
             category_prior_context = None
             category_prior_context_block = ""
             if conf.get("use_category_completion_prior_desc", False) and dataset is not None:
@@ -606,6 +851,35 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 if category_prior_context is not None:
                     category_prior_context_block = category_prior_context["context_block"]
                     sample.update(category_prior_context["metadata"])
+            cc_retrieval_context = None
+            cc_retrieval_context_block = ""
+            if conf.get("use_cc_retrieval_context", False) and dataset is not None:
+                cc_retrieval_context = dataset.retrieve_cc_retrieval_context(sample)
+                if cc_retrieval_context is not None:
+                    cc_retrieval_context_block = cc_retrieval_context["context_block"]
+                    sample.update(cc_retrieval_context["metadata"])
+            category_evidence_summary_context = None
+            category_evidence_summary_block = ""
+            if conf.get("use_category_evidence_summary", False) and dataset is not None:
+                category_evidence_summary_context = dataset.retrieve_category_evidence_summary_context(sample)
+                if category_evidence_summary_context is not None:
+                    evidence_block = category_evidence_summary_context["evidence_block"]
+                    sample.update(category_evidence_summary_context["metadata"])
+                    sample["category_evidence_summary_evidence"] = evidence_block
+                    summary_text, summary_raw, summary_prompt = generate_category_evidence_summary_sync(
+                        summary_client or client,
+                        model,
+                        conf,
+                        evidence_block,
+                    )
+                    sample["category_evidence_summary"] = summary_text
+                    sample["category_evidence_summary_raw_response"] = summary_raw
+                    sample["category_evidence_summary_prompt"] = summary_prompt
+                    category_evidence_summary_block = format_category_evidence_summary_block(
+                        summary_text,
+                        evidence_block=evidence_block,
+                        include_evidence=conf.get("category_evidence_summary_include_evidence", False),
+                    )
             prompt = generate_prompt(
                 conf["dataset"],
                 sample["input_str"],
@@ -615,7 +889,10 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 use_soft_cooccurrence=conf.get("use_soft_cooccurrence", False),
                 soft_cooccurrence_source=conf.get("soft_cooccurrence_source", ""),
                 bundle_graph_context_block=bundle_graph_context_block,
+                ui_category_purchase_prior_block=ui_category_purchase_prior_block,
                 category_prior_context_block=category_prior_context_block,
+                cc_retrieval_context_block=cc_retrieval_context_block,
+                category_evidence_summary_block=category_evidence_summary_block,
                 use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False)
             )
             if idx == 0 and bundle_graph_context is not None:
@@ -626,6 +903,32 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
                 print(f"  [Context Scores] {bundle_graph_context['metadata'].get('bundle_graph_context_scores', [])}")
                 print(f"  [IDF Scores] {[round(x, 6) for x in bundle_graph_context['metadata']['bundle_graph_context_idf_scores']]}")
                 print(f"  [Context Text] {console_safe_text(bundle_graph_context_block[:1000])}...")
+                print("-" * 50 + "\n")
+
+            if idx == 0 and ui_category_purchase_prior is not None:
+                print("\n[DEBUG] UI Category Purchase Prior Check (First Sample):")
+                print(f"  [Input Categories] {ui_category_purchase_prior['metadata'].get('ui_category_purchase_prior_input_category_names', '')}")
+                print(f"  [Top Categories] {ui_category_purchase_prior['metadata'].get('ui_category_purchase_prior_top_category_names', '')}")
+                print(f"  [Scores] {ui_category_purchase_prior['metadata'].get('ui_category_purchase_prior_scores', '')}")
+                print(f"  [Context Text] {console_safe_text(ui_category_purchase_prior_block[:1000])}...")
+                print("-" * 50 + "\n")
+
+            if idx == 0 and cc_retrieval_context is not None:
+                print("\n[DEBUG] C-C Retrieval Context Check (First Sample):")
+                print(f"  [Bundle IDs] {cc_retrieval_context['metadata'].get('cc_retrieval_context_bundle_ids', '')}")
+                print(f"  [Scores] {cc_retrieval_context['metadata'].get('cc_retrieval_context_scores', '')}")
+                print(f"  [Overlap Counts] {cc_retrieval_context['metadata'].get('cc_retrieval_context_overlap_counts', '')}")
+                print(f"  [Extra Priors] {cc_retrieval_context['metadata'].get('cc_retrieval_context_extra_priors', '')}")
+                print(f"  [Jaccards] {cc_retrieval_context['metadata'].get('cc_retrieval_context_jaccards', '')}")
+                print(f"  [Context Text] {console_safe_text(cc_retrieval_context_block[:1000])}...")
+                print("-" * 50 + "\n")
+
+            if idx == 0 and category_evidence_summary_context is not None:
+                print("\n[DEBUG] Category Evidence Summary Check (First Sample):")
+                print(f"  [Selected Count] {category_evidence_summary_context['metadata'].get('category_evidence_summary_selected_count', '')}")
+                print(f"  [Match Levels] {category_evidence_summary_context['metadata'].get('category_evidence_summary_match_levels', '')}")
+                print(f"  [Summary] {console_safe_text(sample.get('category_evidence_summary', '')[:1000])}...")
+                print(f"  [Evidence Text] {console_safe_text(sample.get('category_evidence_summary_evidence', '')[:1000])}...")
                 print("-" * 50 + "\n")
             if idx == 0:
                 debug_sample = dict(sample)
@@ -725,10 +1028,17 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
         df['cfg_toy_eval'] = conf.get("toy_eval", "")
         df['cfg_seed'] = conf.get("seed", "")
         df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
+        df['cfg_use_fixed_test_split'] = conf.get("use_fixed_test_split", False)
+        df['cfg_test_input_file'] = conf.get("test_input_file", "")
+        df['cfg_test_gt_file'] = conf.get("test_gt_file", "")
         df['cfg_use_hard_negative'] = conf.get("use_hard_negative", False)
+        df['cfg_use_hard_negative_effective'] = conf.get("use_hard_negative", False) and not conf.get("use_fixed_test_split", False)
         df['cfg_use_cooccurrence'] = conf.get("use_cooccurrence", False)
         df['cfg_use_soft_cooccurrence'] = conf.get("use_soft_cooccurrence", False)
         df['cfg_soft_cooccurrence_source'] = conf.get("soft_cooccurrence_source", "")
+        df['cfg_use_ui_category_purchase_prior'] = conf.get("use_ui_category_purchase_prior", False)
+        df['cfg_ui_category_purchase_prior_top_k'] = conf.get("ui_category_purchase_prior_top_k", "")
+        df['cfg_ui_category_purchase_prior_min_support'] = conf.get("ui_category_purchase_prior_min_support", "")
         df['cfg_use_item_bundle_affiliation_desc'] = conf.get("use_item_bundle_affiliation_desc", False)
         df['cfg_item_bundle_affiliation_k'] = conf.get("item_bundle_affiliation_k", "")
         df['cfg_item_bundle_affiliation_alpha'] = conf.get("item_bundle_affiliation_alpha", "")
@@ -746,15 +1056,32 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
         df['cfg_bundle_graph_context_use_soft'] = conf.get("bundle_graph_context_use_soft", False)
         df['cfg_bundle_graph_context_soft_source'] = conf.get("bundle_graph_context_soft_source", "")
         df['cfg_bundle_graph_context_soft_alpha'] = conf.get("bundle_graph_context_soft_alpha", "")
+        df['cfg_use_category_evidence_summary'] = conf.get("use_category_evidence_summary", False)
+        df['cfg_category_evidence_summary_k'] = conf.get("category_evidence_summary_k", "")
+        df['cfg_category_evidence_summary_include_evidence'] = conf.get("category_evidence_summary_include_evidence", False)
+        df['cfg_category_evidence_summary_model'] = conf.get("category_evidence_summary_model", "")
+        df['cfg_category_evidence_summary_api_key_env'] = conf.get("category_evidence_summary_api_key_env", "")
+        df['cfg_category_evidence_summary_max_output_tokens'] = conf.get("category_evidence_summary_max_output_tokens", "")
+        df['cfg_use_cc_retrieval_context'] = conf.get("use_cc_retrieval_context", False)
+        df['cfg_cc_retrieval_context_k'] = conf.get("cc_retrieval_context_k", "")
+        df['cfg_cc_retrieval_context_seed'] = conf.get("cc_retrieval_context_seed", "")
+        df['cfg_cc_retrieval_overlap_weight'] = conf.get("cc_retrieval_overlap_weight", "")
+        df['cfg_cc_retrieval_extra_weight'] = conf.get("cc_retrieval_extra_weight", "")
         df['cfg_use_category_completion_prior_desc'] = conf.get("use_category_completion_prior_desc", False)
         df['cfg_use_category_item_text_aug'] = conf.get("use_category_item_text_aug", False)
         df['cfg_category_item_aug_apply_to'] = conf.get("category_item_aug_apply_to", "")
         df['cfg_category_item_aug_rep_items_per_category'] = conf.get("category_item_aug_rep_items_per_category", "")
+        df['cfg_use_category_name_aug'] = conf.get("use_category_name_aug", False)
+        df['cfg_category_name_aug_apply_to'] = conf.get("category_name_aug_apply_to", "")
+        df['cfg_category_name_field'] = conf.get("category_name_field", "")
+        df['cfg_category_name_root'] = conf.get("category_name_root", "")
         df['cfg_input_category_co_occur'] = conf.get("input_category_co_occur", False)
         df['cfg_input_category_co_occur_apply_to'] = conf.get("input_category_co_occur_apply_to", "")
+        df['cfg_input_category_co_occur_verbalization'] = conf.get("input_category_co_occur_verbalization", "")
         df['cfg_input_category_co_occur_top_k'] = conf.get("input_category_co_occur_top_k", "")
         df['cfg_input_category_co_occur_rep_items_per_category'] = conf.get("input_category_co_occur_rep_items_per_category", "")
         df['cfg_category_prior_top_k'] = conf.get("category_prior_top_k", "")
+        df['cfg_category_prior_verbalization'] = conf.get("category_prior_verbalization", "")
         df['cfg_category_prior_rep_items_per_category'] = conf.get("category_prior_rep_items_per_category", "")
         df['cfg_category_prior_min_support'] = conf.get("category_prior_min_support", "")
         df['cfg_category_prior_embedding_model'] = conf.get("category_prior_embedding_model", "")
@@ -766,6 +1093,7 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
         cooc_str = "COOC_" if conf.get("use_cooccurrence", False) else ""
         soft_source = conf.get("soft_cooccurrence_source", "")
         soft_cooc_str = f"SOFTCOOC_{soft_source}_" if conf.get("use_soft_cooccurrence", False) else ""
+        ui_cat_purchase_str = "UICATPUR_" if conf.get("use_ui_category_purchase_prior", False) else ""
         hn_str = "HN_" if conf.get("use_hard_negative", False) else ""
         if conf.get("use_item_bundle_affiliation_desc", False) and conf.get("item_bundle_affiliation_use_soft", False):
             item_aff_str = f"ITEMAFF_SOFT_{conf.get('item_bundle_affiliation_soft_source', '')}_"
@@ -776,10 +1104,20 @@ def process_batch_samples(client, model, samples, conf, dataset=None):
             bundle_ctx_str = f"BGRAPH_SOFT_{conf.get('bundle_graph_context_soft_source', '')}_"
         else:
             bundle_ctx_str = "BGRAPH_" if conf.get("use_bundle_graph_context", False) else ""
+        category_evidence_summary_str = "CATSUM_" if conf.get("use_category_evidence_summary", False) else ""
+        cc_retrieval_str = "CCRET_" if conf.get("use_cc_retrieval_context", False) else ""
         category_prior_str = "CATPRIOR_" if conf.get("use_category_completion_prior_desc", False) else ""
+        if conf.get("use_category_completion_prior_desc", False) and str(conf.get("category_prior_verbalization", "")).strip().lower() in {"category_names", "category_name", "names", "name"}:
+            category_prior_str = "CATPRIORNAME_"
         category_item_aug_str = "CATITEMAUG_" if conf.get("use_category_item_text_aug", False) else ""
-        input_category_co_occur_str = "INPCATCOOC_" if conf.get("input_category_co_occur", False) else ""
-        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{item_aff_str}{user_pur_str}{bundle_ctx_str}{category_prior_str}{category_item_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
+        category_name_aug_str = "CATNAMEAUG_" if conf.get("use_category_name_aug", False) else ""
+        input_category_co_occur_str = ""
+        if conf.get("input_category_co_occur", False):
+            if str(conf.get("input_category_co_occur_verbalization", "")).strip().lower() in {"category_names", "category_name", "names", "name"}:
+                input_category_co_occur_str = "INPCATNAMECOOC_"
+            else:
+                input_category_co_occur_str = "INPCATCOOC_"
+        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{item_aff_str}{user_pur_str}{bundle_ctx_str}{ui_cat_purchase_str}{category_evidence_summary_str}{cc_retrieval_str}{category_prior_str}{category_item_aug_str}{category_name_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
         df.to_csv(save_path, index=False, encoding='utf-8-sig')
         
         print("-" * 30)
@@ -854,9 +1192,13 @@ if __name__ == "__main__":
     
     dataset = BundleZeroShotDataset(conf)
     
-    # NEW LOGIC: optionally load offline-generated hard negatives
+    # Offline hard-negative files are tied to the split they were generated from.
+    # When using a fixed bundle-level split, regenerate samples from the fixed files.
     hard_negative_path = os.path.join(conf.get("data_path", "./datasets"), conf["dataset"], f"hard_negative_samples_{conf['dataset']}.json")
-    if conf.get("use_hard_negative", False) and os.path.exists(hard_negative_path):
+    use_hard_negative = conf.get("use_hard_negative", False) and not conf.get("use_fixed_test_split", False)
+    if conf.get("use_hard_negative", False) and conf.get("use_fixed_test_split", False):
+        print(">>> Skipping pre-generated hard negatives because use_fixed_test_split=True")
+    if use_hard_negative and os.path.exists(hard_negative_path):
         print(f">>> Loading PRE-GENERATED HARD NEGATIVE samples from {hard_negative_path}")
         with open(hard_negative_path, "r", encoding="utf-8") as f:
             samples = json.load(f)
@@ -909,11 +1251,20 @@ if __name__ == "__main__":
         exit(1)
         
     client = genai.Client(api_key=api_key)
+    summary_client = None
+    summary_api_key_env = str(conf.get("category_evidence_summary_api_key_env", "")).strip()
+    if conf.get("use_category_evidence_summary", False) and summary_api_key_env:
+        summary_api_key = os.getenv(summary_api_key_env, "").strip()
+        if not summary_api_key:
+            print(f"[Error] {summary_api_key_env} is not set for category evidence summary.")
+            exit(1)
+        summary_client = genai.Client(api_key=summary_api_key)
+        print(f">>> Category evidence summary will use API key env: {summary_api_key_env}")
     
     if conf["mode"] == "sync":
         print(">>> Running in Sync mode...")
         import asyncio
-        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset, icl_retriever=icl_retriever, user_context_retriever=user_context_retriever))
+        results = asyncio.run(process_sync_samples(client, conf["model"], samples, conf, timestamp, initial_results=initial_results, start_idx=args.start_idx, dataset=dataset, icl_retriever=icl_retriever, user_context_retriever=user_context_retriever, summary_client=summary_client))
         
         # Final save
         save_path, df, hit_rate, valid_ratio, valid_only_hit_rate, valid_sum = save_intermediate_results(results, conf, timestamp, is_final=True)
@@ -936,4 +1287,4 @@ if __name__ == "__main__":
 
     elif conf["mode"] == "batch":
         print(">>> Running in Batch API mode...")
-        process_batch_samples(client, conf["model"], samples, conf, dataset=dataset)
+        process_batch_samples(client, conf["model"], samples, conf, dataset=dataset, summary_client=summary_client)

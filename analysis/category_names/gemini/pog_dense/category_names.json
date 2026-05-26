@@ -1,0 +1,2644 @@
+{
+  "dataset": "pog_dense",
+  "model": "gemini-3-flash-preview",
+  "api_key_env": "",
+  "api_key_file": "",
+  "items_per_category": 10,
+  "batch_size": 4,
+  "category_count": 67,
+  "created_or_updated_at_unix": 1779342007,
+  "categories": [
+    {
+      "category_id": "022ab423f035b47ac0af5046c51ed093",
+      "category_name_en": "Women's Oversized Pullover Sweaters",
+      "category_name_ko": "여성 오버사이즈 풀오버 니트",
+      "short_description_en": "Loose-fitting knit sweaters and pullovers for women featuring a relaxed, casual style.",
+      "keywords_en": [
+        "pullover",
+        "knitwear",
+        "oversized sweater",
+        "loose fit",
+        "women's fashion"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 792,
+      "item_count_train": 613,
+      "representative_item_ids": [
+        9923,
+        30798,
+        17802,
+        17941,
+        5621,
+        14531,
+        29818,
+        2078,
+        7491,
+        9100
+      ],
+      "representative_item_titles": [
+        "秋冬女装新款2018韩版粗毛线宽松套头流苏软妹网红慵懒毛衣针织衫",
+        "毛衣女2018秋装新款套头网红慵懒风撞色宽松外套温柔超火针织衫",
+        "秋季套头毛衣女中长款2018冬装新款条纹宽松韩版慵懒风时尚针织衫",
+        "毛衣女秋装2018新款韩版宽松慵懒风套头羊毛长袖上衣针织衫外套冬",
+        "毛衣女2018新款宽松韩版学生圆领开叉秋冬套头网红毛衣女慵懒风",
+        "秋冬款毛衣女2019新款套头短款打底衫针织衫毛线衣韩版半高领宽松",
+        "甜美小清新慵懒风毛衣女套头圆领中长款针织衫2018新款秋冬上衣潮",
+        "高领毛衣女2018新款韩版女装冬季加厚中长款宽松套头慵懒针织上衣",
+        "2018秋冬新款韩版宽松高领毛衣女装套头网红慵懒风打底针织衫上衣",
+        "秋冬毛衣女2018新款 宽松慵懒风网红超火套头很仙的毛衣洋气百搭"
+      ]
+    },
+    {
+      "category_id": "03bfc1d4783966c69cc6aef8247e0103",
+      "category_name_en": "Men's Casual Joggers and Cropped Pants",
+      "category_name_ko": "남성 캐주얼 조거 및 크롭 팬츠",
+      "short_description_en": "Versatile men's casual trousers including joggers, cargo pants, and cropped styles for daily wear.",
+      "keywords_en": [
+        "joggers",
+        "casual pants",
+        "men's trousers",
+        "cropped pants",
+        "cargo pants"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 369,
+      "item_count_train": 280,
+      "representative_item_ids": [
+        25396,
+        557,
+        22016,
+        14057,
+        7649,
+        3454,
+        28829,
+        5283,
+        3373,
+        2452
+      ],
+      "representative_item_titles": [
+        "春季新款男士日系九分裤男工装裤子宽松束脚休闲裤小脚哈伦裤潮",
+        "春夏修身小脚休闲裤九分裤男日系裤子青年韩版百搭弹力黑色长裤潮",
+        "熊猫本 夏季短裤男潮五分裤工装马裤男休闲日系潮牌宽松运动裤子",
+        "夏秋原创日系条纹运动裤束脚裤青年男士小脚休闲裤宽松小脚裤子潮",
+        "SXF男士休闲裤 日系迷彩修身长裤子小脚哈伦裤春秋季束脚卫裤男潮",
+        "春夏收口运动束脚裤男加肥加大码小脚哈伦裤男宽松休闲裤子长裤潮",
+        "春季新款修身条纹束脚库男日系复古撞色百搭小脚休闲裤韩版布裤潮",
+        "LMTNZD夏季束脚裤子男士韩版宽松修身休闲潮牌bf港风潮运动九分裤",
+        "炉品2019春季款休闲裤多口袋纯色宽松运动裤潮男小脚九分哈伦裤子",
+        "炉品夏季新款日系水洗做旧工装裤青年男士迷彩短裤宽松潮流五分裤"
+      ]
+    },
+    {
+      "category_id": "08734b0d499542a3a0ae060fb5597d09",
+      "category_name_en": "Women's Short Fleece and Sherpa Jackets",
+      "category_name_ko": "여성 양털 및 뽀글이 자켓",
+      "short_description_en": "Stylish short jackets for women featuring fleece, sherpa, or faux lamb wool materials for warmth.",
+      "keywords_en": [
+        "fleece jacket",
+        "sherpa coat",
+        "short jacket",
+        "women's outerwear",
+        "lamb wool"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 508,
+      "item_count_train": 405,
+      "representative_item_ids": [
+        29811,
+        7217,
+        8966,
+        19125,
+        30936,
+        26828,
+        3704,
+        814,
+        8443,
+        6601
+      ],
+      "representative_item_titles": [
+        "秋装女2018新款领子拼牛仔泰迪熊仿羊羔毛短外套毛毛上衣韩版宽松",
+        "秋冬装女2018新款韩版chic港风加绒加厚羊羔毛连帽千鸟格短款外套",
+        "女装2018新款冬季韩版时尚百搭宽松翻领加厚短款仿羊羔绒小外套女",
+        "秋季女装2018新款韩版学生宽松bf潮原宿风连帽秋天牛仔外套女春秋",
+        "2018新款秋冬季韩版chic羊羔毛绒港风百搭宽松短款外套女秋装夹克",
+        "2018秋冬新款女韩版宽松大毛领加绒牛仔衣棉衣加厚夹克衫外套上衣",
+        "秋装女2018新款韩版时尚圆领长袖上衣甜美羊羔毛纯色短款小外套潮",
+        "秋装女上衣2018新款女装韩版时尚潮款翻领口袋毛毛短款外套宽松",
+        "秋冬装女2018新款韩版慵懒宽松chic拼色夹克衫连帽羊毛绒外套潮",
+        "皮毛一体羊羔绒小外套女春秋短款2019新款潮韩版宽松百搭上衣夹克"
+      ]
+    },
+    {
+      "category_id": "0ab410a4baf435f5b6496cb061c11dc1",
+      "category_name_en": "Women's Sterling Silver Stud Earrings",
+      "category_name_ko": "여성 925 실버 귀걸이",
+      "short_description_en": "Elegant 925 sterling silver earrings and studs in various minimalist and decorative designs.",
+      "keywords_en": [
+        "925 silver",
+        "stud earrings",
+        "women's jewelry",
+        "korean style",
+        "silver earrings"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 345,
+      "item_count_train": 268,
+      "representative_item_ids": [
+        10411,
+        3674,
+        15465,
+        18828,
+        15325,
+        26658,
+        1319,
+        5416,
+        29331,
+        9426
+      ],
+      "representative_item_titles": [
+        "s925纯银耳钉女韩国气质耳坠雪花流苏个性百搭耳饰品潮人网红耳环",
+        "耳钉纯银女气质韩国个性简约珍珠耳坠百搭时尚网红爱心耳环耳饰品",
+        "耳钉纯银女气质韩国个性简约百搭耳环防过敏精致迷你甜美爱心耳饰",
+        "S925银针韩国甜美气质爱心耳钉简约百搭耳环个性潮人网红耳坠女",
+        "雪花耳钉纯银女个性简约百搭耳饰品锆石耳坠林浅同款耳环韩国气质",
+        "耳钉女气质韩国个性百搭花瓣耳环纯银耳坠简约时尚超仙网红耳饰品",
+        "925纯银耳钉女气质网红韩国个性大气防过敏珍珠耳环简约百搭耳饰",
+        "耳钉纯银女气质韩国个性百搭月亮纯银耳饰品锆石星星耳坠超仙耳环",
+        "耳钉女气质韩国个性学生简约百搭花朵耳坠s925纯银耳饰品网红耳环",
+        "925纯银耳钉女气质耳环韩国简约个性百搭日韩大气耳饰防过敏饰品"
+      ]
+    },
+    {
+      "category_id": "1199c4654170f33208d7932d7d2587a5",
+      "category_name_en": "Feminine Chiffon Blouses and Tops",
+      "category_name_ko": "페미닌 쉬폰 블라우스 및 상의",
+      "short_description_en": "Elegant and airy chiffon tops featuring ruffles, floral prints, and off-shoulder styles.",
+      "keywords_en": [
+        "Chiffon Blouse",
+        "Ruffle Top",
+        "Floral Print",
+        "Off-shoulder",
+        "Fairy Style"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 229,
+      "item_count_train": 164,
+      "representative_item_ids": [
+        27612,
+        21914,
+        19647,
+        22080,
+        1072,
+        20051,
+        2134,
+        27071,
+        16700,
+        16819
+      ],
+      "representative_item_titles": [
+        "雪纺衫女夏季2018新款格子露肩超仙甜美洋气飘逸小清新衫宽松上衣",
+        "很仙雪纺衫女长袖超仙百搭洋气小衫显瘦衬衫防晒上衣春夏2019新款",
+        "2018夏装新款女装 小清新喇叭袖心机上衣小衫chic蕾丝衫女夏超仙",
+        "一字领露肩雪纺衫女2019夏新款韩版碎花荷叶边洋气小衫小心机上衣",
+        "荷叶边碎花雪纺衫女装短袖2019夏季新款百搭秋装洋气小衫漏肩衬衫",
+        "夏装花朵飘逸超仙白色露肩短袖chic雪纺衫女洋气遮肚子上衣小衫",
+        "超仙女气质雪纺衫女长袖小衫2019春夏装新款宽松小心机时尚上衣",
+        "很仙的上衣洋气衬衫春装2019款女气质超仙长袖小衫白色打底雪纺衫",
+        "2019春装新款洋气小衫超仙气碎花衬衫上衣衬衫宽松荷叶边雪纺衫女",
+        "2018夏装新款时尚洋气小衫性感蕾丝衫女夏长袖镂空网纱打底衫上衣"
+      ]
+    },
+    {
+      "category_id": "126c091a8ff171f694733a624089e68a",
+      "category_name_en": "Women's Dress Pumps and Heels",
+      "category_name_ko": "여성용 펌프스 및 하이힐",
+      "short_description_en": "Stylish women's dress shoes including pointed-toe pumps, chunky heels, and leather flats.",
+      "keywords_en": [
+        "Pumps",
+        "High Heels",
+        "Chunky Heels",
+        "Pointed Toe",
+        "Dress Shoes"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 3221,
+      "item_count_train": 2535,
+      "representative_item_ids": [
+        5374,
+        27262,
+        22314,
+        19576,
+        19305,
+        26038,
+        18542,
+        27266,
+        30695,
+        6968
+      ],
+      "representative_item_titles": [
+        "鞋子女2018新款百搭高跟鞋粗跟单鞋小皮鞋女英伦厚底女鞋2019春季",
+        "春季粗跟深口单鞋女2019新款真皮休闲高跟鞋女中跟尖头女鞋皮鞋女",
+        "2018新款春季单鞋女浅口尖头韩版真皮粗跟奶奶鞋中跟踩脚鞋女鞋子",
+        "2019春季新款浅口百搭裸色真皮单鞋小清新中跟尖头细跟少女高跟鞋",
+        "鞋子女2018新款小清新高跟鞋少女百搭优雅尖头春季单鞋女细跟绒面",
+        "鞋遇女鞋2019新款春季单鞋韩版百搭漆皮方头网红色婚鞋粗跟高跟鞋",
+        "白色高跟鞋女真皮细跟浅口尖头单鞋女2019春秋季新款性感亮片百搭",
+        "低跟单鞋女2019春款浅口平底鞋百搭粗跟奶奶鞋软皮网红尖头鞋白色",
+        "粗跟单鞋女2018新款韩版百搭小清新高跟鞋方头复古奶奶鞋深口女鞋",
+        "2019春季新款尖头温柔鞋晚晚鞋平底百搭中跟仙女豆豆鞋粗跟单鞋女"
+      ]
+    },
+    {
+      "category_id": "12ba81fb3ad68ad5b21e4cec7be42666",
+      "category_name_en": "Vans Classic Skate Shoes",
+      "category_name_ko": "반스 클래식 스케이트 슈즈",
+      "short_description_en": "Iconic low-top and high-top canvas and suede skate shoes from Vans.",
+      "keywords_en": [
+        "Vans",
+        "Skate Shoes",
+        "Old Skool",
+        "Low Top",
+        "Canvas Sneakers"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 60,
+      "item_count_train": 47,
+      "representative_item_ids": [
+        1,
+        7964,
+        18915,
+        7098,
+        23864,
+        27125,
+        11915,
+        20043,
+        8597,
+        15806
+      ],
+      "representative_item_titles": [
+        "Vans范斯官方正品 经典款Old Skool男女黑色低帮运动休闲板鞋",
+        "Vans范斯官方正品 新款Old Skool黑色男女低帮运动休闲板鞋",
+        "VANS范斯经典款男鞋女鞋黑白低帮Old Skool休闲滑板鞋VN-0D3HY28",
+        "Vans范斯官方正品 经典侧边条纹男子黑色低帮运动休闲板鞋",
+        "Vans范斯官方正品 经典侧边条纹男子黑色低帮运动休闲板鞋",
+        "Vans范斯官方正品 经典侧边条纹男子黑色低帮运动休闲板鞋",
+        "Vans范斯官方正品 经典款Sk8-Hi男女黑色高帮运动休闲板鞋",
+        "Vans范斯官方正品 新款Old Skool黑色男女低帮板鞋",
+        "VANS sk8-hi高帮黑白经典款翻毛皮男女休闲帆布鞋滑板鞋VN0D5IB8C",
+        "Vans 范斯官方男子经典侧边条纹黑色低帮板鞋"
+      ]
+    },
+    {
+      "category_id": "188ff8c06949a640ea5ac102e60941ec",
+      "category_name_en": "Long Tassel and Threader Earrings",
+      "category_name_ko": "롱 태슬 및 드롭 귀걸이",
+      "short_description_en": "Elegant long-style earrings featuring tassels, pearls, and threader designs in sterling silver.",
+      "keywords_en": [
+        "Threader Earrings",
+        "Tassel Earrings",
+        "Drop Earrings",
+        "925 Silver",
+        "Jewelry"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 16,
+      "item_count_train": 11,
+      "representative_item_ids": [
+        20388,
+        9987,
+        19915,
+        29744,
+        17191,
+        4692,
+        23143,
+        9254,
+        16676,
+        27694
+      ],
+      "representative_item_titles": [
+        "925银淡水珍珠耳线长款流苏耳环百搭耳坠耳饰韩国女气质简约耳钉",
+        "纯银耳坠女气质韩国长款耳钉个性流苏耳环时尚简约学生耳线耳饰品",
+        "925纯银少女超仙长款耳线韩版气质百搭耳环耳链耳坠时尚简约性感",
+        "蝴蝶结仿珍珠耳线耳环女长款吊坠气质韩国简约个性小清新耳坠耳钉",
+        "简约显脸瘦的流苏耳环925银针韩国网红长款耳坠百搭ins少女心耳饰",
+        "莫莉925银耳环韩国气质耳钉女耳线长款耳坠小红心个性流苏耳链",
+        "耳环韩国气质珍珠纯银耳坠长款流苏耳线耳链女士吊坠耳饰母亲礼物",
+        "五角星仿珍珠耳线流苏耳环韩国气质长款耳坠女生耳钉个性耳链饰品",
+        "温柔又很仙小麋人手工拉丝S925纯银雪花耳线长耳坠气质节日礼物女",
+        "纯银耳线 黄色橘子橙子耳坠耳吊 长款时尚气质925银耳链百搭耳饰"
+      ]
+    },
+    {
+      "category_id": "19125833f147d19800e3aa39ecfc76c2",
+      "category_name_en": "Women's Fashion Quartz Watches",
+      "category_name_ko": "여성 패션 쿼츠 시계",
+      "short_description_en": "Stylish and waterproof quartz wristwatches for women featuring various strap materials and minimalist designs.",
+      "keywords_en": [
+        "women's watch",
+        "quartz watch",
+        "waterproof",
+        "fashion accessory",
+        "wrist watch"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 228,
+      "item_count_train": 190,
+      "representative_item_ids": [
+        2168,
+        3597,
+        9560,
+        27522,
+        28282,
+        14547,
+        4480,
+        2831,
+        27282,
+        13147
+      ],
+      "representative_item_titles": [
+        "手表女防水时尚款女2018新款女士表正品学生简约大气皮带潮流女表",
+        "正品女士手表女表时尚新款女生表简约钢带防水休闲学生女式石英表",
+        "女士手表防水时尚2019新款潮流学生韩版简约休闲大气石英表女表",
+        "正品防水女士手表女简约水钻时尚潮流石英表情侣钨钢女表2019新款",
+        "2019新款女士手表防水时尚潮流学生简约超薄大气网红石英女表正品",
+        "新款正品女士手表女钢带简约大表盘时尚潮流品牌防水大气石英女表",
+        "手表女时尚潮流简约防水正品女款女式个性网红2019新款大气小表盘",
+        "女士手表防水时尚2019新款潮流学生韩版简约休闲超薄钢带石英女表",
+        "手表女学生韩版简约休闲大气时尚潮流复古手链表女士防水石英女表",
+        "正品情侣手表女款防水时尚潮流简约休闲牛皮带女表石英表2018新款"
+      ]
+    },
+    {
+      "category_id": "1d14b937ef24d01520848534952cee70",
+      "category_name_en": "Men's Fleece-Lined Leather Jackets",
+      "category_name_ko": "남성 플리스 안감 가죽 자켓",
+      "short_description_en": "Thickened winter leather jackets for men featuring lamb wool or fleece lining for extra warmth.",
+      "keywords_en": [
+        "leather jacket",
+        "men's outerwear",
+        "fleece lined",
+        "winter jacket",
+        "lamb wool"
+      ],
+      "confidence": 0.9,
+      "dataset": "pog_dense",
+      "item_count_all": 1,
+      "item_count_train": 1,
+      "representative_item_ids": [
+        18945
+      ],
+      "representative_item_titles": [
+        "GENANX闪电潮牌羊羔绒皮衣修身韩版冬季加厚潮流皮夹克男加绒"
+      ]
+    },
+    {
+      "category_id": "23ee17885f87575534b44d099507a747",
+      "category_name_en": "Women's High-Top Platform Sneakers",
+      "category_name_ko": "여성 하이탑 플랫폼 스니커즈",
+      "short_description_en": "Trendy high-top sneakers for women with platform soles, often made of leather and available with fleece lining.",
+      "keywords_en": [
+        "high-top sneakers",
+        "platform shoes",
+        "white sneakers",
+        "women's footwear",
+        "casual shoes"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 62,
+      "item_count_train": 46,
+      "representative_item_ids": [
+        27801,
+        12735,
+        4011,
+        14750,
+        20463,
+        4652,
+        2918,
+        30876,
+        18900,
+        26167
+      ],
+      "representative_item_titles": [
+        "高帮鞋女2018新款韩版百搭真皮厚底运动鞋冬季加绒内增高小白鞋子",
+        "高帮鞋女秋冬季2018新款百搭韩版厚底小白鞋嘻哈街舞运动女鞋子潮",
+        "高帮鞋女加绒2018冬季新款百搭韩版系带小熊底休闲鞋真皮小白鞋潮",
+        "小白鞋女真皮加绒2018冬季新款百搭韩版ulzzang运动鞋学生板鞋潮",
+        "高帮小白鞋女真皮2018秋冬新款韩版原宿ulzzang休闲鞋系带板鞋",
+        "加绒高帮鞋女2018新款冬季欧洲站女鞋潮休闲鞋真皮板鞋网红毛毛鞋",
+        "欧洲站小白鞋女真皮2018冬新款百搭厚底韩版系带运动鞋松糕女单鞋",
+        "欧美厚底高帮运动鞋女2018春季新品真皮休闲单鞋板鞋系带松糕鞋",
+        "高帮鞋女2019新款春季百搭韩版休闲平底学生粉色高邦板鞋小白鞋子",
+        "欧洲站增高厚底女鞋高帮鞋2019春季新款松糕鞋高邦真皮休闲单鞋潮"
+      ]
+    },
+    {
+      "category_id": "2450d5bfc87a1f5b96e2837f5c87a70c",
+      "category_name_en": "Women's Chiffon Summer Dresses",
+      "category_name_ko": "여성 쉬폰 여름 원피스",
+      "short_description_en": "Elegant and lightweight mid-length dresses for women, featuring chiffon, lace, or floral prints.",
+      "keywords_en": [
+        "chiffon dress",
+        "summer dress",
+        "floral print",
+        "midi dress",
+        "women's fashion"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 4615,
+      "item_count_train": 3567,
+      "representative_item_ids": [
+        223,
+        15460,
+        5302,
+        22017,
+        29788,
+        23184,
+        13209,
+        30767,
+        28969,
+        16706
+      ],
+      "representative_item_titles": [
+        "长袖雪纺连衣裙chic早秋装女2018新款韩版蛋糕裙百褶衬衫裙子夏季",
+        "条纹连衣裙女 香影2018夏装新款时尚领结短袖中长收腰百褶雪纺裙",
+        "名媛复古女装夏装2018新款印花漏肩a字裙高腰V领裙子中长款连衣裙",
+        "夏季气质名媛雪纺长裙短袖显瘦中长款连衣裙女2019夏装新款女装",
+        "夏装2019新款女装印花衬衫气质名媛收腰长裙显瘦中长款连衣裙",
+        "雪纺连衣裙女2019新款夏装气质修身显瘦高腰裙超仙短袖中长裙子",
+        "春装2019款女刺绣蕾丝连衣裙女网纱裙初恋裙超仙海边度假长裙子夏",
+        "三彩2018夏装新品中款圆领无袖镂空连衣裙显瘦高腰蕾丝裙白裙女",
+        "2018早春夏季新款女装衬衫裙子气质收腰粉色a字短袖连衣裙",
+        "夏装2018新款女装气质名媛优雅印花修身显瘦中长款大摆短袖连衣裙"
+      ]
+    },
+    {
+      "category_id": "24ba242c5b46bb809b6ce85d8c6253e3",
+      "category_name_en": "Women's Bandeau and Tube Tops",
+      "category_name_ko": "여성 튜브탑 및 밴듀",
+      "short_description_en": "Strapless and backless tube tops designed for summer wear or as base layers.",
+      "keywords_en": [
+        "bandeau",
+        "tube top",
+        "strapless",
+        "innerwear",
+        "summer top"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 7,
+      "item_count_train": 4,
+      "representative_item_ids": [
+        23302,
+        27275,
+        18569,
+        5301
+      ],
+      "representative_item_titles": [
+        "izp 复古温柔风防滑裹胸女夏外穿小心机性感打底纯色紧身抹胸",
+        "性感美背黑色抹胸背心免穿文胸女打底内搭带胸垫小吊带裹胸上衣夏",
+        "2018夏季立体鱼骨抹胸裹胸小背心修身显瘦防滑露肩露背上衣港味",
+        "IAMC定制 暗黑风多裁片拼接抹胸外穿一片式无肩带文胸裹胸女夏潮"
+      ]
+    },
+    {
+      "category_id": "2637918fb4c6fbe3432dab045d841406",
+      "category_name_en": "Women's Fashion Leather Belts",
+      "category_name_ko": "여성 패션 가죽 벨트",
+      "short_description_en": "Versatile leather belts for women, ranging from thin decorative styles to wide waist belts.",
+      "keywords_en": [
+        "leather belt",
+        "waist belt",
+        "cowhide",
+        "fashion accessory",
+        "pin buckle"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 28,
+      "item_count_train": 19,
+      "representative_item_ids": [
+        29912,
+        21795,
+        15186,
+        19215,
+        9588,
+        20142,
+        27475,
+        3452,
+        27960,
+        8877
+      ],
+      "representative_item_titles": [
+        "女士时尚皮带女真皮简约百搭韩国韩版学生牛仔装饰纯牛皮腰带裤带",
+        "牛皮细腰带女士皮带真皮女休闲简约百搭韩国针扣学生装饰裤带韩版",
+        "皮带女ins风纯头层牛皮黑色女士腰带真皮简约百搭韩国时尚牛仔裤",
+        "细皮带女真皮纯牛皮简约百搭韩国复古女士腰带女配裙子装饰连衣裙",
+        "小皮带女士ins风新款真皮纯牛皮腰带细黑色简约百搭韩国牛仔裤带",
+        "复古皮带女真皮纯牛皮简约百搭韩国宽腰带女装饰韩版学生牛仔裤带",
+        "纯牛皮编织细腰带女士真皮简约百搭装饰配裙子皮带女士韩国细裤带",
+        "皮带女士真皮简约百搭韩国黑白色时尚潮 酷ins风装饰宽牛仔裤腰带",
+        "皮带女休闲简约百搭2019新款韩国真皮针扣复古时尚牛仔裤方扣腰带",
+        "帆布腰带女双环扣bf风装饰布皮带女简约百搭韩国裤带女士韩版学生"
+      ]
+    },
+    {
+      "category_id": "2b28f4772c30b8544c742f6a349a06b3",
+      "category_name_en": "Women's Mules and Outdoor Slides",
+      "category_name_ko": "여성 뮬 및 야외 슬라이드",
+      "short_description_en": "Stylish flat or low-heel mules and slides suitable for casual outdoor and summer wear.",
+      "keywords_en": [
+        "mules",
+        "slides",
+        "slippers",
+        "flat shoes",
+        "summer footwear"
+      ],
+      "confidence": 0.97,
+      "dataset": "pog_dense",
+      "item_count_all": 573,
+      "item_count_train": 456,
+      "representative_item_ids": [
+        1352,
+        25156,
+        28307,
+        7978,
+        29911,
+        18292,
+        13360,
+        13927,
+        7714,
+        28278
+      ],
+      "representative_item_titles": [
+        "拖鞋女夏时尚外穿半拖2018新款百搭平底室外出个性海边沙滩鞋凉拖",
+        "穆勒鞋包头半拖鞋女2019新款平底懒人鞋尖头拖鞋女夏时尚外穿凉拖",
+        "凉拖鞋女夏时尚外穿真皮h拖2019新款平底网红同款百搭白色一字拖",
+        "半拖鞋女夏时尚外穿欧美真皮包头凉鞋女粗跟穆勒鞋懒人网红款凉拖",
+        "包头半拖鞋女2019夏新款时尚百搭网红拖鞋女平底懒人凉拖鞋女外穿",
+        "凉拖女夏外穿时尚百搭包头半拖鞋女2019夏季新款平底懒人穆勒拖",
+        "包头半拖鞋女2019夏季新款时尚百搭外穿凉拖鞋懒人穆勒鞋网红拖鞋",
+        "拖鞋女韩版2019夏季新款时尚外穿网红仙女chic平底一字拖女鞋凉拖",
+        "拖鞋女夏时尚外穿2018新款真皮平底印花H拖鞋平跟女士凉拖沙滩鞋",
+        "夏季女士chic网红凉拖鞋女夏2018新款时尚百搭外穿一字拖平底室外"
+      ]
+    },
+    {
+      "category_id": "2deec110140f47a0a9b9fddf744f956e",
+      "category_name_en": "Men's Martin and Work Boots",
+      "category_name_ko": "남성 마틴 부츠 및 워커",
+      "short_description_en": "Durable high-top and mid-top boots for men, featuring British and workwear styles.",
+      "keywords_en": [
+        "martin boots",
+        "work boots",
+        "leather boots",
+        "high-top shoes",
+        "men's footwear"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 20,
+      "item_count_train": 17,
+      "representative_item_ids": [
+        21041,
+        4309,
+        10375,
+        8085,
+        3900,
+        9277,
+        29703,
+        29450,
+        24976,
+        422
+      ],
+      "representative_item_titles": [
+        "马丁靴男士秋冬季加绒中帮短靴高帮潮工装英伦风雪地棉鞋靴子男鞋",
+        "马丁靴男英伦风真皮高帮沙漠工装男鞋潮男靴子2018冬季短靴男军靴",
+        "秋季马丁靴男大黄靴真皮雪地短靴子中帮棉鞋英伦军靴大头高帮工装",
+        "冬季马丁靴男真皮大黄靴英伦男靴子工装鞋短靴军靴男皮靴高帮男鞋",
+        "马丁靴男士低帮短靴韩版学生休闲工装潮英伦风靴子男百搭复古男鞋",
+        "男士高帮鞋英伦风男靴子韩版潮流百搭马丁靴中帮男鞋短靴冬季加绒",
+        "MRA高帮马丁靴男靴英伦风百搭中帮短靴工装靴加绒男鞋英伦潮靴子",
+        "梅西秋季马丁靴男靴英伦风潮靴子男士短靴高帮工装靴沙漠靴男鞋靴",
+        "春季情侣工装靴真皮马丁靴男鞋加绒棉鞋雪地靴军靴高帮鞋潮男靴子",
+        "男鞋春季2019新款马丁靴男真皮高帮休闲皮鞋工装鞋子男中帮短靴潮"
+      ]
+    },
+    {
+      "category_id": "2f31c28c89277ed7b750018066a28b35",
+      "category_name_en": "Women's Insulated Down Pants",
+      "category_name_ko": "여성용 다운 팬츠",
+      "short_description_en": "Thickened and warm down-filled trousers designed for winter outdoor wear.",
+      "keywords_en": [
+        "down pants",
+        "insulated trousers",
+        "winter leggings",
+        "warm pants"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 3,
+      "item_count_train": 2,
+      "representative_item_ids": [
+        23651,
+        13471
+      ],
+      "representative_item_titles": [
+        "玛玛绨2018春装新款欧美个性贴布时尚羽绒裤女保暖显瘦小脚牛仔裤",
+        "巴掌家欧洲站打底裤冬季黑色裤子羽绒裤外穿显瘦女裤加厚2018新款"
+      ]
+    },
+    {
+      "category_id": "3afab60a60abe737c6b12772e0fcec0a",
+      "category_name_en": "Women's Ankle Strap Heeled Sandals",
+      "category_name_ko": "여성용 스트랩 힐 샌들",
+      "short_description_en": "Elegant open-toe sandals featuring ankle straps and various heel styles for summer.",
+      "keywords_en": [
+        "heeled sandals",
+        "ankle strap",
+        "open toe",
+        "stiletto sandals",
+        "block heel"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 1112,
+      "item_count_train": 875,
+      "representative_item_ids": [
+        5698,
+        14842,
+        4539,
+        3815,
+        24954,
+        28926,
+        24969,
+        208,
+        6058,
+        26800
+      ],
+      "representative_item_titles": [
+        "凉鞋女高跟细跟2019夏新款少女拼色性感露趾中跟小清新一字扣女鞋",
+        "中粗跟凉鞋女夏季晚晚同款露趾一字扣带2018新款韩版百搭仙女鞋子",
+        "2019夏季新款百搭露趾一字扣带黑色高跟鞋女网红细跟凉鞋女防水台",
+        "凉鞋女2019夏季新款真皮chic女鞋一字扣带高跟鞋韩版百搭细跟鞋子",
+        "夏季露趾一字扣带高跟凉鞋女2019新款细跟性感百搭网红明星同款潮",
+        "凉鞋女鞋2019新款夏一字扣带中跟细跟高跟鞋夜场猫跟鞋小清新鱼嘴",
+        "凉鞋2018新款女夏季中跟网红女士粗跟高跟夏天一字带女鞋韩版百搭",
+        "包头凉鞋女夏粗跟2019新款小清新高跟鞋百搭一字带chic仙女晚晚鞋",
+        "夏季新款真皮防水台细跟凉鞋 女 春超高跟露趾一字扣带高跟鞋女鞋",
+        "一字带凉鞋女2019新款夏季韩版百搭简约时尚绸缎中跟露趾粗跟女鞋"
+      ]
+    },
+    {
+      "category_id": "3e600277f4bf92983bf6fcb0ac09e0d7",
+      "category_name_en": "Women's High Waist Casual Trousers",
+      "category_name_ko": "여성용 하이웨이스트 캐주얼 팬츠",
+      "short_description_en": "Versatile high-waisted pants including wide-leg, straight-leg, and suit trouser styles.",
+      "keywords_en": [
+        "wide leg pants",
+        "high waist trousers",
+        "straight leg pants",
+        "casual pants"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 1483,
+      "item_count_train": 1127,
+      "representative_item_ids": [
+        3433,
+        25318,
+        7131,
+        29023,
+        5538,
+        30715,
+        18453,
+        17247,
+        687,
+        19944
+      ],
+      "representative_item_titles": [
+        "女裤子2018新款 韩版百搭松紧腰休闲裤直筒裤宽松高腰阔腿裤女秋",
+        "裤子女秋2018新款 韩版宽松百搭松紧高腰坠感直筒裤休闲阔腿裤",
+        "高腰阔腿裤女新款韩版港味复古显瘦chic直筒西装长裤黑色休闲百搭",
+        "裤子女秋2018新款 韩版宽松百搭chic风松紧高腰黑色休闲短裤女裤",
+        "裤子女2019新款春秋休闲西裤直筒宽松黑色侧开叉阔腿裤女高腰垂感",
+        "毛呢裤女2019新款女装春装chic裤子女直筒休闲九分裤宽松百搭长裤",
+        "2018秋冬小脚裤新款坠感阔腿裤黑色宽松直筒铅笔裤休闲女高腰裤子",
+        "阔腿裤女夏2018新款宽松黑色西装休闲裤显瘦a字高腰短裤港味裤子",
+        "2019新款复古格子高腰显瘦毛呢阔腿裤女春秋韩版宽松坠感直筒长裤",
+        "2018秋季新款女裤子 韩版休闲百搭高腰侧条纹修身铅笔裤女九分裤"
+      ]
+    },
+    {
+      "category_id": "44187dfef4ed2dd3669957cc9592514e",
+      "category_name_en": "Daniel Wellington Women's Quartz Watches",
+      "category_name_ko": "다니엘 웰링턴 여성용 쿼츠 시계",
+      "short_description_en": "Minimalist quartz wristwatches for women from the Daniel Wellington brand with various straps.",
+      "keywords_en": [
+        "Daniel Wellington",
+        "quartz watch",
+        "women's watch",
+        "minimalist watch"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 85,
+      "item_count_train": 72,
+      "representative_item_ids": [
+        19340,
+        14010,
+        15818,
+        23622,
+        25919,
+        30052,
+        11236,
+        23125,
+        5931,
+        29452
+      ],
+      "representative_item_titles": [
+        "Danielwellington 丹尼尔惠灵顿DW手表女28mm简约时尚女表",
+        "Danielwellington丹尼尔惠灵顿dw手表女32mm金属表带石英表",
+        "Danielwellington 丹尼尔惠灵顿DW女表32mm皮带石英女表",
+        "Danielwellington 丹尼尔惠灵顿dw手表女36mm进口皮带石英表",
+        "Danielwellington丹尼尔惠灵顿 dw手表女 34mm镶钻织纹石英女表",
+        "Danielwellington 丹尼尔惠灵顿dw手表34mm皮带石英女表",
+        "Danielwellington 丹尼尔惠灵顿dw手表女 32mm纯白皮表女表",
+        "Danielwellington 丹尼尔惠灵顿dw手表36mm女表进口石英女表",
+        "Daniel Wellington丹尼尔惠灵顿32mm简约钢带石英腕表DW手表女",
+        "Danielwellington 丹尼尔惠灵顿dw手表28mm纯白皮革表带女表"
+      ]
+    },
+    {
+      "category_id": "46eacb79120159c0d446c08e1f671b0f",
+      "category_name_en": "Women's Casual Short Sleeve T-Shirts",
+      "category_name_ko": "여성 캐주얼 반팔 티셔츠",
+      "short_description_en": "Versatile and comfortable short-sleeved T-shirts for women featuring various prints and basic designs.",
+      "keywords_en": [
+        "T-shirt",
+        "short sleeve",
+        "women's fashion",
+        "casual wear",
+        "summer top"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 1109,
+      "item_count_train": 837,
+      "representative_item_ids": [
+        26512,
+        13073,
+        25412,
+        8256,
+        25237,
+        21653,
+        10433,
+        18823,
+        9451,
+        25951
+      ],
+      "representative_item_titles": [
+        "2018夏装新款女装半袖上衣 韩版休闲基础百搭打底白色短袖T恤女夏",
+        "2018夏装新款韩版字母印花短袖T恤女宽松显瘦打底衫圆领上衣百搭",
+        "2018夏季新款韩版白色印花短袖t恤女宽松百搭体恤chic学生上衣潮",
+        "白色短袖t恤女宽松2018新款女装夏装圆领打底衫女纯棉t恤百搭上衣",
+        "衣品乐原创大码休闲韩版宽松圆领短袖棉T恤打底上衣女装2019夏装",
+        "2018新款短袖女chic印花t恤韩版时髦百搭休闲简约学生夏季打底衫",
+        "白色短袖t恤女2019春装新款夏季全棉打底衫宽松显瘦短款女装上衣",
+        "淡粉色时尚短袖t恤女纯棉2019春夏新款韩版宽松百搭ins上衣夏装潮",
+        "早秋个性露肩短袖T恤女装2018新款潮夏季韩版白色体恤衫漏肩上衣",
+        "纯棉t恤女短袖2018新款宽松ulzzang chic港味大版圆领印花上衣"
+      ]
+    },
+    {
+      "category_id": "58f1ddb77bfc5576db30fa20e53111fa",
+      "category_name_en": "Classic Canvas High and Low Top Sneakers",
+      "category_name_ko": "클래식 캔버스 하이 및 로우탑 스니커즈",
+      "short_description_en": "Iconic canvas sneakers available in both high-top and low-top silhouettes for men and women.",
+      "keywords_en": [
+        "canvas shoes",
+        "sneakers",
+        "high-top",
+        "low-top",
+        "casual footwear"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 56,
+      "item_count_train": 49,
+      "representative_item_ids": [
+        30359,
+        30883,
+        26991,
+        14668,
+        15155,
+        1012,
+        30875,
+        27122,
+        2780,
+        29225
+      ],
+      "representative_item_titles": [
+        "Converse匡威1970s三星标白色高帮低帮男女帆布鞋162056C 162065C",
+        "Converse匡威1970s三星标白色高低帮帆布鞋男女鞋162065C/162056C",
+        "Converse匡威1970s 三星标米白色高帮 低帮帆布鞋162062c 162053c",
+        "Converse/匡威1970s 三星标帆布鞋黑白高帮低帮 162050C 162058C",
+        "Converse匡威1970s三星标黑高帮低帮男女鞋帆布鞋162050C/162058C",
+        "converse 匡威1970s三星标白色高低帮帆布鞋162065c 162056c",
+        "Converse匡威1970s 三星标黄色高帮低帮男鞋女鞋帆布鞋162054C",
+        "匡威/Converse 70s 复古帆布鞋三星标高帮 黑色142334C 162050C",
+        "Converse 匡威1970S三星标帆布鞋黑色高帮黑低帮142334C 162050c",
+        "Converse匡威1970s经典帆布鞋三星标黑高黄高海军蓝橄榄绿162050c"
+      ]
+    },
+    {
+      "category_id": "594c45bd75088c708c8acb043ca9b377",
+      "category_name_en": "Non-Pierced Clip-On Earrings",
+      "category_name_ko": "무피어싱 귀찌 및 클립형 귀걸이",
+      "short_description_en": "Elegant and stylish clip-on earrings and ear cuffs designed specifically for non-pierced ears.",
+      "keywords_en": [
+        "clip-on earrings",
+        "ear cuffs",
+        "non-pierced",
+        "jewelry",
+        "fashion accessories"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 24,
+      "item_count_train": 18,
+      "representative_item_ids": [
+        9902,
+        21634,
+        14271,
+        1578,
+        8522,
+        11104,
+        23128,
+        177,
+        20791,
+        7379
+      ],
+      "representative_item_titles": [
+        "无痛耳夹无耳洞女韩国简约冰花短款耳坠气质百搭螺旋珍珠耳环925",
+        "金玉 无耳洞耳钉女气质韩国简约耳夹式长款耳坠超仙耳环清新耳饰",
+        "气质韩国无耳洞耳饰品女耳夹式假耳环耳钉夹简约水钻菠萝个性港风",
+        "韩版百搭气质长款珍珠流苏无耳洞耳环耳夹女无洞耳环夹式无痛耳夹",
+        "简约气质蝴蝶结短款耳坠女耳钉韩国个性百搭假耳环清新耳夹无耳洞",
+        "水晶心 仿珍珠长款耳夹耳环气质爱心耳坠韩国吊坠女无耳洞耳饰",
+        "时尚百搭三角形水晶耳钉女防过敏耳饰气质韩国耳夹水钻无耳洞耳环",
+        "ZENGLIU小众耳夹无耳洞女法式耳钉简约气质冷淡风耳环耳骨夹耳饰",
+        "925纯银耳钉日韩气质女款 几何方块假耳环无耳洞耳夹夸张耳坠饰品",
+        "OSEWAYA珍珠耳夹无耳洞女韩国简约清新冷淡风耳环气质耳饰耳骨夹"
+      ]
+    },
+    {
+      "category_id": "5b971cf50885d3dc973bfc30a389361f",
+      "category_name_en": "Women's High-Waisted Straight-Leg Trousers",
+      "category_name_ko": "여성 하이웨이스트 일자핏 슬랙스",
+      "short_description_en": "Professional and casual straight-leg trousers, often featuring high-waisted and cropped designs for a slim look.",
+      "keywords_en": [
+        "trousers",
+        "suit pants",
+        "straight-leg",
+        "high-waisted",
+        "office wear"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 15,
+      "item_count_train": 10,
+      "representative_item_ids": [
+        6442,
+        25203,
+        925,
+        13256,
+        27007,
+        24448,
+        27482,
+        14186,
+        19575,
+        3007
+      ],
+      "representative_item_titles": [
+        "im向自制 春装2018新款韩版直筒裤黑色百搭显瘦九分烟管西装裤女",
+        "四喜家 2019秋冬高腰西装阔腿裤女学生休闲九分韩版直筒裤百搭",
+        "小宜定制 裤子女夏季2018新款抽绳系带垂感九分裤宽松高腰休闲裤",
+        "小宜定制YESWOMEN 腰带错位设计显瘦高腰九分西裤",
+        "MC冬装新款简约好版型羊毛双面呢子西裤高腰九分西装长裤女西装裤",
+        "HAVE RICE饭馆 春款很显瘦的直筒西装拖地裤子女",
+        "HAVE RICE饭馆 显瘦裤型烟管裤修身锥形西装九分裤",
+        "ALOHA STUDIO露合制衣 高品质显瘦休闲裤白色洋气直筒九分裤西裤",
+        "GYOKUU 秋冬新款黑色水洗磨毛柔软修身款显瘦直筒长裤",
+        "新职场主义进口三醋酸 高级黑 通勤西裤 W21748"
+      ]
+    },
+    {
+      "category_id": "604b7f56f881d721455b0bd5815a7c88",
+      "category_name_en": "Air Jordan Basketball Sneakers",
+      "category_name_ko": "에어 조던 농구화",
+      "short_description_en": "High-performance and lifestyle basketball sneakers from the Air Jordan series.",
+      "keywords_en": [
+        "Air Jordan",
+        "Basketball Shoes",
+        "Sneakers",
+        "Retro",
+        "Nike"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 8,
+      "item_count_train": 4,
+      "representative_item_ids": [
+        27025,
+        5575,
+        24125,
+        6831
+      ],
+      "representative_item_titles": [
+        "上尚Air Jordan 1 OG AJ1 藤原浩小闪电黑白蓝 575441-555088-403",
+        "Nike Air Jordan 13 AJ13 乔13黑白熊猫复刻男女篮球鞋414571-104",
+        "库客运动 Nike Air Jordan 1 OG GS 原色 白黑红 女款 332558-163",
+        "无 AIR JORDAN 5 BLACK GRAPE AJ5 乔5 黑葡萄 136027-007"
+      ]
+    },
+    {
+      "category_id": "64fe11119537f0ea81cfb5e4d54b3c71",
+      "category_name_en": "Sterling Silver Crystal Bracelets",
+      "category_name_ko": "실버 크리스탈 팔찌",
+      "short_description_en": "Elegant sterling silver bracelets decorated with natural crystals and gemstones for women.",
+      "keywords_en": [
+        "Sterling Silver",
+        "Crystal Bracelet",
+        "Strawberry Quartz",
+        "Women's Jewelry",
+        "Handmade Style"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 215,
+      "item_count_train": 174,
+      "representative_item_ids": [
+        29090,
+        21379,
+        9286,
+        10134,
+        15669,
+        13527,
+        25842,
+        13143,
+        8201,
+        16534
+      ],
+      "representative_item_titles": [
+        "纯银手链女水晶学生简约网红森系闺蜜情侣手镯情人节礼物送女友",
+        "天然草莓晶粉水晶手链女纯银招桃花运韩版简约学生森系闺蜜冷淡风",
+        "天然草莓晶水晶招桃花纯银手链女韩版简约个性学生森系桃花运闺蜜",
+        "手链女纯银韩版简约学生森系闺蜜镶施华洛世奇锆情人节礼物送女友",
+        "新款纯银手链女渐冻人新款简约设计个性首饰品彼岸花简约手环礼物",
+        "【饰悟】925纯银草莓晶手链女韩版简约个性闺蜜饰品女招桃花手链",
+        "天然月光石草莓晶水晶手链女招桃花转运韩版简约个性森系闺蜜礼物",
+        "银时代S925纯银韩版简约时尚学生手链女双层森系闺蜜饰个性送女友",
+        "天然红石榴石手链女多圈彩银本命年水晶情侣闺蜜手串项链生日礼物",
+        "四叶草银手链女手镯韩版简约个性女生礼物镶施华洛世奇锆非 纯银"
+      ]
+    },
+    {
+      "category_id": "664162d351ab59ea042546db288bbf7c",
+      "category_name_en": "Women's Leather Crossbody Bags",
+      "category_name_ko": "여성 가죽 크로스백",
+      "short_description_en": "Stylish and compact genuine leather bags for women, featuring crossbody and shoulder strap designs.",
+      "keywords_en": [
+        "Leather Bag",
+        "Crossbody Bag",
+        "Small Square Bag",
+        "Shoulder Bag",
+        "Women's Fashion"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 3640,
+      "item_count_train": 2941,
+      "representative_item_ids": [
+        1396,
+        23484,
+        24867,
+        13084,
+        11843,
+        25236,
+        28790,
+        20223,
+        24317,
+        17977
+      ],
+      "representative_item_titles": [
+        "真皮包包女2019新款潮韩版手提包百搭时尚单肩包小包女斜挎小方包",
+        "上新小包包女2019新款潮韩版百搭斜挎单肩时尚手提质感复古小方包",
+        "上新小包包女2019新款潮韩版百搭斜挎chic复古港风铆钉手提单肩包",
+        "真皮小包包女2018新款潮韩版百搭链条包时尚单肩小方包女包斜挎包",
+        "上新小包包女2019新款潮韩版真皮女包迷你百搭森系斜挎包女单肩包",
+        "小包包女2019新款潮韩版牛皮单肩包百搭斜挎小包女手提包真皮女包",
+        "包包2019新款夏天小方包迷你女韩版斜挎包小香风单肩百搭链条包潮",
+        "真皮女包迷你小包包女2019新款潮时尚斜挎小包女单肩包女士斜挎包",
+        "小包包女2019新款真皮女包韩版百搭斜挎包菱格链条包夏天迷你包潮",
+        "真皮小挎包包女2019新款韩版百搭时尚小方包锁扣链条包单肩斜挎包"
+      ]
+    },
+    {
+      "category_id": "6b0fd0d9ed161e73775d02021a82eebc",
+      "category_name_en": "Men's Mid-Length Woolen Overcoats",
+      "category_name_ko": "남성 중기장 울 코트",
+      "short_description_en": "Trendy mid-length woolen coats and overcoats for men featuring stylish patterns and color-blocking.",
+      "keywords_en": [
+        "Woolen Coat",
+        "Overcoat",
+        "Men's Outerwear",
+        "Mid-Length",
+        "Streetwear"
+      ],
+      "confidence": 0.9,
+      "dataset": "pog_dense",
+      "item_count_all": 15,
+      "item_count_train": 13,
+      "representative_item_ids": [
+        10262,
+        22607,
+        3221,
+        21889,
+        9579,
+        2271,
+        21861,
+        13607,
+        19874,
+        30862
+      ],
+      "representative_item_titles": [
+        "GENANX闪电潮牌毛呢大衣男韩版中长款黑黄撞色拼接羊毛外套男秋冬",
+        "GENANX闪电潮牌呢子大衣男韩版中长款宽松潮流绣花情侣羊绒外套",
+        "GENANX闪电潮牌男士羊毛大衣印花冬季韩版毛呢外套男中长款风衣",
+        "GENANX闪电潮牌男士大衣韩版菱形条格纹中长款毛呢外套男潮流秋冬",
+        "GENANX闪电潮牌情侣大衣中长款呢子冬蓝色白绣花羊绒大衣男中长款",
+        "GENANX闪电潮牌羊绒大衣男冬季中长款新款撞色印花咖啡色情侣外套",
+        "GENANX男士毛呢子大衣潮流宽松落肩中长款加厚呢子外套男青年风衣",
+        "GENANX闪电潮牌情侣款风衣女bf贴布袖章中长款宽松羊毛大衣男外套",
+        "GENANX毛呢大衣中长款黑白撞色提花单排扣立领外套男冬季潮流个性",
+        "GENANX设计师原创潮牌呢子外套男不规则长短下摆韩版宽松情侣大衣"
+      ]
+    },
+    {
+      "category_id": "6d399e81b6d56cdf82bed9c5b35a1885",
+      "category_name_en": "Women's Pendant Necklaces and Clavicle Chains",
+      "category_name_ko": "여성 펜던트 목걸이 및 초커",
+      "short_description_en": "A variety of decorative necklaces featuring pendants, sterling silver materials, and minimalist to vintage designs.",
+      "keywords_en": [
+        "Necklace",
+        "Pendant",
+        "Sterling Silver",
+        "Clavicle Chain",
+        "Jewelry"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 10,
+      "item_count_train": 9,
+      "representative_item_ids": [
+        17523,
+        20263,
+        10812,
+        2966,
+        12322,
+        7015,
+        768,
+        22744,
+        6701
+      ],
+      "representative_item_titles": [
+        "子墨家s925纯银复古镂空手工拉丝吊坠项链短链锁骨链简约清新文艺",
+        "PANDORA潘多拉玫瑰金色经典优雅项链386240CZ简约锁骨链饰品女",
+        "仿真钻石吊坠锁骨项链 纯银女超闪锆石仿钻定制莫桑石18k白金铂金",
+        "顺庆银楼s925纯银灯泡吊坠简约镶嵌仿锆石银项链锁骨链银饰品首饰",
+        "亲爱的废柴毛衣链复古925纯银男女通款梨球拳击吊坠项链励志礼物",
+        "Crocus 【向往的生活】立体鸟笼造型锁骨链女士项链 61496",
+        "巧魂原创无毛猫斯芬克斯脖子饰品925纯银吊坠锁骨情侣项链圣诞礼",
+        "Fellala翡拉拉时尚旋转木马项链 日韩气质锁骨链原创吊坠女饰品潮",
+        "鑫蕊开光冰彩虹眼黑曜石狐狸吊坠狐仙招桃花防小人小三女灵狐项链"
+      ]
+    },
+    {
+      "category_id": "6eb82f81b7105a1112fec1bb3c8dd62b",
+      "category_name_en": "Women's Knit Sweaters and Cardigans",
+      "category_name_ko": "여성 니트 스웨터 및 가디건",
+      "short_description_en": "Versatile women's knitwear including pullovers and cardigans in various fits for autumn and winter seasons.",
+      "keywords_en": [
+        "Knitwear",
+        "Sweater",
+        "Cardigan",
+        "Pullover",
+        "Women's Fashion"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 659,
+      "item_count_train": 496,
+      "representative_item_ids": [
+        25792,
+        13612,
+        16262,
+        14033,
+        22118,
+        17355,
+        28387,
+        817,
+        23091,
+        8159
+      ],
+      "representative_item_titles": [
+        "修身半高领针织衫女2018秋冬季装新款韩版长袖套头内搭打底毛衣潮",
+        "宽松针织衫女2017春装新款韩版百搭中长款chic长袖套头上衣毛衣",
+        "毛衣宽松秋冬女2018新款韩版条纹长袖CHIC早秋上衣慵懒针织衫百搭",
+        "2019秋冬新款宽松半高领针织衫套头长袖简约百搭打底衫毛衣女上衣",
+        "条纹针织衫女秋冬装2018新款韩版宽松长袖chic慵懒上衣薄毛衣外套",
+        "长袖针织开衫2018秋季新款韩版宽松V领条纹慵懒风chic毛衣外套女",
+        "针织衫上衣女2018秋冬装季新款chic韩版白色百搭宽松套头长袖毛衣",
+        "针织开衫女秋冬装2018新款韩版宽松慵懒风短款chic网红毛衣外套潮",
+        "毛衣外套女2018秋冬新款 韩版宽松休闲坑条纹长袖针织衫套头慵懒",
+        "针织衫女秋装2018新款韩版宽松chic上衣长袖修身薄款毛衣打底衫潮"
+      ]
+    },
+    {
+      "category_id": "72b059d86956ec93bbe2ae5a6622f4bd",
+      "category_name_en": "Men's Casual Graphic T-Shirts",
+      "category_name_ko": "남성 캐주얼 그래픽 티셔츠",
+      "short_description_en": "Comfortable men's short-sleeve T-shirts featuring various prints, patterns, and loose fits for casual wear.",
+      "keywords_en": [
+        "T-Shirt",
+        "Men's Tops",
+        "Graphic Tee",
+        "Short Sleeve",
+        "Casual Wear"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 219,
+      "item_count_train": 168,
+      "representative_item_ids": [
+        27198,
+        1893,
+        15080,
+        2866,
+        22719,
+        2146,
+        28689,
+        14512,
+        20696,
+        3936
+      ],
+      "representative_item_titles": [
+        "炉品男装夏季新款短袖男字母印花圆领宽松T恤潮流休闲体恤半袖T恤",
+        "炉品男装夏季新款BF风印花体恤男圆领宽松落肩袖五分袖潮男T恤",
+        "原宿风宽松纯色男短袖潮流新款5分T恤圆领潮牌男夏季纯棉港风体恤",
+        "炉品夏季新款潮牌格子印花T恤圆领宽松情侣T恤潮男休闲短袖T恤男",
+        "棉夏季男士短袖T恤男装潮圆领纯色体恤打底衫韩版半袖上衣夏装",
+        "炉品夏季印花T恤情侣款2019潮牌t恤街头宽松中长纯色字母短袖t男",
+        "马切达夏季男装日系个性印花半袖T恤青年复古圆领宽松短袖潮体恤",
+        "二十八间夏季男装个性字母印花情侣短袖潮流宽松体恤青年男生T恤",
+        "辰未原创夏季日系潮流拼色字母印花短袖纯棉圆领休闲套头T恤男潮",
+        "炉品夏季bf中性落肩袖情侣T恤街头潮流T恤宽松印花宽松潮男短袖T"
+      ]
+    },
+    {
+      "category_id": "77c9c3bb3736bf7ba3a3d36b532f6962",
+      "category_name_en": "Women's Camisoles and Tank Tops",
+      "category_name_ko": "여성 캐미솔 및 탱크탑",
+      "short_description_en": "Lightweight and stylish women's sleeveless tops, including camisoles and vests, suitable for layering or summer wear.",
+      "keywords_en": [
+        "Camisole",
+        "Tank Top",
+        "Sleeveless",
+        "Women's Tops",
+        "Summer Fashion"
+      ],
+      "confidence": 0.97,
+      "dataset": "pog_dense",
+      "item_count_all": 123,
+      "item_count_train": 89,
+      "representative_item_ids": [
+        4589,
+        23187,
+        3119,
+        18428,
+        4970,
+        17634,
+        22021,
+        6492,
+        1903,
+        12126
+      ],
+      "representative_item_titles": [
+        "吊带背心女外穿夏装2019新款女港味复古chic内搭短款无袖打底上衣",
+        "港味复古吊带背心女无袖内搭夏装针织小清新上衣打底抹胸露肩外穿",
+        "吊带女内搭上衣夏季新款修身百搭荷叶边性感漏背短款打底背心外穿",
+        "小宜定制YESWOMEN复古chic百搭吊带背心夏季宽松性感无袖外穿上衣",
+        "美背雪纺吊带背心女夏季短款宽松性感内搭打底交叉带外穿百搭上衣",
+        "小清新吊带背心女夏2019夏装新款性感露肩chic抹胸外穿荷叶边上衣",
+        "吊带背心女夏短款宽松外穿交叉带雪纺上衣韩版纯色打底内搭小吊带",
+        "韩国修身小吊带背心女2019夏季新款外穿针织短款百搭内搭打底上衣",
+        "热夏定制2018夏季新款简约百搭打底背心挂脖小清新上衣女可外穿",
+        "Ayuko 小吊带背心女外穿2018夏季新款黑色上衣修身性感打底背心"
+      ]
+    },
+    {
+      "category_id": "7b0b5e99f45560c0f83ee235d461ca04",
+      "category_name_en": "Women's Fashion Quartz Watches",
+      "category_name_ko": "여성 패션 쿼츠 시계",
+      "short_description_en": "Stylish and minimalist quartz wristwatches for women featuring various strap materials and waterproof designs.",
+      "keywords_en": [
+        "women's watch",
+        "quartz watch",
+        "fashion timepiece",
+        "waterproof watch",
+        "minimalist watch"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 47,
+      "item_count_train": 39,
+      "representative_item_ids": [
+        17971,
+        6307,
+        1560,
+        26718,
+        20269,
+        25488,
+        13998,
+        27973,
+        28636,
+        17046
+      ],
+      "representative_item_titles": [
+        "聚利时女士手表女款时尚潮流小巧钢带简约女表学生韩版防水石英表",
+        "聚利时女士手表女学生韩版简约时尚潮流防水小巧大气质女生石英表",
+        "聚利时女表复古韩版简约时尚潮流防水女士手表学生皮带日历石英表",
+        "正品卡西欧手表女士casio情侣简约防水学生石英皮带女表LTP-V300",
+        "卡西欧手表女学生复古小方表防水时尚网红方形钢皮带表LTP-V007",
+        "聚利时女士手表女学生韩版时尚简约潮流ins风小表盘防水钢带女表",
+        "聚利时女士手表学生韩版简约时尚防水石英表钢带手表女ins风气质",
+        "聚利时真皮女表 时尚潮流简约皮带女士手表 石英防水女学生手表",
+        "聚利时手表女时尚女学生韩国简约气质小表盘女士细皮带防水石英表",
+        "聚利时女士手表女学生韩版简约时尚潮流复古ins风大气质防水女表"
+      ]
+    },
+    {
+      "category_id": "7c3f3d05228e2ee51736f64757cfb385",
+      "category_name_en": "Men's Streetwear Windbreakers and Trench Coats",
+      "category_name_ko": "남성 스트릿 윈드브레이커 및 트렌치 코트",
+      "short_description_en": "Trendy mid-length windbreakers and hooded coats for men with streetwear and workwear influences.",
+      "keywords_en": [
+        "men's windbreaker",
+        "trench coat",
+        "streetwear jacket",
+        "hooded outerwear",
+        "mid-length coat"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 16,
+      "item_count_train": 11,
+      "representative_item_ids": [
+        14157,
+        4961,
+        1166,
+        17467,
+        21737,
+        10841,
+        20903,
+        13342,
+        20665,
+        23880
+      ],
+      "representative_item_titles": [
+        "GENANX闪电潮牌嘻哈男风衣薄款新中长款潮流印花男士帅气外套时尚",
+        "GENANX闪电潮牌风衣男外套潮流韩版秋季薄款中长款休闲学生帅气男",
+        "GENANX闪电潮牌连帽风衣男薄款新款宽松舒适男生潮流街头防晒衣",
+        "GENANX闪电潮牌发型师外套男潮新款多彩撞色印花棒球领风衣男秋冬",
+        "GENANX闪电潮牌外套风衣 双排扣潮流英伦学院风修身风衣男青年",
+        "NOTHOMME潮牌工装中长款水洗宽松牛仔风衣外套男款拼接街头嘻哈潮",
+        "NOTHOMME日系潮牌军绿中长款连帽工装风衣外套男款宽松版ifashion",
+        "GBOY春季暗黑系中长款风衣男青年宽松连帽外套日系休闲纯色上衣",
+        "NOTHOMME日系潮牌宽松棒球领卡其风衣可拆卸帽中长款工装外套",
+        "云无缰原创棉麻民族男士风衣中长款外套春秋大衣披风男【战旗】"
+      ]
+    },
+    {
+      "category_id": "814ed433f7b89cef654140214dfdaab5",
+      "category_name_en": "Men's Casual White Sneakers and Skate Shoes",
+      "category_name_ko": "남성 캐주얼 화이트 스니커즈 및 단화",
+      "short_description_en": "Versatile and trendy white casual shoes and low-top sneakers for men.",
+      "keywords_en": [
+        "white sneakers",
+        "men's casual shoes",
+        "skate shoes",
+        "low-top sneakers",
+        "versatile footwear"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 59,
+      "item_count_train": 44,
+      "representative_item_ids": [
+        23929,
+        11019,
+        9125,
+        11794,
+        27398,
+        20830,
+        21301,
+        1003,
+        13598,
+        21313
+      ],
+      "representative_item_titles": [
+        "夏季透气男鞋小白鞋男真皮2019新款韩版百搭白鞋春季板鞋休闲潮鞋",
+        "春季新款小白鞋男真皮韩版百搭板鞋厚底运动休闲鞋白色鞋子男潮鞋",
+        "小白鞋男真皮男士板鞋韩版学生男鞋春季白色鞋子男休闲鞋百搭潮鞋",
+        "夏季男士休闲运动男鞋小白韩版潮流板鞋百搭跑步潮鞋透气网鞋布鞋",
+        "小白鞋男鞋春季潮鞋2019新款鞋子韩版潮流百搭内增高厚底休闲板鞋",
+        "男鞋春夏季透气休闲鞋男2019春季新款潮鞋男士板鞋韩版潮流百搭鞋",
+        "百搭潮鞋情侣春季小白鞋男士休闲白鞋运动板鞋白色韩版潮流男鞋子",
+        "小白鞋男韩版百搭潮流春季男鞋子潮内增高白色板鞋男休闲运动白鞋",
+        "春季2019新款男士休闲鞋运动板鞋韩版潮流鞋子百搭黑色皮鞋男夏季",
+        "韩版男鞋子春季潮男小白鞋潮流百搭男士休闲潮鞋板鞋2019新款白鞋"
+      ]
+    },
+    {
+      "category_id": "82462c11b65faedd60ec94210debc584",
+      "category_name_en": "Men's Casual Retro and Workwear Jackets",
+      "category_name_ko": "남성 캐주얼 레트로 및 워크웨어 자켓",
+      "short_description_en": "A variety of men's casual jackets including bomber, denim, and hooded workwear styles.",
+      "keywords_en": [
+        "men's jacket",
+        "bomber jacket",
+        "denim jacket",
+        "workwear jacket",
+        "retro outerwear"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 110,
+      "item_count_train": 79,
+      "representative_item_ids": [
+        18218,
+        25480,
+        16242,
+        28272,
+        3938,
+        5232,
+        26080,
+        4597,
+        13856,
+        2113
+      ],
+      "representative_item_titles": [
+        "春季日系休闲纯色夹克潮男青年修身连帽薄款冲锋衣运动上衣外套",
+        "春季日系复古纯色牛仔夹克短款修身拼接青少年潮男士牛仔衣外套",
+        "听风 春季日系复古宽松连帽夹克男 青少年大口袋工装夹克军绿外套",
+        "炉品春季美式复古套头连帽飞行员机车夹克衣服潮流工装上衣外套男",
+        "男道春季新款学院风宽松连帽夹克男日系复古青年潮流外套拼色上衣",
+        "雅痞制噪 日系复古两条杠连帽外套 嘻哈运动工装夹克潮牌男青年",
+        "雅痞制噪 日系街头拼色复古夹克外套青少年港仔棒球服潮牌上衣男",
+        "炉品春季美式复古风拼色潮男刺绣夹克青少年上衣休闲情侣夹克外套",
+        "NOTHOMME日系潮牌开衫外套男款复古纯色工装夹克中国风",
+        "GENANX闪电潮牌男外套秋季撞色口袋宽松韩版飞行员夹克男潮流帅气"
+      ]
+    },
+    {
+      "category_id": "83668c24f1cbd74fb8e01a243e79a3a0",
+      "category_name_en": "Women's Padded Puffer Vests",
+      "category_name_ko": "여성 패딩 조끼",
+      "short_description_en": "Sleeveless padded vests and puffer waistcoats for women, often featuring hoods and loose fits.",
+      "keywords_en": [
+        "puffer vest",
+        "padded waistcoat",
+        "sleeveless jacket",
+        "women's outerwear",
+        "winter vest"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 34,
+      "item_count_train": 26,
+      "representative_item_ids": [
+        26428,
+        22687,
+        7061,
+        19701,
+        16182,
+        2349,
+        25449,
+        5740,
+        11599,
+        30697
+      ],
+      "representative_item_titles": [
+        "马甲女冬2018新款韩版连帽收腰中长款棉背心外穿宽松面包服外套厚",
+        "短款面包外套韩版宽松冬季2018新款无袖马夹背心翻领羽绒棉马甲女",
+        "2018秋冬新款韩版棉马甲女外套背心bf百搭无袖宽松马夹外穿棉衣潮",
+        "短款羽绒棉马甲女秋冬2019新款x2韩版宽松欧货面包服马夹背心外套",
+        "连帽羽绒棉衣马甲女中长款宽松大码韩版2018秋冬新款加厚坎肩外套",
+        "棉马甲女2018新款冬季短款韩版宽松无袖加厚羽绒棉马夹坎肩外套潮",
+        "2018新款棉马甲女韩版学生百搭bf宽松立领无袖棉衣马夹外套秋冬",
+        "立领马夹女中长款2018新款加厚秋冬宽松大码坎肩背心A字版棉马甲",
+        "秋冬女2018新款仿狐狸毛皮草背心韩版坎肩毛毛马甲中长款毛衣外套",
+        "中长款马甲棉服女秋冬2018新款韩版学院风学生宽松大口袋连帽外套"
+      ]
+    },
+    {
+      "category_id": "83fb64f0af37f88a42f311549fb261cb",
+      "category_name_en": "Men's Distressed Slim Fit Jeans",
+      "category_name_ko": "남성 디스트레스드 슬림핏 청바지",
+      "short_description_en": "Men's denim pants featuring ripped details, slim or tapered fits, and various washes.",
+      "keywords_en": [
+        "men's jeans",
+        "distressed denim",
+        "slim fit pants",
+        "ripped jeans",
+        "streetwear"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 153,
+      "item_count_train": 124,
+      "representative_item_ids": [
+        285,
+        15324,
+        29881,
+        22162,
+        29883,
+        14519,
+        10545,
+        29357,
+        26211,
+        26655
+      ],
+      "representative_item_titles": [
+        "夏季浅色水洗破洞牛仔裤男潮牌九分裤韩版潮流修身小脚裤直筒裤子",
+        "炉品春季百搭破洞牛仔裤男潮流乞丐裤韩版修身小脚裤潮男九分裤子",
+        "冬季新款牛仔裤复古街头水洗休闲长裤潮男抓痕小脚哈伦裤束脚裤男",
+        "GENANX闪电潮牌韩版小直脚裤 潮流黑色帅气复古水洗牛仔裤男青年",
+        "春季牛仔裤男宽松日系复古潮流大码小脚哈伦裤黑色弹力长裤子男士",
+        "GENANX闪电潮牌印花牛仔裤潮流新款修身帅气小脚夏季破洞牛仔裤男",
+        "GENANX闪电潮牌牛仔长裤男破洞牛仔裤男小脚印花修身型显瘦青年",
+        "衣品天成2019春季新款男士牛仔裤青年潮流韩版中腰破洞直筒裤子",
+        "牛仔裤男士小脚修身韩版潮流弹力休闲黑灰色裤子男2019春夏季新款",
+        "清仓特价，夏季破洞牛仔裤子男士潮流水洗复古做旧浅色小脚九分裤"
+      ]
+    },
+    {
+      "category_id": "841c8877534da01768696cd2375bab70",
+      "category_name_en": "Women's Minimalist Silver Necklaces",
+      "category_name_ko": "여성 미니멀 실버 목걸이",
+      "short_description_en": "Delicate sterling silver necklaces, clavicle chains, and chokers for women with minimalist designs.",
+      "keywords_en": [
+        "sterling silver necklace",
+        "clavicle chain",
+        "choker",
+        "pendant necklace",
+        "minimalist jewelry"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 393,
+      "item_count_train": 303,
+      "representative_item_ids": [
+        1291,
+        13445,
+        13358,
+        9049,
+        4294,
+        1005,
+        26600,
+        14166,
+        22856,
+        23281
+      ],
+      "representative_item_titles": [
+        "s925纯银项链女银杏吊坠韩版简约森系小清新ulzzang原宿风锁骨链",
+        "珍珠锁骨项链女纯银韩版简约个性气质小众锁骨链chic网红短款吊坠",
+        "项链女纯银 潮 网红锁骨链 简约气质百搭吊坠设计小众短款颈链",
+        "颈链女choker短款韩国脖子饰品颈带小众设计网红项链潮项圈锁骨链",
+        "项链女纯银 小众设计锁骨链潮 网红 短款吊坠简约气质银饰颈链",
+        "小众网红脖链气质百搭黑色水晶短款珍珠锁骨链项链颈链颈带项圈女",
+        "s925纯银项链女小红心爱心吊坠韩版简约森系学生清新女配饰锁骨链",
+        "925银蝴蝶结项链女锁骨颈链短款简约韩国学生闺蜜姐妹链脖子饰品",
+        "银项链女纯银简约百搭小众轻奢礼物福袋转运珠红色吊坠网红锁骨链",
+        "s925纯银星月项链脖子饰品项圈锁骨链女短款日韩简约颈带学生网红"
+      ]
+    },
+    {
+      "category_id": "8476c833956c74092868c24514562b0b",
+      "category_name_en": "Women's Long Woolen Overcoats",
+      "category_name_ko": "여성 롱 울 코트",
+      "short_description_en": "Elegant mid-length and long woolen or cashmere coats for women, including double-sided wool designs.",
+      "keywords_en": [
+        "woolen coat",
+        "overcoat",
+        "cashmere coat",
+        "double-sided wool",
+        "winter outerwear"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 1094,
+      "item_count_train": 857,
+      "representative_item_ids": [
+        26946,
+        24219,
+        20488,
+        13883,
+        26532,
+        29262,
+        16889,
+        9578,
+        28188,
+        8695
+      ],
+      "representative_item_titles": [
+        "宽松毛呢外套女秋冬装中长款过膝开叉茧型双面呢子大衣女2018新款",
+        "羊绒大衣女中长款2018新款秋冬季时尚格子双面穿韩版显瘦毛呢外套",
+        "秋冬装女2018新款韩版水貂绒宽松翻领中长款呢子大衣格子毛呢外套",
+        "羊毛呢大衣女士2018冬装新款韩版宽松显瘦中长款原宿双面呢子外套",
+        "三彩2018冬季新款西装领流行双面呢羊毛大衣长款森系呢子外套女",
+        "2018秋冬新款韩版双排扣中长款长袖毛呢茧型外套女宽松休闲大衣",
+        "秋冬装女2018新款小个子双面羊绒流行大衣连帽呢子中长款毛呢外套",
+        "双面羊绒呢子衣女中长款2018新款连帽风衣浴袍系过膝修身毛呢外套",
+        "毛呢子大衣女中长款2018冬季新款韩版流行赫本风过膝双面羊绒外套",
+        "双面羊绒大衣女2019冬季新款韩版中长款高端羊毛宽松A字毛呢外套"
+      ]
+    },
+    {
+      "category_id": "852a581f78e4f4d7ecf9972a038e440c",
+      "category_name_en": "Women's Fashion Ankle Boots",
+      "category_name_ko": "여성 패션 앵클 부츠",
+      "short_description_en": "Stylish women's short boots featuring various heel styles and pointed or round toes.",
+      "keywords_en": [
+        "Ankle Boots",
+        "Martin Boots",
+        "High Heels",
+        "Pointed Toe",
+        "Women's Footwear"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 1642,
+      "item_count_train": 1331,
+      "representative_item_ids": [
+        6934,
+        15755,
+        3851,
+        1926,
+        4651,
+        2359,
+        21292,
+        7086,
+        6655,
+        10072
+      ],
+      "representative_item_titles": [
+        "短靴女高跟2019秋冬新款百搭磨砂尖头马丁靴英伦毛毛粗跟绒面女靴",
+        "小短靴女2018新款马丁靴英伦风冬季加绒鞋子韩版百搭粗跟裸靴女秋",
+        "2018秋冬季新款短靴女加绒百搭粗跟英伦女靴子高跟尖头短筒马丁靴",
+        "短靴女2018韩版新款秋冬雪地靴高跟鞋细跟尖头毛毛靴棉鞋马丁靴子",
+        "2018新款短靴女加绒秋冬细跟弹力袜靴高跟尖头瘦瘦靴中筒马丁靴",
+        "短靴女粗跟2018秋款女矮靴英伦复古百搭高跟鞋女冬季马丁靴女靴子",
+        "粗跟短靴女2018秋冬新款网红高跟鞋女马丁靴尖头瘦瘦靴加绒靴子女",
+        "女靴2018秋冬新款方头平跟短筒英伦风马丁靴漆皮百搭加绒里短靴子",
+        "短靴女秋冬2018新款网红高跟鞋尖头单靴性感真皮及踝靴细跟马丁靴",
+        "真皮粗跟短筒靴子女2018秋冬新款白色短靴百搭中跟马丁靴圆头女靴"
+      ]
+    },
+    {
+      "category_id": "856a563554cc6f5b2bac63e3e8ff10b5",
+      "category_name_en": "Men's High-Top Casual Sneakers",
+      "category_name_ko": "남성 하이탑 캐주얼 스니커즈",
+      "short_description_en": "Trendy high-top sneakers and skate shoes for men, suitable for casual and street style.",
+      "keywords_en": [
+        "High-Top Sneakers",
+        "Skate Shoes",
+        "Men's Casual Shoes",
+        "Streetwear",
+        "Leather Sneakers"
+      ],
+      "confidence": 0.92,
+      "dataset": "pog_dense",
+      "item_count_all": 17,
+      "item_count_train": 10,
+      "representative_item_ids": [
+        25253,
+        16092,
+        13892,
+        28253,
+        15524,
+        27644,
+        30996,
+        851,
+        25642,
+        843
+      ],
+      "representative_item_titles": [
+        "夏季高帮鞋男板鞋韩版潮流百搭男鞋男士休闲鞋黑色春季鞋子运动鞋",
+        "真皮男士高帮板鞋青年运动休闲潮鞋子复古英伦韩版街拍潮鞋子秋季",
+        "春季新款马丁靴男士休闲英伦板鞋韩版潮流皮鞋黑色高帮鞋男鞋子潮",
+        "韩版板鞋男潮流运动鞋男鞋复古透气青年百搭潮鞋复古男士休闲鞋",
+        "高帮皮鞋男板鞋棉鞋春季2019春季新款网红潮鞋男鞋韩版潮流高邦",
+        "BJHG反绒皮空军中高帮板鞋男潮流百搭绑带韩版港风运动休闲平底鞋",
+        "GENANX闪电潮牌高帮休闲鞋黑白两色男士欧美潮流新款冬季靴子",
+        "简约百搭小白高帮版鞋男欧美开口笑真皮拉链高帮潮鞋厚底靴男",
+        "夏季球鞋男透气网面运动休闲鞋初中学生青少年波鞋男鞋子网鞋潮鞋",
+        "Tweak特威克春夏男鞋滑板鞋真牛皮高帮板鞋 帆布休闲潮鞋"
+      ]
+    },
+    {
+      "category_id": "8585a77eaebc91282b433359863cb569",
+      "category_name_en": "Women's Padded Puffer Jackets",
+      "category_name_ko": "여성 패딩 점퍼",
+      "short_description_en": "Thickened mid-length or short puffer jackets for women, often featuring fur collars and hoods.",
+      "keywords_en": [
+        "Puffer Jacket",
+        "Cotton-Padded Coat",
+        "Fur Collar",
+        "Winter Outerwear",
+        "Hooded Jacket"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 468,
+      "item_count_train": 364,
+      "representative_item_ids": [
+        1797,
+        26033,
+        1107,
+        24232,
+        123,
+        21278,
+        4669,
+        21572,
+        18755,
+        16325
+      ],
+      "representative_item_titles": [
+        "宽松大毛领连帽chic棉服女2018新款冬装加厚外套中长款面包服棉衣",
+        "短款棉衣女2018新款冬装韩版宽松面包服chic羽绒棉服毛领外套棉袄",
+        "棉袄女2018新款冬季外套韩版中长款棉服宽松bf加厚面包服羽绒棉衣",
+        "ins棉服女中长款2018冬新款大毛领羽绒棉衣宽松bf面包服棉袄外套",
+        "冬季棉衣女装ins中长款韩版宽松棉袄2018新款轻薄学生棉服外套潮",
+        "MG小象中长款棉服女2018冬季新款韩版chic面包服大毛领棉衣外套潮",
+        "大毛领过膝连帽棉服外套女冬季2018新款中长款棉袄宽松加厚棉衣潮",
+        "冬季2018新款刺绣甜美大毛领chic棉服女中长款茧型宽松厚外套棉衣",
+        "MG小象棉服女2018新款加厚棉衣宽松休闲大毛领棉袄冬季工装外套潮",
+        "MG小象棉衣女装中长款韩版加厚大毛领面包服新款chic冬季棉服外套"
+      ]
+    },
+    {
+      "category_id": "95c3a26ab13f3ec5cd28a281e3685e7b",
+      "category_name_en": "Women's Fashion Drop Earrings",
+      "category_name_ko": "여성 패션 드롭 귀걸이",
+      "short_description_en": "Elegant sterling silver earrings for women, including studs, tassels, and pearl designs.",
+      "keywords_en": [
+        "Drop Earrings",
+        "Sterling Silver",
+        "Pearl Earrings",
+        "Tassel Earrings",
+        "Korean Style Jewelry"
+      ],
+      "confidence": 0.97,
+      "dataset": "pog_dense",
+      "item_count_all": 739,
+      "item_count_train": 610,
+      "representative_item_ids": [
+        4193,
+        22504,
+        5296,
+        26086,
+        23516,
+        21220,
+        29062,
+        6875,
+        18150,
+        30624
+      ],
+      "representative_item_titles": [
+        "耳钉女纯银韩国气质简约百搭耳坠长款流苏不对称耳饰网红超仙耳环",
+        "珍珠耳环女气质韩国个性百搭耳坠长款流苏水晶锆石吊坠耳钉纯银女",
+        "耳环女气质韩国个性百搭简约长款耳吊坠一款两戴珍珠爱心纯银耳钉",
+        "耳环韩国气质长款吊坠女个性百搭不对称几何耳坠简约耳饰纯银耳钉",
+        "耳环女韩国气质长款简约S925纯银流苏防过敏耳坠水晶个性百搭耳钉",
+        "耳环女气质韩国个性简约百搭耳饰不对称复古长款吊坠流苏珍珠耳坠",
+        "925纯银耳钉珍珠耳环长款韩国女气质简约耳坠百搭流苏日韩耳饰",
+        "耳钉纯银女气质韩国个性简约百搭网红耳环珍珠蓝色爱心防过敏耳饰",
+        "S925银珍珠耳环女韩国气质个性百搭耳钉简约耳坠耳饰长款",
+        "耳环韩国气质长款女个性百搭吊坠简约耳坠网红秋冬耳线纯银耳钉潮"
+      ]
+    },
+    {
+      "category_id": "9e3e1aff5fca5f418e5e3679ff932c05",
+      "category_name_en": "Men's Casual Canvas Shoes",
+      "category_name_ko": "남성 캐주얼 캔버스화",
+      "short_description_en": "A variety of men's canvas sneakers including low-top and high-top styles for casual wear.",
+      "keywords_en": [
+        "canvas shoes",
+        "men's sneakers",
+        "low-top",
+        "skate shoes",
+        "casual footwear"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 43,
+      "item_count_train": 37,
+      "representative_item_ids": [
+        8494,
+        29707,
+        27970,
+        27664,
+        549,
+        9969,
+        10961,
+        20772,
+        13015,
+        23999
+      ],
+      "representative_item_titles": [
+        "回力帆布鞋男春季新款韩版潮流男鞋子百搭休闲鞋男板鞋小白鞋潮鞋",
+        "回力帆布鞋男低帮春季男鞋韩版透气情侣学生布鞋单鞋潮鞋子男板鞋",
+        "回力帆布鞋男夏季男鞋子韩版百搭低帮板鞋男休闲鞋布鞋平底小白鞋",
+        "回力帆布鞋男百搭男鞋子布鞋透气平底休闲鞋潮鞋夏季韩版潮流板鞋",
+        "回力帆布鞋男低帮男鞋春季2019新款布鞋小白鞋板鞋男鞋子男潮鞋",
+        "回力男鞋高帮帆布鞋男韩版百搭板鞋春秋季学生情侣鞋黑色休闲鞋",
+        "帆布鞋男鞋夏季小白鞋男生布板鞋韩版潮流百搭休闲亚麻鞋子男潮鞋",
+        "人本帆布鞋男夏季潮学生休闲鞋情侣韩版低帮白色布鞋板鞋男鞋大码",
+        "回力帆布鞋男高帮帆布鞋男鞋子男潮鞋2019新款男鞋夏季透气板鞋男",
+        "帆布鞋男春季休闲鞋男士布鞋黑色鞋子百搭男鞋韩版潮流学生小黑鞋"
+      ]
+    },
+    {
+      "category_id": "9fa5c6beaf93259bc3dcd4ead2b3397f",
+      "category_name_en": "Fur Collar Down Jackets",
+      "category_name_ko": "퍼 칼라 다운 자켓",
+      "short_description_en": "Winter down jackets featuring fur collars and stylish prints for cold weather protection.",
+      "keywords_en": [
+        "down jacket",
+        "fur collar",
+        "winter coat",
+        "puffer jacket",
+        "outerwear"
+      ],
+      "confidence": 0.9,
+      "dataset": "pog_dense",
+      "item_count_all": 2,
+      "item_count_train": 1,
+      "representative_item_ids": [
+        28937
+      ],
+      "representative_item_titles": [
+        "GENANX闪电潮牌毛领羽绒服情侣款黑白撞色菱形印花冬季新款男时尚"
+      ]
+    },
+    {
+      "category_id": "9fd21872baa91cc0713a7ee1d29529ca",
+      "category_name_en": "Men's Short Sleeve Polo Shirts",
+      "category_name_ko": "남성 반팔 폴로 셔츠",
+      "short_description_en": "Classic short-sleeved polo shirts for men featuring lapel collars and casual designs.",
+      "keywords_en": [
+        "polo shirt",
+        "men's tops",
+        "short sleeve",
+        "lapel collar",
+        "casual shirt"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 6,
+      "item_count_train": 3,
+      "representative_item_ids": [
+        10602,
+        20293,
+        28034
+      ],
+      "representative_item_titles": [
+        "GXG男装 2018夏季商场同款黑色短袖POLO衫翻领T恤男#182224306",
+        "HLA/海澜之家舒适清爽短袖T恤2018夏季新品基础易搭POLO衫男",
+        "DUMB2019夏季新款潮流百搭polo衫男装撞色假两件翻领体恤男生衣服"
+      ]
+    },
+    {
+      "category_id": "a68b85f0e84cbac87f49f5483e16fb6d",
+      "category_name_en": "Fashion Bangles and Bracelets",
+      "category_name_ko": "패션 뱅글 및 팔찌",
+      "short_description_en": "Stylish bangles and bracelets made from materials like titanium steel, silver, and rose gold plating.",
+      "keywords_en": [
+        "bangle",
+        "bracelet",
+        "jewelry",
+        "rose gold",
+        "titanium steel"
+      ],
+      "confidence": 1.0,
+      "dataset": "pog_dense",
+      "item_count_all": 82,
+      "item_count_train": 67,
+      "representative_item_ids": [
+        9985,
+        9397,
+        11089,
+        15392,
+        17371,
+        5523,
+        15989,
+        425,
+        7129,
+        30408
+      ],
+      "representative_item_titles": [
+        "ZENGLIU日韩情侣刻字手镯 女镀18k玫瑰金手环简约个性潮人首饰品",
+        "镀18K玫瑰金手镯女小众设计网红开口手环韩版简约个性情侣冷淡风",
+        "韩国饰品手镯 女款镀18K玫瑰金手环潮人韩版钛钢简约情侣刻字首饰",
+        "实心999纯银手镯女款小众学生网红开口男士银饰手环情侣足银镯子",
+        "ZENGLIU小众设计手镯女冷淡风钛钢手环流行饰品韩版简约刻字首饰",
+        "ZENGLIU韩国镀18K玫瑰金手镯 女个性情侣手环简约潮人刻字首饰品",
+        "镂空几何手镯女款简约韩版学生百搭潮人饰品手环个性钛钢情侣首饰",
+        "欧美时尚水晶球开口手镯女 镀18K玫瑰金手环简约钛钢防过敏饰品",
+        "ZENGLIU学生饰品镯子女款时尚韩版简约百搭个性潮人手环女生手镯",
+        "钛钢手镯女不掉色网红手环韩版玫瑰金简约潮人欧美夸张手链手饰品"
+      ]
+    },
+    {
+      "category_id": "a6cd655d1645f38869be793d5fb194cb",
+      "category_name_en": "Women's High-Waist Cropped Jeans",
+      "category_name_ko": "여성 하이웨이스트 크롭 청바지",
+      "short_description_en": "Stylish high-waisted denim jeans in various cuts including straight and skinny, often featuring distressed details.",
+      "keywords_en": [
+        "High-Waist Jeans",
+        "Cropped Denim",
+        "Distressed Jeans",
+        "Straight Leg",
+        "Slimming Pants"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 1636,
+      "item_count_train": 1286,
+      "representative_item_ids": [
+        27602,
+        7666,
+        16557,
+        10242,
+        28347,
+        28029,
+        13627,
+        21950,
+        15862,
+        28281
+      ],
+      "representative_item_titles": [
+        "牛仔裤女直筒高腰显瘦网红裤子宽松2019春款新款浅色九分裤女韩版",
+        "2018新款春秋韩版chic紧身显瘦高腰破洞小脚铅笔裤子九分牛仔裤女",
+        "女装春秋新款牛仔裤女九分宽松高腰韩版乞丐破洞直筒显瘦2019春装",
+        "牛仔裤女九分铅笔高腰紧身小脚春秋2019新款韩版显瘦弹力百搭裤子",
+        "牛仔裤女春季2019新款韩版高腰显瘦铅笔裤浅色修身小脚九分裤",
+        "2018春夏新款韩版百搭显瘦破洞牛仔裤宽松九分裤chic高腰裤子女潮",
+        "牛仔裤女春秋2018新款韩版显瘦宽松大码高腰哈伦裤百搭九分裤子潮",
+        "破洞牛仔裤女2019新款裤子女韩版显瘦紧身裤高腰小脚裤九分铅笔裤",
+        "2018春秋新款韩版显瘦高腰小脚牛仔裤女抓痕磨破洞铅笔裤长裤子",
+        "破洞牛仔裤女春夏季2018新款韩版复古宽松高腰浅色卷边直筒九分裤"
+      ]
+    },
+    {
+      "category_id": "ab493384339108f4d90b1ae4d5a5ee3d",
+      "category_name_en": "Casual Sandals and Flip-Flops",
+      "category_name_ko": "캐주얼 샌들 및 플립플랍",
+      "short_description_en": "A variety of summer footwear including flip-flops, mules, and beach sandals for men and women.",
+      "keywords_en": [
+        "Flip-Flops",
+        "Mules",
+        "Beach Sandals",
+        "Summer Slippers",
+        "Casual Footwear"
+      ],
+      "confidence": 0.9,
+      "dataset": "pog_dense",
+      "item_count_all": 9,
+      "item_count_train": 7,
+      "representative_item_ids": [
+        11931,
+        10957,
+        19859,
+        12895,
+        23861,
+        8267,
+        16999
+      ],
+      "representative_item_titles": [
+        "花花公子时尚外穿夏季沙滩室外凉拖夹脚防滑夏天人字拖男士拖鞋男",
+        "欧美夏季男半拖鞋男真皮头层牛皮豆豆凉拖包头凉鞋懒人鞋韩版潮拖",
+        "夏季真皮男士半拖男款室内拖鞋男鞋包头休闲懒人无后跟豆豆凉拖鞋",
+        "男凉拖鞋2018新款潮流男士个性百搭黑色皮凉鞋室外穿时尚一字拖鞋",
+        "Ipanema凉拖鞋女外穿网红拖鞋情侣时尚人字平底沙滩鞋ins潮拖男鞋",
+        "售罄DOLCE GABBANA杜嘉班纳新款皇冠印花沙滩凉鞋拖鞋男CS1489",
+        "JINIWU吾倪季2019新款穆勒鞋优质天鹅绒印度进口手工徽章包头拖鞋"
+      ]
+    },
+    {
+      "category_id": "b5512b7b61119e0a76d1f6b3bd6d2b94",
+      "category_name_en": "Women's Slimming Outerwear Leggings",
+      "category_name_ko": "여성 슬리밍 아우터 레깅스",
+      "short_description_en": "Versatile high-waisted leggings designed for outer wear, available in fleece-lined and thin versions.",
+      "keywords_en": [
+        "Leggings",
+        "Pencil Pants",
+        "Fleece-Lined",
+        "High-Waist",
+        "Slimming"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 213,
+      "item_count_train": 177,
+      "representative_item_ids": [
+        21561,
+        29403,
+        22696,
+        7399,
+        14808,
+        17858,
+        21342,
+        3044,
+        29529,
+        28739
+      ],
+      "representative_item_titles": [
+        "薄绒九分打底裤女外穿2018新款秋冬黑色高腰显瘦紧身铅笔小脚裤子",
+        "打底裤女外穿小脚裤2018新款秋冬高腰显瘦小黑裤修身铅笔裤长裤潮",
+        "加绒加厚打底裤女秋冬季2018新款高腰外穿黑色小脚魔术铅笔长裤@",
+        "打底裤女外穿2019新款薄款韩版显瘦高腰小脚铅笔长裤春秋黑色裤子",
+        "黑色加绒裤女外穿高腰加厚2018春秋新款秋冬款百搭显瘦小脚打底裤",
+        "打底裤女外穿春秋薄款弹力紧身2019新款高腰显瘦铅笔裤黑色小脚裤",
+        "加绒打底裤女外穿2018新款秋冬季黑色紧身高腰加厚小脚铅笔魔术裤",
+        "打底裤女外穿春装2019新款黑色大码休闲裤百搭显瘦高腰弹力小脚裤",
+        "黑色打底裤女外穿秋装小黑裤2018新款春秋韩版百搭高腰显瘦九分裤",
+        "薄绒打底裤女外穿开叉小脚裤高腰薄款九分裤2018秋冬新款黑色裤子"
+      ]
+    },
+    {
+      "category_id": "b608ccb44928992e75009892971acd46",
+      "category_name_en": "Women's Fashion Sun Hats",
+      "category_name_ko": "여성 패션 햇빛 차단 모자",
+      "short_description_en": "A collection of trendy hats for women including baseball caps, bucket hats, and straw hats for sun protection.",
+      "keywords_en": [
+        "Baseball Caps",
+        "Bucket Hats",
+        "Straw Hats",
+        "Sun Protection",
+        "Berets"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 774,
+      "item_count_train": 615,
+      "representative_item_ids": [
+        16821,
+        15737,
+        17180,
+        27985,
+        7976,
+        21385,
+        3054,
+        11073,
+        27891,
+        26717
+      ],
+      "representative_item_titles": [
+        "帽子女 鸭舌帽韩版学生街头遮阳帽夏防晒新款棒球帽子女 休闲百搭",
+        "韩版毛边针织盆帽夏季出游透气渔夫帽草帽日系百搭大檐遮阳帽子女",
+        "帽子女平沿遮阳帽防晒太阳帽礼帽潮百搭韩版平顶草帽女夏天小清新",
+        "ins网红贝雷帽女春秋韩版日系百搭画家帽黑色英伦八角帽女帽子夏",
+        "帽子女鸭舌帽女炫彩镶钻夏季棒球帽女韩潮百搭出游遮阳帽原创帽子",
+        "帽子女 日系文艺范草编报童帽海军帽夏季韩版休闲遮阳鸭舌帽百搭",
+        "帽子女夏天韩版潮春秋百搭遮阳帽名媛修脸显瘦贝雷帽八角帽渔夫帽",
+        "帽子女夏天韩版时尚百搭礼帽女士遮阳帽大沿帽草帽防晒帽沙滩帽潮",
+        "帽子女夏天韩版百搭贝雷帽夏季出游休闲遮阳帽防晒遮阳鸭舌八角帽",
+        "帽子女春夏韩国韩代百搭棉布遮阳帽盆帽休闲韩版卷边可爱渔夫帽"
+      ]
+    },
+    {
+      "category_id": "b6f318187d9a7cf416a2e84fc24349aa",
+      "category_name_en": "Women's Casual Blazers and Suits",
+      "category_name_ko": "여성 캐주얼 블레이저 및 자켓",
+      "short_description_en": "Stylish and versatile women's blazers featuring Korean-style cuts, plaid patterns, and casual designs.",
+      "keywords_en": [
+        "blazer",
+        "women's suit",
+        "plaid jacket",
+        "casual outerwear",
+        "Korean style"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 61,
+      "item_count_train": 49,
+      "representative_item_ids": [
+        7243,
+        15175,
+        541,
+        7368,
+        11936,
+        26857,
+        8713,
+        4182,
+        1133,
+        9258
+      ],
+      "representative_item_titles": [
+        "小宜定制网红小西装女春季韩版宽松休闲垂重质感时尚chic西装外套",
+        "格子小西装女2019春秋装新款韩版修身复古格纹休闲外套短款小西服",
+        "2019春秋新款韩版休闲格子小西装外套女网红短款格纹刺绣西服复古",
+        "小西装外套女2019新款春季时尚韩版气质黑色百搭单排扣短款西服潮",
+        "三彩2019春秋装新款chic休闲小西装网红格子外套女西服复古女",
+        "三彩2019春秋装新款chic休闲小西装网红格子外套女西服复古女",
+        "2019春秋装新款韩版时尚修身百搭ol短款小西装女外套休闲西服长袖",
+        "春装女装2019新款时尚气质休闲修身黑色中长款小西装长袖西服外套",
+        "2019春装新款韩版V领一粒扣长袖休闲小西装女chic宽松气质外套",
+        "时尚粉色网红小西装套装女装2019春夏季新款韩版气质职业西服外套"
+      ]
+    },
+    {
+      "category_id": "bc11aa63d5a69b1b0f90c34fd2c62102",
+      "category_name_en": "Women's Chiffon Blouses and Shirts",
+      "category_name_ko": "여성 쉬폰 블라우스 및 셔츠",
+      "short_description_en": "Elegant long-sleeved blouses and shirts for women, often featuring chiffon fabric, ruffles, and floral prints.",
+      "keywords_en": [
+        "chiffon blouse",
+        "long sleeve shirt",
+        "women's tops",
+        "floral shirt",
+        "v-neck blouse"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 695,
+      "item_count_train": 511,
+      "representative_item_ids": [
+        11832,
+        14907,
+        168,
+        10452,
+        18924,
+        10047,
+        24869,
+        16564,
+        19455,
+        8577
+      ],
+      "representative_item_titles": [
+        "雪纺衬衫女2018春秋新款长袖宽松韩范衬衣白色上衣心机衬衫设计感",
+        "雪纺衬衫女长袖2019春装新款韩版宽松网纱拼接职业衬衣大码上衣潮",
+        "格子长袖衬衫女2019春秋装新款荷叶边V领小心机韩版宽松学生衬衣",
+        "雪纺衬衫女长袖2018春夏装新款 漏锁骨上衣心机宽松V领喇叭袖衬衣",
+        "宽松长袖白衬衫女棉立方2019新款春装女装韩版荷叶花边领绣花衬衣",
+        "雪纺衫长袖女2018新款韩版洋气小衫百搭碎花遮肚子仙仙女上衣超仙",
+        "白色衬衫女长袖2018春款新款宽松港味学生条纹chic上衣百搭衬衣潮",
+        "2018夏季新款设计感心机粉色雪纺衬衫女长袖chic衬衣韩范V领上衣",
+        "蝴蝶结雪纺白衬衫女长袖2019春装新款女装宽松上衣高档洋气小衫",
+        "2019新款春秋长袖衬衫女心机设计感小众韩范气质宽松显瘦网红上衣"
+      ]
+    },
+    {
+      "category_id": "c024d6d8b2a5878439b85d8146a91239",
+      "category_name_en": "Women's Fashion Rings and Bands",
+      "category_name_ko": "여성 패션 반지 및 링",
+      "short_description_en": "Trendy and decorative rings for women, including open-end, knuckle, and pearl-accented designs.",
+      "keywords_en": [
+        "fashion ring",
+        "index finger ring",
+        "925 silver",
+        "knuckle ring",
+        "adjustable ring"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 85,
+      "item_count_train": 61,
+      "representative_item_ids": [
+        19768,
+        18701,
+        7534,
+        20583,
+        15284,
+        19730,
+        17241,
+        13161,
+        11966,
+        3493
+      ],
+      "representative_item_titles": [
+        "ZENGLIU网红戒指女日韩潮人学生大气食指环关节个性潮人情侣饰品",
+        "ZEGL组合戒指女细款镀玫瑰金戒子潮人个性日韩网红关节食指环饰品",
+        "潮人开口戒指女饰品韩国简约食指指环关节戒子网红时尚个性冷淡风",
+        "ZENGLIU蝴蝶结戒指女大气食指戒子网红日韩潮人个性chic指环饰品",
+        "ZENGLIU日韩国仿珍珠开口戒指女 食指环关节戒个性潮人装饰品戒子",
+        "日韩简约潮人开口珍珠戒指女 韩国时尚个性18k玫瑰金食指指环饰品",
+        "925银戒指日韩简约甜美双海豚开口食指女时尚个性文艺尾戒礼物",
+        "s925银戒指女纯银克拉钻石仿真钻戒结婚求婚小众设计镶施华洛世锆",
+        "日韩版时尚圆形镶钻戒指女潮人食指环戒子清新大气钛钢镀真金配饰",
+        "ZENGLIU套装戒指女日韩潮人个性学生食指环大气饰品关节小指尾戒"
+      ]
+    },
+    {
+      "category_id": "c5a37fdeb54701aa580971fcfe834201",
+      "category_name_en": "Branded Quartz Wristwatches",
+      "category_name_ko": "브랜드 쿼츠 손목시계",
+      "short_description_en": "High-quality quartz wristwatches from popular brands, featuring waterproof designs and elegant styles for men and women.",
+      "keywords_en": [
+        "quartz watch",
+        "wrist watch",
+        "waterproof watch",
+        "luxury watch",
+        "couple's watch"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 19,
+      "item_count_train": 14,
+      "representative_item_ids": [
+        23501,
+        19449,
+        3060,
+        24063,
+        22001,
+        10112,
+        10057,
+        26622,
+        19,
+        17348
+      ],
+      "representative_item_titles": [
+        "CK手表女士专柜正品瑞士新款玫瑰金防水经典百搭石英女表K3G23626",
+        "CK手表女士男士新款专柜旗舰正品百搭情侣表石英表男女表K3M21126",
+        "新款瑞士ck手表专柜女表男士男表情侣表K3M2112Z全球联保",
+        "Swatch斯沃琪手表男瑞士正品俊凯同款情侣学生男女石英表 SYXS106",
+        "【香港直邮】进口正品CK手表时尚女表镂空手镯表石英表K3G23626",
+        "【香港直邮】瑞士正品CK玫瑰金镂空简约时尚石英女士手表K7L23646",
+        "正品瑞士天梭女表 天梭库图系列石英女表 休闲女士手表T035防水表",
+        "Swatch/斯沃琪手表 色彩密码时尚简约运动情侣学生石英女表GN256",
+        "Tissot天梭官方正品魅时简约时尚3巴生活防水石英钢带手表女表",
+        "TITUS铁达时石英表女大表盘手表女手表女正品情侣表一对3071"
+      ]
+    },
+    {
+      "category_id": "c6342df4744ae61888fa993d281972d7",
+      "category_name_en": "Men's Japanese Style Casual Shirts",
+      "category_name_ko": "남성 일본식 캐주얼 셔츠",
+      "short_description_en": "Casual cotton shirts for men featuring Japanese aesthetic, stripes, and stand collars.",
+      "keywords_en": [
+        "Men's Shirt",
+        "Japanese Style",
+        "Oxford Shirt",
+        "Casual Top",
+        "Cotton Shirt"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 129,
+      "item_count_train": 96,
+      "representative_item_ids": [
+        7259,
+        14001,
+        26461,
+        9492,
+        29763,
+        27144,
+        24428,
+        28508,
+        10682,
+        4431
+      ],
+      "representative_item_titles": [
+        "春季日系水洗竖条纹长袖立领宽松纯棉衬衫潮流青少年男士休闲衬衣",
+        "春季日系清新纯色简约男士修身型长袖纯棉立领牛津纺衬衫休闲衬衣",
+        "春季日系纯色简约衬衫潮男士青少年学生休闲修身长袖纯棉牛仔衬衣",
+        "日系男装新款原创青少年撞色条纹休闲衬衫男百搭潮流韩版衬衣男",
+        "听风春秋季款日系休闲长袖衬衫男青年帅气小清新衬衣牛津纺打底衫",
+        "听风 春季日系纯棉修身蓝白条纹长袖衬衫男 青少年袖口刺绣衬衣潮",
+        "春夏日系小清新纯棉短袖白衬衫男青少年修身文艺七分袖衬衣打底衫",
+        "听风 春季日系文艺纯棉白衬衫男士 简约打底衬衣长袖青少年小清新",
+        "听风 日系纯棉宽松白衬衫男士 复古简约打底衬衣长袖青少年小清新",
+        "秋季日系文艺小清新灰白竖条纹衬衫男长袖宽松韩版学生bf青年衬衣"
+      ]
+    },
+    {
+      "category_id": "c6ba1690407cbd175f036694488a914e",
+      "category_name_en": "Women's Korean Style Hoodies and Sweatshirts",
+      "category_name_ko": "여성 한국식 후드 및 맨투맨",
+      "short_description_en": "Loose-fitting Korean style pullovers and hooded sweatshirts for women, often fleece-lined.",
+      "keywords_en": [
+        "Women's Hoodie",
+        "Sweatshirt",
+        "Korean Fashion",
+        "Pullover",
+        "Oversized Top"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 672,
+      "item_count_train": 526,
+      "representative_item_ids": [
+        10136,
+        5233,
+        373,
+        12206,
+        21303,
+        14847,
+        9084,
+        6448,
+        27922,
+        25055
+      ],
+      "representative_item_titles": [
+        "2018春秋季新款宽松加厚加绒连帽长袖套头卫衣女装韩版学生外套潮",
+        "长袖连帽卫衣2018新款女秋季外套假两件慵懒百搭学生韩版宽松上衣",
+        "卫衣女秋2018新款长袖韩版宽松百搭圆领无帽套头chic早秋上衣外套",
+        "2018秋装新款宽松长袖中长款开衫连帽卫衣女春秋韩版学生外套bf潮",
+        "加绒卫衣女连帽套头2019新款春秋韩版学生潮宽松带帽衫薄款慵懒风",
+        "衣品乐原创大码宽松休闲套头卫衣女2019春装新款韩版拼接刺绣上衣",
+        "2018秋冬新款女韩版中长款半高领加绒卫衣宽松字母印花绒衫套头衫",
+        "衣品乐原创大码韩版休闲连帽套头卫衣女中长款宽松外套2019春装",
+        "2018秋冬新款韩版学生百搭刺绣加绒加厚卫衣女连帽宽松套头外套潮",
+        "2018秋冬季新款韩版宽松加绒加厚半高领卫衣女长袖套头慵懒风上衣"
+      ]
+    },
+    {
+      "category_id": "c7d17d4d3b51ccfb89c4c0f40ae87262",
+      "category_name_en": "Men's Athletic Running Shoes",
+      "category_name_ko": "남성용 스포츠 러닝화",
+      "short_description_en": "Performance and casual running shoes for men featuring mesh breathability and cushioning.",
+      "keywords_en": [
+        "Running Shoes",
+        "Men's Sneakers",
+        "Athletic Footwear",
+        "Mesh Shoes",
+        "Sport Shoes"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 69,
+      "item_count_train": 44,
+      "representative_item_ids": [
+        22873,
+        27660,
+        14708,
+        15851,
+        14639,
+        3603,
+        22882,
+        15384,
+        18688,
+        7394
+      ],
+      "representative_item_titles": [
+        "耐克男鞋2019夏季新款AIR ZOOM气垫鞋轻便运动跑步鞋942851-001",
+        "Adidas/阿迪达斯男鞋运动鞋2019新鞋正品黑武士夏季EQT休闲跑步鞋",
+        "阿迪达斯男鞋ELEMENT RACEPE夏黑白网面缓震休闲运动跑步鞋DB1459",
+        "「OTT」ADIDAS/三叶草 INIKI BOOST 黑白男女跑步鞋CQ2489/B37947",
+        "特步男鞋运动鞋男2019新款夏季男士跑鞋休闲鞋网面鞋子透气跑步鞋",
+        "特步男鞋2019春季新款透气网面休闲运动鞋男士正品夏季黑跑步鞋子",
+        "Nike/耐克男鞋2019夏季网面运动鞋轻便透气跑鞋休闲复古跑步鞋",
+        "Nike耐克男鞋2019夏秋季新款黑武士运动鞋跑鞋飞线鞋子网面跑步鞋",
+        "特步男鞋春季2019新款黑运动鞋男网面夏季透气跑步鞋子休闲旅游鞋",
+        "阿迪达斯男鞋2019新款三叶草运动鞋EQT SUPPORT ADV休闲鞋跑步鞋"
+      ]
+    },
+    {
+      "category_id": "d2d96e58ef034b572fcf4e8c6d663b84",
+      "category_name_en": "Men's Casual Sandals and Beach Shoes",
+      "category_name_ko": "남성 캐주얼 샌들 및 비치 슈즈",
+      "short_description_en": "Comfortable outdoor sandals and beach footwear for men, including leather and sporty styles.",
+      "keywords_en": [
+        "Men's Sandals",
+        "Beach Shoes",
+        "Outdoor Footwear",
+        "Casual Sandals",
+        "Skechers"
+      ],
+      "confidence": 0.9,
+      "dataset": "pog_dense",
+      "item_count_all": 3,
+      "item_count_train": 3,
+      "representative_item_ids": [
+        9180,
+        14431,
+        17058
+      ],
+      "representative_item_titles": [
+        "Skechers斯凯奇男鞋新款简约凉鞋 时尚露趾平底凉拖沙滩鞋 65524",
+        "Skechers斯凯奇男鞋新款休闲凉鞋 时尚简约沙滩鞋 65523",
+        "男士凉鞋真皮夏季2019新款休闲韩版潮流户外软底沙滩鞋牛皮凉拖鞋"
+      ]
+    },
+    {
+      "category_id": "dab681fd76ae76e9421f7378ed0ed11d",
+      "category_name_en": "Men's Padded Winter Jackets",
+      "category_name_ko": "남성 패딩 겨울 자켓",
+      "short_description_en": "Thickened and warm padded jackets for men, featuring various styles like hooded, bomber, and mid-length designs.",
+      "keywords_en": [
+        "padded jacket",
+        "winter coat",
+        "men's outerwear",
+        "hooded parka",
+        "warm cotton coat"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 18,
+      "item_count_train": 12,
+      "representative_item_ids": [
+        9728,
+        6325,
+        6303,
+        24980,
+        21053,
+        2791,
+        28250,
+        18793,
+        23019,
+        2277
+      ],
+      "representative_item_titles": [
+        "@马切达冬男装日系休闲短款棉衣青年棒球领宽松加厚外套潮流上衣",
+        "隐于市冬季潮牌街头个性印花宽松连帽棉衣男嘻哈潮流情侣棉服外套",
+        "SXF圣希梵连帽棉衣男 中长款冬季外套男 日系加厚棉服保暖棉袄潮",
+        "A21冬季连帽中长款棉衣男新款帅气男士棉袄保暖休闲棉服男外套潮",
+        "男道冬季新款美式工装纯色连帽棉衣男宽松加厚外套保暖休闲棉服潮",
+        "棉衣男潮2018新款韩版潮流冬季连帽中长款加绒加厚青少年棉服外套",
+        "嘿马日系复古冬季纯色空军飞行员男士棉衣棉袄夹克潮牌外套情侣装",
+        "【反季清仓】冬季连帽棉衣男学生厚保暖棉袄外套短款修身棉服袄子",
+        "SXF圣希梵棉袄男 2018冬装新款棉衣中长款连帽外套刺绣男士棉服潮",
+        "【特价】BJHG欧美街头宽松帅气印花工装连帽套头棉衣潮男棉服外套"
+      ]
+    },
+    {
+      "category_id": "de802e3a05e11e88ddd894aa58e0f4d9",
+      "category_name_en": "Women's White Canvas Sneakers",
+      "category_name_ko": "여성 화이트 캔버스 스니커즈",
+      "short_description_en": "Casual white canvas shoes and flat sneakers for women, popular for student and street style.",
+      "keywords_en": [
+        "white sneakers",
+        "canvas shoes",
+        "casual footwear",
+        "flat board shoes",
+        "women's shoes"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 362,
+      "item_count_train": 294,
+      "representative_item_ids": [
+        26579,
+        5243,
+        4905,
+        863,
+        16532,
+        27570,
+        5952,
+        30885,
+        6756,
+        30195
+      ],
+      "representative_item_titles": [
+        "人本小白鞋女2019春款平底板鞋韩版ulzzang布鞋百搭学生帆布鞋女",
+        "2018春季新款小白鞋女百搭韩版学生chic厚底帆布鞋白鞋子板鞋夏季",
+        "人本帆布鞋女2018新款鞋子女学生百搭运动板鞋2019春款韩版小白鞋",
+        "人本小白鞋女2019春款板鞋子女2018新款布鞋学生韩版黑色帆布鞋女",
+        "人本帆布鞋子女2018新款学生百搭韩版ulzzang板鞋2019春款小白鞋",
+        "小白鞋女夏季2019新款百搭韩版透气女鞋帆布学生chic白鞋春款潮鞋",
+        "回力鞋女鞋帆布鞋女小白鞋女2019新款百搭韩版学生板鞋休闲情侣鞋",
+        "小白鞋女2018春季新款百搭平底休闲鞋学生韩版白鞋系带白色板鞋女",
+        "2018春季新款休闲韩版chic小白鞋女百搭白鞋学生帆布鞋平底板鞋子",
+        "帆布鞋女高帮春款2019新款韩版百搭学生白色平底粉色街拍原宿板鞋"
+      ]
+    },
+    {
+      "category_id": "e89e92593584db62ee08a1502919819d",
+      "category_name_en": "Women's PU Leather Biker Jackets",
+      "category_name_ko": "여성 PU 가죽 라이더 자켓",
+      "short_description_en": "Stylish faux leather jackets for women, featuring biker styles, slim fits, and cropped designs.",
+      "keywords_en": [
+        "leather jacket",
+        "biker jacket",
+        "PU leather",
+        "women's outerwear",
+        "moto jacket"
+      ],
+      "confidence": 0.97,
+      "dataset": "pog_dense",
+      "item_count_all": 35,
+      "item_count_train": 26,
+      "representative_item_ids": [
+        9233,
+        4361,
+        5313,
+        9136,
+        30353,
+        2365,
+        19850,
+        7594,
+        22401,
+        20868
+      ],
+      "representative_item_titles": [
+        "皮衣外套女2018新款秋冬韩版连帽仿兔毛加绒宽松短款机车pu皮夹克",
+        "小羽家皮衣女秋季2019新款外套长袖韩版显瘦春秋修身皮夹克机车服",
+        "小宜定制 机车皮衣女2018新款韩版港风宽松显瘦chic拉链短外套",
+        "2019春秋季新款皮衣女韩版短款百搭休闲pu皮夹克修身显瘦小外套潮",
+        "春秋女装外套chic港风pu机车外套女显瘦皮夹克高腰粉色皮衣女短款",
+        "皮衣短款外套女冬季2019新款韩版宽松显瘦加绒加厚pu皮高腰小夹克",
+        "◆MUGU◆短款皮衣女2019春秋装新款纯色宽松收腰机车服夹克外套",
+        "pu皮衣女短款翻领外套修身韩版秋季2018新款bf原宿机车风皮夹克女",
+        "A7seven 短款工装PU皮衣女秋季2019新款宽松显瘦休闲皮夹克短外套",
+        "izp 系带收腰皮衣外套女中长款皮风衣2019春秋新机车服宽松皮外套"
+      ]
+    },
+    {
+      "category_id": "ecff24c1d93157b5c20fd73bb31faced",
+      "category_name_en": "Men's Casual Hoodies and Sweatshirts",
+      "category_name_ko": "남성 캐주얼 후드 및 맨투맨",
+      "short_description_en": "Comfortable pullover hoodies and crewneck sweatshirts with Japanese street style and graphic prints.",
+      "keywords_en": [
+        "hoodie",
+        "sweatshirt",
+        "pullover",
+        "streetwear",
+        "casual top"
+      ],
+      "confidence": 0.96,
+      "dataset": "pog_dense",
+      "item_count_all": 180,
+      "item_count_train": 141,
+      "representative_item_ids": [
+        19783,
+        12793,
+        21496,
+        25267,
+        12376,
+        9600,
+        35,
+        13165,
+        8803,
+        24699
+      ],
+      "representative_item_titles": [
+        "NOTHOMME春款日系拼接撞色宽松版连帽卫衣男款潮牌情侣款帽衫街头",
+        "听风 春季日系复古刺绣加绒连帽卫衣男 青少年纯色百搭开衫卫衣潮",
+        "炉品秋季新款圆领套头印花卫衣中性风情侣卫衣潮流青年宽松上衣男",
+        "炉品2019春季宽松套头连帽情侣卫衣学生百搭oversize卫衣潮男外套",
+        "二十八间春季男装纯色连帽卫衣潮流青年帅气宽松套头衫情侣外套男",
+        "男道春季新款日系复古撞色圆领卫衣男青年潮牌套头运动衣情侣外套",
+        "NOTHOMME日系潮牌宽松版拼接撞色套头卫衣男款上衣印花街头",
+        "听风 春季日系休闲宽松套头圆领卫衣男 青少年渐变色落肩袖卫衣潮",
+        "西西里男装港风卫衣男连帽宽松印花原宿套头衫ulzzang运动外套潮",
+        "马切达秋冬男装日系复古个性印花连帽套头卫衣青年休闲宽松帽衫潮"
+      ]
+    },
+    {
+      "category_id": "f38776a72637f9103f9229c5f2c92e41",
+      "category_name_en": "Men's Knit Sweaters and Cardigans",
+      "category_name_ko": "남성 니트 스웨터 및 가디건",
+      "short_description_en": "A collection of men's knitwear including pullovers, turtlenecks, and cardigans in various trendy styles.",
+      "keywords_en": [
+        "men's sweater",
+        "knitwear",
+        "pullover",
+        "cardigan",
+        "turtleneck"
+      ],
+      "confidence": 0.95,
+      "dataset": "pog_dense",
+      "item_count_all": 37,
+      "item_count_train": 27,
+      "representative_item_ids": [
+        22033,
+        4808,
+        587,
+        8086,
+        16639,
+        4426,
+        19463,
+        29073,
+        15417,
+        21050
+      ],
+      "representative_item_titles": [
+        "GENANX闪电潮牌毛衣男韩版学生圆领潮宽松波点撞色男士针织衫套头",
+        "GENANX闪电潮牌高领毛衣男韩版潮流男士针织衫冬季打底衫修身线衣",
+        "GENANX闪电潮牌黑白条纹毛衣男内搭休闲宽松韩版秋冬针织衫男套头",
+        "GENANX闪电潮牌男士休闲毛衣秋季新款宽松拼色套头针织衫内搭男生",
+        "GENANX闪电潮牌简约纯色粗线针织衫韩版宽松套头长款毛衣男帅气",
+        "GENANX闪电潮牌休闲毛衣五角星撞色印花圆领嵌花简约男毛衣韩版",
+        "GENANX闪电潮牌针织开衫男中长款黑白撞色嵌花v领毛衣男韩版宽松",
+        "GENANX闪电潮牌青少年毛衣男韩版潮流日系复古学生款帅气时尚内搭",
+        "GENANX闪电潮牌男士开衫针织衫男中长款帅气帅气开衩下摆毛衣男",
+        "男道冬装新款日系复古圆领补丁毛衣男韩版学生修身针织衫套头线衣"
+      ]
+    },
+    {
+      "category_id": "fbf269b6cc339b080853c548156a1050",
+      "category_name_en": "Women's Mid-Length Trench Coats",
+      "category_name_ko": "여성 중기장 트렌치 코트",
+      "short_description_en": "Stylish mid-length trench coats for women featuring double-breasted designs and slim fits.",
+      "keywords_en": [
+        "trench coat",
+        "women's outerwear",
+        "double-breasted",
+        "mid-length coat",
+        "windbreaker"
+      ],
+      "confidence": 0.98,
+      "dataset": "pog_dense",
+      "item_count_all": 257,
+      "item_count_train": 200,
+      "representative_item_ids": [
+        30803,
+        6207,
+        26769,
+        2979,
+        30059,
+        10332,
+        24717,
+        2376,
+        24031,
+        11427
+      ],
+      "representative_item_titles": [
+        "风衣女中长款秋装2018新款长袖双排扣外衣显瘦chic收腰过膝外套",
+        "风衣女中长款香影2019新款韩版时尚修身显瘦休闲外套英伦春秋chic",
+        "风衣女中长款香影2019新款修身英伦复古港风韩版休闲春秋外套chic",
+        "风衣女中长款韩版春季2018新款连帽宽松百搭休闲春秋装风衣外套女",
+        "风衣女中长款秋季2019新款韩版深秋流行大衣加厚冬季港风chic外套",
+        "风衣女中长款韩版春季2018新款女士过膝lulu卡其色chic早秋外套",
+        "风衣女士中长款韩版春装2019新款女装修身显瘦百搭chic外套F1735",
+        "春季2019新款韩版中长款过膝双排扣风衣外套女学院风端庄气质大衣",
+        "三彩西装领风衣女装2018春秋新款宽松纯色中长款时尚气质外套潮",
+        "风衣女中长款衣香丽影2018秋装新款系带修身双排扣长袖翻领外套"
+      ]
+    },
+    {
+      "category_id": "fc528592c3858f90196fbfacc814f235",
+      "category_name_en": "Women's High-Waist Mid-Length Skirts",
+      "category_name_ko": "여성 하이웨이스트 미디 스커트",
+      "short_description_en": "Versatile mid-length skirts for women featuring high-waist designs in A-line, pleated, and pencil cuts.",
+      "keywords_en": [
+        "A-line skirt",
+        "midi skirt",
+        "high-waist skirt",
+        "pleated skirt",
+        "pencil skirt"
+      ],
+      "confidence": 0.97,
+      "dataset": "pog_dense",
+      "item_count_all": 1208,
+      "item_count_train": 929,
+      "representative_item_ids": [
+        8228,
+        29001,
+        28594,
+        15847,
+        28162,
+        3795,
+        6118,
+        18189,
+        1159,
+        11441
+      ],
+      "representative_item_titles": [
+        "a字裙半身裙2018新款女装春装秋百搭中长高腰时尚仿毛呢包臀裙子",
+        "2018夏季新款高腰雪纺半身裙女装a字裙chic气质长裙港味复古裙子",
+        "裙子秋女2018新款ins超火的半身裙秋冬复古chic中长款针织包臀裙",
+        "2018秋季新款韩版蕾丝高腰chic半身裙女港味复古a字裙a型半身长裙",
+        "中长款半身裙女装夏季2019新款百褶皱时尚长裙高腰裙子a字裙",
+        "时尚高腰半身裙女装秋季2018新款百褶裙中长款网纱裙a字仙女裙子",
+        "A字裙半身裙女chic中长款2018夏季韩版新百搭显瘦不规则高腰裙子",
+        "裙子秋女2018新款 韩版休闲百搭高腰中长款chic针织裙半身裙秋冬",
+        "不规则半身裙高腰格子裙子荷叶边春装女2019新款中长款a字包臀裙",
+        "宿本2018秋冬季新款chic早秋半身裙包臀复古高腰a字裙 奶茶格子裙"
+      ]
+    }
+  ]
+}

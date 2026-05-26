@@ -18,7 +18,7 @@ __pycache__/
 
 # Local evaluation results (Large and frequently updated)
 
-#results/**
+results/**
 #!results/.gitkeep
 #*.csv
 #*_analyzed.csv

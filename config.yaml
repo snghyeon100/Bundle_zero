@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: pog_dense                  # pog | pog_dense | spotify | spotify_sparse
+dataset: pog                 # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────
@@ -8,18 +8,44 @@ num_token: 5       # max input items per bundle (-1 = no limit)
 toy_eval: 250     # -1 = full test set | N = first N samples
 seed: 45           # seed for candidate items (A-J)
 shuffle_seed: 41   # seed for input items shuffling
+use_fixed_test_split: true  # If true, reads bi_fix_test_input/gt for one held-out GT per bundle
+test_input_file: bi_fix_test_input.txt
+test_gt_file: bi_fix_test_gt.txt
+fixed_test_gt_selection: random  # random | first
+fixed_test_gt_seed: 45
 use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.json
 
 # ─── LLM ──────────────────────────────────────────────────────────────────────
 
-model: gemini-3.1-flash-lite-preview
+model: gemini-3.1-flash-lite
 temperature: 0.0
-use_multimodal: true  # If true, loads images and sends them to Gemini along with text
+use_multimodal: false  # If true, loads images and sends them to Gemini along with text
 use_image_category_completion_prompt: false  # If true with use_multimodal, adds coarse category completion guidance
+
+use_ui_category_purchase_prior: true  # If true, inserts aggregate UI category co-purchase prior after input items
+ui_category_purchase_prior_top_k: 5
+ui_category_purchase_prior_min_support: 1
+
+use_input_item_description_aug: false  # If true, appends cached generated summaries to input items only
+input_item_description_cache_root: ./analysis/input_item_neighborhood_summaries/gemini #./analysis/input_item_descriptions/gemini | ./analysis/input_item_neighborhood_summaries/gemini
+input_item_description_field: summary  # description | summary
+
+use_category_evidence_summary: false  # If true, summarizes train-derived category evidence before final prediction
+category_evidence_summary_k: 5
+category_evidence_summary_include_evidence: false  # If true, also passes retrieved category evidence to final LLM
+category_evidence_summary_model: ""  # empty = use main model
+category_evidence_summary_api_key_env: "GEMINI_API_KEY_2"  # empty = use main client; e.g., GEMINI_API_KEY_2
+category_evidence_summary_max_output_tokens: 180
+
+use_cc_retrieval_context: false  # If true, inserts C-C completion-retrieved train outfit examples after input items
+cc_retrieval_context_k: 3
+cc_retrieval_context_seed: 45
+cc_retrieval_overlap_weight: 1.0
+cc_retrieval_extra_weight: 1.0
 
 use_cooccurrence: false  # If true, appends train BI co-bundled shared/candidate bundle counts to candidate options
 use_soft_cooccurrence: false  # If true, appends soft I->B' co-bundled counts to candidate options
-soft_cooccurrence_source: item_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
+soft_cooccurrence_source: item_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_text_input_desc | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_text_input_desc | bundle_smoothing_bi_lgcn
 
 use_item_bundle_affiliation_desc: false  # IB x BI. If true, appends co-bundled item descriptions to input/candidate items
 item_bundle_affiliation_k: 3
@@ -27,7 +53,7 @@ item_bundle_affiliation_alpha: 0.5
 item_bundle_affiliation_seed: 45
 item_bundle_affiliation_exclude_query_items: false
 item_bundle_affiliation_use_soft: false  # (IB + I-B') x BI. Adds soft I->B' bundles before retrieving co-bundled items
-item_bundle_affiliation_soft_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
+item_bundle_affiliation_soft_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_text_input_desc | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_text_input_desc | bundle_smoothing_bi_lgcn
 item_bundle_affiliation_soft_alpha: 1.0
 
 use_item_user_copurchase_desc: false  # If true, appends UI^T UI co-purchased item descriptions to input/candidate items
@@ -37,22 +63,32 @@ item_user_copurchase_seed: 45
 item_user_copurchase_exclude_query_items: false
 
 use_bundle_graph_context: false  # BI x IB. If true, prepends train bundles retrieved by input-item overlap and IDF tie-break
-bundle_graph_context_k: 1
+bundle_graph_context_k: 3
 bundle_graph_context_max_items: 5
 bundle_graph_context_seed: 45
 bundle_graph_context_use_soft: false  # BI x (IB + I-B'). Adds soft I->B' matches to the bundle-context retrieval pool/score
-bundle_graph_context_soft_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_bi_lgcn
+bundle_graph_context_soft_source: bundle_smoothing_bi_lgcn  # item_smoothing_text | item_smoothing_text_input_desc | item_smoothing_bi_lgcn | bundle_smoothing_text | bundle_smoothing_text_input_desc | bundle_smoothing_bi_lgcn
 bundle_graph_context_soft_alpha: 1.0
 
-use_category_completion_prior_desc: false  # If true, prepends train-derived top-k complementary category hints using representative train items
+#use_category_completion_prior_desc: false  # If true, prepends train-derived top-k complementary category hints
 use_category_item_text_aug: false  # If true, appends same-category representative item examples to item text
 category_item_aug_apply_to: both  # inputs | candidates | both
 category_item_aug_rep_items_per_category: 2
-input_category_co_occur: false  # If true, appends category co-occurrence examples
-input_category_co_occur_apply_to: inputs  # inputs | candidates | both
-input_category_co_occur_top_k: 3
+
+use_category_name_aug: true  # If true, appends generated human-readable category names to item text
+category_name_aug_apply_to: both  # inputs | candidates | both
+category_name_field: category_name_en  # category_name_en | category_name_ko | short_description_en
+category_name_root: ./analysis/category_names/gemini
+
+input_category_co_occur: false    # If true, appends category co-occurrence examples
+input_category_co_occur_apply_to: both  # inputs | candidates | both
+input_category_co_occur_verbalization: category_names # representative_items | category_names
+input_category_co_occur_top_k: 1
 input_category_co_occur_rep_items_per_category: 1
+
+use_category_completion_prior_desc: false
 category_prior_top_k: 3
+category_prior_verbalization: category_names  # representative_items | category_names
 category_prior_rep_items_per_category: 3
 category_prior_min_support: 3
 category_prior_max_itemset_size: 6

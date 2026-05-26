@@ -170,6 +170,12 @@ def write_bundle_neighbors(path, bundle_ids, top_bundle, top_sim):
             writer.writerow([int(bundle_id), int(top_bundle[row]), float(top_sim[row])])
 
 
+def text_artifact_name(prefix, suffix, ext):
+    suffix = str(suffix or "").strip()
+    suffix_part = f"_{suffix}" if suffix else ""
+    return f"{prefix}{suffix_part}_top1.{ext}"
+
+
 def mapping_stats(mapping, num_items):
     lengths = np.asarray([len(v) for v in mapping.values()], dtype=np.float64)
     if lengths.size == 0:
@@ -229,19 +235,23 @@ def build_for_dataset(repo_root, dataset, args):
     }
     bundle_bi_smooth = build_bundle_smooth_mapping(item_to_bundles, bi_bundle_to_top1)
 
-    item_json = dataset_dir / "item_smoothing_i2bprime_text_top1.json"
-    item_txt = dataset_dir / "item_smoothing_i2bprime_text_top1.txt"
+    item_json = dataset_dir / text_artifact_name("item_smoothing_i2bprime_text", args.text_output_suffix, "json")
+    item_txt = dataset_dir / text_artifact_name("item_smoothing_i2bprime_text", args.text_output_suffix, "txt")
     item_bi_json = dataset_dir / "item_smoothing_i2bprime_bi_lgcn_top1.json"
     item_bi_txt = dataset_dir / "item_smoothing_i2bprime_bi_lgcn_top1.txt"
-    bundle_json = dataset_dir / "bundle_smoothing_i2bprime_text_top1.json"
-    bundle_txt = dataset_dir / "bundle_smoothing_i2bprime_text_top1.txt"
+    bundle_json = dataset_dir / text_artifact_name("bundle_smoothing_i2bprime_text", args.text_output_suffix, "json")
+    bundle_txt = dataset_dir / text_artifact_name("bundle_smoothing_i2bprime_text", args.text_output_suffix, "txt")
     bundle_bi_json = dataset_dir / "bundle_smoothing_i2bprime_bi_lgcn_top1.json"
     bundle_bi_txt = dataset_dir / "bundle_smoothing_i2bprime_bi_lgcn_top1.txt"
-    item_neighbor_csv = dataset_dir / "item_top1_similar_train_item_text.csv"
+    item_neighbor_csv = dataset_dir / text_artifact_name("item_top1_similar_train_item_text", args.text_output_suffix, "csv")
     item_bi_neighbor_csv = dataset_dir / "item_top1_similar_train_item_bi_lgcn.csv"
-    bundle_neighbor_csv = dataset_dir / "train_bundle_top1_similar_bundle_text.csv"
+    bundle_neighbor_csv = dataset_dir / text_artifact_name("train_bundle_top1_similar_bundle_text", args.text_output_suffix, "csv")
     bundle_bi_neighbor_csv = dataset_dir / "train_bundle_top1_similar_bundle_bi_lgcn.csv"
-    meta_path = dataset_dir / "soft_i2bprime_text_top1_meta.json"
+    meta_path = dataset_dir / text_artifact_name(
+        "soft_i2bprime_text",
+        args.text_output_suffix,
+        "json",
+    ).replace("_top1.json", "_top1_meta.json")
     meta_bi_path = dataset_dir / "soft_i2bprime_bi_lgcn_top1_meta.json"
 
     write_mapping_json(item_json, item_smooth)
@@ -261,6 +271,7 @@ def build_for_dataset(repo_root, dataset, args):
         "dataset": dataset,
         "embedding_cache": str(cache_path),
         "model": args.model,
+        "text_output_suffix": args.text_output_suffix,
         "num_items": num_items,
         "num_train_bundles": len(bundle_items),
         "num_train_active_items": len(train_active_items),
@@ -337,6 +348,11 @@ def main():
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--item-block-size", type=int, default=512)
     parser.add_argument("--bundle-block-size", type=int, default=512)
+    parser.add_argument(
+        "--text-output-suffix",
+        default="",
+        help="Optional suffix for text-based outputs, e.g. input_desc -> item_smoothing_i2bprime_text_input_desc_top1.json",
+    )
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parents[1]
