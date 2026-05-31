@@ -1,0 +1,13 @@
+﻿k,success_type,num_successful_views,count,ratio
+1,all_three_failed,0,119,0.476
+1,one_view_success,1,52,0.208
+1,two_views_success,2,39,0.156
+1,all_three_success,3,40,0.16
+3,all_three_failed,0,44,0.176
+3,one_view_success,1,29,0.116
+3,two_views_success,2,60,0.24
+3,all_three_success,3,117,0.468
+5,all_three_failed,0,11,0.044
+5,one_view_success,1,16,0.064
+5,two_views_success,2,43,0.172
+5,all_three_success,3,180,0.72

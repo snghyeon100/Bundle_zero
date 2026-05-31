@@ -1,0 +1,4 @@
+﻿view,hit_at_1_count,focal_only_hit_at_1_count,focal_only_hit_at_1_ratio,shared_with_one_other_count,shared_with_two_others_count,best_other_rank_mean,best_other_rank_median,best_other_margin_mean,best_other_margin_median,best_other_rank_ge_3_count,best_other_rank_ge_3_ratio,best_other_rank_ge_5_count,best_other_rank_ge_5_ratio,worst_other_rank_mean,worst_other_rank_median
+IBxBI,107,33,0.308411214953271,38,36,1.485981308411215,1.0,0.48598130841121495,0.0,11,0.102803738317757,1,0.009345794392523364,2.822429906542056,2.0
+IUxUI,73,13,0.1780821917808219,24,36,1.36986301369863,1.0,0.3698630136986301,0.0,7,0.0958904109589041,1,0.0136986301369863,2.452054794520548,2.0
+BIxIB,109,27,0.24770642201834864,46,36,1.4220183486238531,1.0,0.42201834862385323,0.0,9,0.08256880733944955,3,0.027522935779816515,2.9908256880733943,2.0

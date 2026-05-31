@@ -1,0 +1,8 @@
+﻿best_view_set,num_best_views,count,ratio
+BIxIB,1,56,0.224
+IBxBI,1,51,0.204
+IBxBI|IUxUI|BIxIB,3,45,0.18
+IBxBI|BIxIB,2,40,0.16
+IUxUI,1,29,0.116
+IUxUI|BIxIB,2,20,0.08
+IBxBI|IUxUI,2,9,0.036

@@ -3,6 +3,7 @@ import re
 import sys
 import yaml
 import json
+import math
 import time
 import asyncio
 import glob
@@ -10,7 +11,6 @@ import pandas as pd
 from dotenv import load_dotenv
 from google import genai
 from dataset import BundleZeroShotDataset, set_seed
-from PIL import Image
 
 # Load Env 
 env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
@@ -25,6 +25,122 @@ def parse_model_response(raw_text):
     match = re.search(r'([A-Z])', clean_text.upper())
     return match.group(1) if match else raw_text.strip()[0].upper()
 
+def option_letters(num_cans):
+    return [chr(ord('A') + i) for i in range(int(num_cans))]
+
+def is_ranking_mode(conf):
+    return str(conf.get("prediction_mode", "choice")).strip().lower() in {"ranking", "rank"}
+
+def generation_max_output_tokens(conf):
+    if is_ranking_mode(conf):
+        return int(conf.get("ranking_max_output_tokens", 160))
+    return int(conf.get("max_output_tokens", 10))
+
+def _strip_json_fence(raw_text):
+    text = str(raw_text or "").strip()
+    text = re.sub(r"^```(?:json)?\s*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\s*```$", "", text)
+    return text.strip()
+
+def parse_model_ranking(raw_text, num_cans, fill_missing=True):
+    letters = option_letters(num_cans)
+    allowed = set(letters)
+    text = _strip_json_fence(raw_text)
+    parsed = []
+
+    json_candidates = [text]
+    match = re.search(r"\{.*\}", text, flags=re.DOTALL)
+    if match:
+        json_candidates.append(match.group(0))
+    match = re.search(r"\[.*\]", text, flags=re.DOTALL)
+    if match:
+        json_candidates.append(match.group(0))
+
+    for candidate in json_candidates:
+        try:
+            obj = json.loads(candidate)
+        except Exception:
+            continue
+        if isinstance(obj, dict):
+            obj = obj.get("ranking", obj.get("rank", obj.get("choices", obj.get("order", []))))
+        if isinstance(obj, list):
+            for value in obj:
+                value_text = str(value).upper()
+                letter_match = re.search(rf"(?<![A-Z])([{letters[0]}-{letters[-1]}])(?![A-Z])", value_text)
+                if letter_match:
+                    parsed.append(letter_match.group(1))
+            break
+
+    if not parsed:
+        upper_text = text.upper()
+        parsed = re.findall(rf"(?<![A-Z])([{letters[0]}-{letters[-1]}])(?![A-Z])", upper_text)
+
+    deduped = []
+    seen = set()
+    duplicate_found = False
+    invalid_found = False
+    for letter in parsed:
+        if letter not in allowed:
+            invalid_found = True
+            continue
+        if letter in seen:
+            duplicate_found = True
+            continue
+        deduped.append(letter)
+        seen.add(letter)
+
+    ranking_valid = (
+        len(deduped) == len(letters)
+        and set(deduped) == allowed
+        and not duplicate_found
+        and not invalid_found
+    )
+
+    if deduped and fill_missing:
+        deduped.extend([letter for letter in letters if letter not in seen])
+
+    return deduped, ranking_valid
+
+def evaluate_model_output(raw_text, true_option_char, conf):
+    if is_ranking_mode(conf):
+        ranking, ranking_valid = parse_model_ranking(
+            raw_text,
+            conf.get("num_cans", 10),
+            fill_missing=conf.get("ranking_fill_missing", True),
+        )
+        prediction = ranking[0] if ranking else "ERR_RANK"
+        true_rank = ranking.index(true_option_char) + 1 if true_option_char in ranking else None
+        mrr = 1.0 / true_rank if true_rank else 0.0
+
+        def hit_at(k):
+            return int(true_rank is not None and true_rank <= k)
+
+        def ndcg_at(k):
+            if true_rank is None or true_rank > k:
+                return 0.0
+            return 1.0 / math.log2(true_rank + 1)
+
+        return {
+            "prediction": prediction,
+            "ranking": json.dumps(ranking, ensure_ascii=False),
+            "ranking_valid": int(ranking_valid),
+            "true_rank": true_rank if true_rank is not None else "",
+            "hit": hit_at(1),
+            "hit_at_1": hit_at(1),
+            "hit_at_3": hit_at(3),
+            "hit_at_5": hit_at(5),
+            "mrr": mrr,
+            "ndcg_at_3": ndcg_at(3),
+            "ndcg_at_5": ndcg_at(5),
+            "ndcg_at_10": ndcg_at(min(10, int(conf.get("num_cans", 10)))),
+        }
+
+    pred_text = parse_model_response(raw_text)
+    return {
+        "prediction": pred_text,
+        "hit": int(pred_text == true_option_char),
+    }
+
 def console_safe_text(text):
     encoding = sys.stdout.encoding or "utf-8"
     return str(text).encode(encoding, errors="backslashreplace").decode(encoding)
@@ -38,6 +154,10 @@ def print_first_qa_debug(sample, conf, text_prompt=None):
     print(f"  [True Option] {sample.get('true_option_char')} | True Item ID: {sample.get('true_indice')}")
     print(f"  [Input Item IDs] {sample.get('input_indices')}")
     print(f"  [Candidate Item IDs] {sample.get('candidate_indices')}")
+    print(f"  [Prediction Mode] {conf.get('prediction_mode', 'choice')}")
+    if is_ranking_mode(conf):
+        print(f"  [Ranking max output tokens] {conf.get('ranking_max_output_tokens', '')}")
+        print(f"  [Ranking fill missing] {conf.get('ranking_fill_missing', True)}")
     print(f"  [Input Item Description Aug Enabled] {conf.get('use_input_item_description_aug', False)}")
     if conf.get("use_input_item_description_aug", False):
         print(f"  [Input Item Description root] {conf.get('input_item_description_cache_root', '')}")
@@ -120,7 +240,9 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
                     category_prior_context_block="", ui_category_purchase_prior_block="",
                     cc_retrieval_context_block="",
                     category_evidence_summary_block="",
-                    use_image_category_completion_prompt=False):
+                    use_image_category_completion_prompt=False,
+                    prediction_mode="choice",
+                    num_cans=10):
     if "spotify" in dataset_name:
         t_name = "playlist continuation"
         b_name = "music playlist"
@@ -187,10 +309,32 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
             "Now solve the target question.\n"
         )
 
+    ranking_mode = str(prediction_mode).strip().lower() in {"ranking", "rank"}
+    if ranking_mode:
+        letters = option_letters(num_cans)
+        json_example = json.dumps({"ranking": letters}, separators=(",", ":"))
+        task_instruction = (
+            f"You should rank all candidate options from most likely to least likely to complete the {b_name}. "
+            f"The first option in the ranking should be the single best completion.\n"
+        )
+        answer_instruction = (
+            f"Rank all candidate options from most likely to least likely. "
+            f"Return only valid JSON in this exact format: {json_example}\n"
+            f"Rules: include each option letter exactly once, use only option letters {letters[0]}-{letters[-1]}, "
+            f"do not include explanations, item names, or markdown.\nRanking: "
+        )
+    else:
+        task_instruction = (
+            f"You should directly answer the question by choosing the letter of the correct option. "
+            f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
+        )
+        answer_instruction = (
+            f"Your answer should indicate your choice with a single letter (e.g., \"A,\" \"B,\" \"C,\" etc.).\nChoice: "
+        )
+
     prompt = (
         f"You are a helpful and honest assistant. The following are multiple choice questions about {t_name}. "
-        f"You should directly answer the question by choosing the letter of the correct option. "
-        f"Only provide the letter of your answer, without any explanation or mentioning the option content.\n"
+        f"{task_instruction}"
         f"{image_instruction}"
         f"{cf_legend}"
         f"{icl_block}"
@@ -203,7 +347,7 @@ def generate_prompt(dataset_name, input_str, target_str, use_multimodal=False,
         f"Options: {target_str}\n"
         #f"First, analyze the overall combination and coherence of the items in the {b_name}. Then, choose the candidate {i_name} that best completes the set."
         #f"{extra_instruction}"
-        f"Your answer should indicate your choice with a single letter (e.g., \u201cA,\u201d \u201cB,\u201d \u201cC,\u201d etc.).\nChoice: "
+        f"{answer_instruction}"
     )
     return prompt
 
@@ -426,17 +570,34 @@ def build_interleaved_multimodal_contents(text_prompt, sample, enriched_target_s
 def save_intermediate_results(results, conf, timestamp, is_final=False):
     df = pd.DataFrame(results)
     hit_rate = df['hit'].mean() if not df.empty else 0.0
-    valid_options = [chr(ord('A')+i) for i in range(conf.get("num_cans", 10))]
-    valid_mask = df['prediction'].isin(valid_options)
+    valid_options = option_letters(conf.get("num_cans", 10))
+    if is_ranking_mode(conf):
+        valid_mask = df['ranking_valid'].astype(bool) if 'ranking_valid' in df.columns else pd.Series(False, index=df.index)
+    else:
+        valid_mask = df['prediction'].isin(valid_options)
     valid_ratio = valid_mask.mean() if not df.empty else 0.0
     valid_only_hit_rate = df.loc[valid_mask, 'hit'].mean() if valid_mask.sum() > 0 else 0.0
     
     df['overall_hit_rate'] = hit_rate
     df['overall_valid_ratio'] = valid_ratio
     df['valid_only_hit_rate'] = valid_only_hit_rate
+    if is_ranking_mode(conf):
+        true_rank_numeric = pd.to_numeric(df.get('true_rank', pd.Series(dtype=float)), errors='coerce')
+        df['overall_hit_at_3'] = df['hit_at_3'].mean() if 'hit_at_3' in df.columns and not df.empty else 0.0
+        df['overall_hit_at_5'] = df['hit_at_5'].mean() if 'hit_at_5' in df.columns and not df.empty else 0.0
+        df['overall_mrr'] = df['mrr'].mean() if 'mrr' in df.columns and not df.empty else 0.0
+        df['overall_ndcg_at_3'] = df['ndcg_at_3'].mean() if 'ndcg_at_3' in df.columns and not df.empty else 0.0
+        df['overall_ndcg_at_5'] = df['ndcg_at_5'].mean() if 'ndcg_at_5' in df.columns and not df.empty else 0.0
+        df['overall_ndcg_at_10'] = df['ndcg_at_10'].mean() if 'ndcg_at_10' in df.columns and not df.empty else 0.0
+        df['overall_mean_rank'] = true_rank_numeric.mean() if true_rank_numeric.notna().any() else 0.0
+        df['overall_median_rank'] = true_rank_numeric.median() if true_rank_numeric.notna().any() else 0.0
+        df['valid_only_mrr'] = df.loc[valid_mask, 'mrr'].mean() if valid_mask.sum() > 0 and 'mrr' in df.columns else 0.0
     df['cfg_num_cans'] = conf.get("num_cans", "")
     df['cfg_num_token'] = conf.get("num_token", "")
     df['cfg_toy_eval'] = conf.get("toy_eval", "")
+    df['cfg_prediction_mode'] = conf.get("prediction_mode", "choice")
+    df['cfg_ranking_max_output_tokens'] = conf.get("ranking_max_output_tokens", "")
+    df['cfg_ranking_fill_missing'] = conf.get("ranking_fill_missing", "")
     df['cfg_seed'] = conf.get("seed", "")
     df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
     df['cfg_use_fixed_test_split'] = conf.get("use_fixed_test_split", False)
@@ -506,6 +667,7 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
     
     actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
     os.makedirs(actual_output_dir, exist_ok=True)
+    ranking_str = "RANK_" if is_ranking_mode(conf) else ""
     cooc_str = "COOC_" if conf.get("use_cooccurrence", False) else ""
     soft_source = conf.get("soft_cooccurrence_source", "")
     soft_cooc_str = f"SOFTCOOC_{soft_source}_" if conf.get("use_soft_cooccurrence", False) else ""
@@ -537,7 +699,7 @@ def save_intermediate_results(results, conf, timestamp, is_final=False):
         else:
             input_category_co_occur_str = "INPCATCOOC_"
     partial_str = "" if is_final else "_partial"
-    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{input_desc_str}{ui_cat_purchase_str}{category_evidence_summary_str}{cc_retrieval_str}{category_prior_str}{category_item_aug_str}{category_name_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
+    save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_{ranking_str}{icl_str}{user_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{input_desc_str}{ui_cat_purchase_str}{category_evidence_summary_str}{cc_retrieval_str}{category_prior_str}{category_item_aug_str}{category_name_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}{partial_str}.csv")
     tmp_path = f"{save_path}.tmp"
     last_error = None
     for attempt in range(5):
@@ -724,7 +886,9 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
             category_prior_context_block=category_prior_context_block,
             cc_retrieval_context_block=cc_retrieval_context_block,
             category_evidence_summary_block=category_evidence_summary_block,
-            use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False)
+            use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False),
+            prediction_mode=conf.get("prediction_mode", "choice"),
+            num_cans=conf.get("num_cans", 10)
         )
 
         if idx == 0:
@@ -779,10 +943,10 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
                 res = await client.aio.models.generate_content(
                     model=model, 
                     contents=contents,
-                    config={"temperature": conf["temperature"], "max_output_tokens": 10}
+                    config={"temperature": conf["temperature"], "max_output_tokens": generation_max_output_tokens(conf)}
                 )
                 raw_text = res.text if res.text else ""
-                pred_text = parse_model_response(raw_text)
+                pred_info = evaluate_model_output(raw_text, sample['true_option_char'], conf)
                 break  # Success! Break out of the retry loop
             except Exception as e:
                 err_str = str(e).lower()
@@ -796,18 +960,20 @@ async def process_sync_samples(client, model, samples, conf, timestamp, initial_
                         await asyncio.sleep(wait_time)
                         continue
                 raw_text = str(e)
-                pred_text = "ERR_EX"
+                pred_info = {"prediction": "ERR_EX", "hit": 0}
                 break
         
-        sample['prediction'] = pred_text
+        sample.update(pred_info)
         sample['raw_response'] = raw_text # Save verbatim output or error trace
-        sample['hit'] = int(pred_text == sample['true_option_char'])
         results.append(sample)
         
         # Save after each sample so interrupted runs can resume.
         save_intermediate_results(results, conf, timestamp, is_final=False)
         
-        print(f"[{current_idx+1}/{total_samples_len}] True: {sample['true_option_char']} | Pred: {pred_text}")
+        if is_ranking_mode(conf):
+            print(f"[{current_idx+1}/{total_samples_len}] True: {sample['true_option_char']} | Pred: {sample['prediction']} | Rank: {sample.get('true_rank', '')}")
+        else:
+            print(f"[{current_idx+1}/{total_samples_len}] True: {sample['true_option_char']} | Pred: {sample['prediction']}")
         
         # Enforce rate limit (Dynamic based on model Free Tier limits)
         # Gemini 2.5 Flash / Pro -> 5 requests / min = 12s interval. (Using 13s)
@@ -893,7 +1059,9 @@ def process_batch_samples(client, model, samples, conf, dataset=None, summary_cl
                 category_prior_context_block=category_prior_context_block,
                 cc_retrieval_context_block=cc_retrieval_context_block,
                 category_evidence_summary_block=category_evidence_summary_block,
-                use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False)
+                use_image_category_completion_prompt=conf.get("use_image_category_completion_prompt", False),
+                prediction_mode=conf.get("prediction_mode", "choice"),
+                num_cans=conf.get("num_cans", 10)
             )
             if idx == 0 and bundle_graph_context is not None:
                 print("\n[DEBUG] Bundle Graph Context Check (First Sample):")
@@ -938,7 +1106,7 @@ def process_batch_samples(client, model, samples, conf, dataset=None, summary_cl
                 "id": str(idx),
                 "request": {
                     "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {"temperature": conf["temperature"], "maxOutputTokens": 10}
+                    "generationConfig": {"temperature": conf["temperature"], "maxOutputTokens": generation_max_output_tokens(conf)}
                 }
             }
             f.write(json.dumps(req_obj) + "\n")
@@ -988,32 +1156,34 @@ def process_batch_samples(client, model, samples, conf, dataset=None, summary_cl
                 # Try to extract the generated text
                 if "response" in resp_obj:
                     raw_text = resp_obj["response"].get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
-                    pred_text = parse_model_response(raw_text)
+                    pred_info = evaluate_model_output(raw_text, samples[int(req_id)]['true_option_char'], conf)
                 elif "error" in resp_obj:
                     raw_text = str(resp_obj["error"])
-                    pred_text = "ERR_API"
+                    pred_info = {"prediction": "ERR_API", "hit": 0}
                 else:
                     raw_text = "UNKNOWN_FORMAT"
-                    pred_text = "ERR_API"
-                result_map[int(req_id)] = (pred_text, raw_text)
+                    pred_info = {"prediction": "ERR_API", "hit": 0}
+                result_map[int(req_id)] = (pred_info, raw_text)
             except Exception as e:
                 continue
 
         # Merge with samples and evaluate
         results = []
         for idx, sample in enumerate(samples):
-            pred_info = result_map.get(idx, ("ERR_MISSING", "Not found in batch response"))
-            sample['prediction'] = pred_info[0]
-            sample['raw_response'] = pred_info[1]
-            sample['hit'] = int(pred_info[0] == sample['true_option_char'])
+            pred_info, raw_response = result_map.get(idx, ({"prediction": "ERR_MISSING", "hit": 0}, "Not found in batch response"))
+            sample.update(pred_info)
+            sample['raw_response'] = raw_response
             results.append(sample)
 
         # Calculate metrics and prepare DataFrame
         df = pd.DataFrame(results)
         timestamp = time.strftime('%Y%m%d_%H%M%S')
         hit_rate = df['hit'].mean()
-        valid_options = [chr(ord('A')+i) for i in range(conf["num_cans"])]
-        valid_mask = df['prediction'].isin(valid_options)
+        valid_options = option_letters(conf["num_cans"])
+        if is_ranking_mode(conf):
+            valid_mask = df['ranking_valid'].astype(bool) if 'ranking_valid' in df.columns else pd.Series(False, index=df.index)
+        else:
+            valid_mask = df['prediction'].isin(valid_options)
         valid_ratio = valid_mask.mean()
         
         valid_only_hit_rate = df.loc[valid_mask, 'hit'].mean() if valid_mask.sum() > 0 else 0.0
@@ -1021,11 +1191,25 @@ def process_batch_samples(client, model, samples, conf, dataset=None, summary_cl
         df['overall_hit_rate'] = hit_rate
         df['overall_valid_ratio'] = valid_ratio
         df['valid_only_hit_rate'] = valid_only_hit_rate
+        if is_ranking_mode(conf):
+            true_rank_numeric = pd.to_numeric(df.get('true_rank', pd.Series(dtype=float)), errors='coerce')
+            df['overall_hit_at_3'] = df['hit_at_3'].mean() if 'hit_at_3' in df.columns and not df.empty else 0.0
+            df['overall_hit_at_5'] = df['hit_at_5'].mean() if 'hit_at_5' in df.columns and not df.empty else 0.0
+            df['overall_mrr'] = df['mrr'].mean() if 'mrr' in df.columns and not df.empty else 0.0
+            df['overall_ndcg_at_3'] = df['ndcg_at_3'].mean() if 'ndcg_at_3' in df.columns and not df.empty else 0.0
+            df['overall_ndcg_at_5'] = df['ndcg_at_5'].mean() if 'ndcg_at_5' in df.columns and not df.empty else 0.0
+            df['overall_ndcg_at_10'] = df['ndcg_at_10'].mean() if 'ndcg_at_10' in df.columns and not df.empty else 0.0
+            df['overall_mean_rank'] = true_rank_numeric.mean() if true_rank_numeric.notna().any() else 0.0
+            df['overall_median_rank'] = true_rank_numeric.median() if true_rank_numeric.notna().any() else 0.0
+            df['valid_only_mrr'] = df.loc[valid_mask, 'mrr'].mean() if valid_mask.sum() > 0 and 'mrr' in df.columns else 0.0
         
         # Insert experiment configurations
         df['cfg_num_cans'] = conf.get("num_cans", "")
         df['cfg_num_token'] = conf.get("num_token", "")
         df['cfg_toy_eval'] = conf.get("toy_eval", "")
+        df['cfg_prediction_mode'] = conf.get("prediction_mode", "choice")
+        df['cfg_ranking_max_output_tokens'] = conf.get("ranking_max_output_tokens", "")
+        df['cfg_ranking_fill_missing'] = conf.get("ranking_fill_missing", "")
         df['cfg_seed'] = conf.get("seed", "")
         df['cfg_shuffle_seed'] = conf.get("shuffle_seed", "")
         df['cfg_use_fixed_test_split'] = conf.get("use_fixed_test_split", False)
@@ -1090,6 +1274,7 @@ def process_batch_samples(client, model, samples, conf, dataset=None, summary_cl
         actual_output_dir = os.path.join(conf["output_dir"], conf["dataset"])
         os.makedirs(actual_output_dir, exist_ok=True)
         
+        ranking_str = "RANK_" if is_ranking_mode(conf) else ""
         cooc_str = "COOC_" if conf.get("use_cooccurrence", False) else ""
         soft_source = conf.get("soft_cooccurrence_source", "")
         soft_cooc_str = f"SOFTCOOC_{soft_source}_" if conf.get("use_soft_cooccurrence", False) else ""
@@ -1117,13 +1302,16 @@ def process_batch_samples(client, model, samples, conf, dataset=None, summary_cl
                 input_category_co_occur_str = "INPCATNAMECOOC_"
             else:
                 input_category_co_occur_str = "INPCATCOOC_"
-        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{item_aff_str}{user_pur_str}{bundle_ctx_str}{ui_cat_purchase_str}{category_evidence_summary_str}{cc_retrieval_str}{category_prior_str}{category_item_aug_str}{category_name_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
+        save_path = os.path.join(actual_output_dir, f"results_{conf['dataset']}_batch_{ranking_str}{item_aff_str}{user_pur_str}{bundle_ctx_str}{ui_cat_purchase_str}{category_evidence_summary_str}{cc_retrieval_str}{category_prior_str}{category_item_aug_str}{category_name_aug_str}{input_category_co_occur_str}{cooc_str}{soft_cooc_str}{hn_str}C{conf.get('num_cans', '')}_T{conf.get('num_token', '')}_{timestamp}.csv")
         df.to_csv(save_path, index=False, encoding='utf-8-sig')
         
         print("-" * 30)
         print(f"Batch Dataset: {conf['dataset']}")
         print(f"Saved to: {save_path}")
         print(f"Overall Hit Rate: {hit_rate:.4f}")
+        if is_ranking_mode(conf):
+            print(f"Hit@3: {df['hit_at_3'].mean():.4f} | Hit@5: {df['hit_at_5'].mean():.4f} | MRR: {df['mrr'].mean():.4f} | NDCG@10: {df['ndcg_at_10'].mean():.4f}")
+            print(f"Mean Rank: {pd.to_numeric(df['true_rank'], errors='coerce').mean():.4f}")
         print(f"Valid-Only Hit Rate: {valid_only_hit_rate:.4f} (from {valid_mask.sum()} samples without errors)")
         print(f"Valid Ratio: {valid_ratio:.4f}")
         print("-" * 30)
@@ -1278,6 +1466,9 @@ if __name__ == "__main__":
         print(f"Dataset: {conf['dataset']}")
         print(f"Saved to: {save_path}")
         print(f"Overall Hit Rate: {hit_rate:.4f}")
+        if is_ranking_mode(conf):
+            print(f"Hit@3: {df['hit_at_3'].mean():.4f} | Hit@5: {df['hit_at_5'].mean():.4f} | MRR: {df['mrr'].mean():.4f} | NDCG@10: {df['ndcg_at_10'].mean():.4f}")
+            print(f"Mean Rank: {pd.to_numeric(df['true_rank'], errors='coerce').mean():.4f}")
         print(f"Valid-Only Hit Rate: {valid_only_hit_rate:.4f} (from {valid_sum} samples without errors)")
         print(f"Valid Ratio: {valid_ratio:.4f}")
         print("-" * 30)

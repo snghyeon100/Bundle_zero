@@ -1,0 +1,13 @@
+﻿role,label,item_id,english_title,image,is_gt
+input,1,18531,Floral chiffon dress,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\input\input_1_18531.png,
+input,2,24847,Long pearl earrings,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\input\input_2_24847.png,
+candidate,A,16366,Oversized denim jacket,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\A_16366.png,False
+candidate,B,879,Short faux-fur biker jacket,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\B_879.png,False
+candidate,C,15382,Light denim jacket,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\C_15382.png,False
+candidate,D,12800,GT: flat fur slippers,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\GT_D_12800.png,True
+candidate,E,17810,Fleece slip-on shoes,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\E_17810.png,False
+candidate,F,8933,High-waist knit skirt,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\F_8933.png,False
+candidate,G,9552,Men's white sneakers,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\G_9552.png,False
+candidate,H,21513,Bohemian summer dress,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\H_21513.png,False
+candidate,I,5579,Short pink bodycon dress,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\I_5579.png,False
+candidate,J,29465,Large leather tote bag,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\case_study_slide_assets\pog_dense_bundle_11208_BIxIB\candidates\J_29465.png,False

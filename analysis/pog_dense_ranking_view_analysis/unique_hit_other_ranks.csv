@@ -1,0 +1,4 @@
+﻿unique_hit_view,count,avg_rank_IUxUI,median_rank_IUxUI,avg_rank_BIxIB,median_rank_BIxIB,avg_rank_IBxBI,median_rank_IBxBI
+IBxBI,33,4.0,4.0,2.878787878787879,2.0,,
+IUxUI,13,,,4.769230769230769,4.0,3.4615384615384617,3.0
+BIxIB,27,4.407407407407407,4.0,,,3.259259259259259,2.0

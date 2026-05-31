@@ -1,5 +1,5 @@
 # ─── Dataset ──────────────────────────────────────────────────────────────────
-dataset: pog                 # pog | pog_dense | spotify | spotify_sparse
+dataset: pog_dense                 # pog | pog_dense | spotify | spotify_sparse
 data_path: ./datasets
 
 # ─── Evaluation ───────────────────────────────────────────────────────────────
@@ -8,21 +8,25 @@ num_token: 5       # max input items per bundle (-1 = no limit)
 toy_eval: 250     # -1 = full test set | N = first N samples
 seed: 45           # seed for candidate items (A-J)
 shuffle_seed: 41   # seed for input items shuffling
-use_fixed_test_split: true  # If true, reads bi_fix_test_input/gt for one held-out GT per bundle
-test_input_file: bi_fix_test_input.txt
-test_gt_file: bi_fix_test_gt.txt
+use_fixed_test_split: false  # If true, reads bi_fix_test_input/gt for one held-out GT per bundle
+test_input_file: bi_test_input.txt
+test_gt_file: bi_test_gt.txt
 fixed_test_gt_selection: random  # random | first
 fixed_test_gt_seed: 45
-use_hard_negative: true  # If true, loads from hard_negative_samples_<dataset>.json
+use_hard_negative: false  # If true, loads from hard_negative_samples_<dataset>.json
 
 # ─── LLM ──────────────────────────────────────────────────────────────────────
 
 model: gemini-3.1-flash-lite
 temperature: 0.0
+prediction_mode: ranking  # choice | ranking
+max_output_tokens: 10
+ranking_max_output_tokens: 160
+ranking_fill_missing: true  # If true, append missing option letters after the parsed ranking for metric calculation
 use_multimodal: false  # If true, loads images and sends them to Gemini along with text
 use_image_category_completion_prompt: false  # If true with use_multimodal, adds coarse category completion guidance
 
-use_ui_category_purchase_prior: true  # If true, inserts aggregate UI category co-purchase prior after input items
+use_ui_category_purchase_prior: false  # If true, inserts aggregate UI category co-purchase prior after input items
 ui_category_purchase_prior_top_k: 5
 ui_category_purchase_prior_min_support: 1
 
@@ -62,7 +66,7 @@ item_user_copurchase_alpha: 0.5
 item_user_copurchase_seed: 45
 item_user_copurchase_exclude_query_items: false
 
-use_bundle_graph_context: false  # BI x IB. If true, prepends train bundles retrieved by input-item overlap and IDF tie-break
+use_bundle_graph_context: true  # BI x IB. If true, prepends train bundles retrieved by input-item overlap and IDF tie-break
 bundle_graph_context_k: 3
 bundle_graph_context_max_items: 5
 bundle_graph_context_seed: 45
@@ -75,7 +79,7 @@ use_category_item_text_aug: false  # If true, appends same-category representati
 category_item_aug_apply_to: both  # inputs | candidates | both
 category_item_aug_rep_items_per_category: 2
 
-use_category_name_aug: true  # If true, appends generated human-readable category names to item text
+use_category_name_aug: false  # If true, appends generated human-readable category names to item text
 category_name_aug_apply_to: both  # inputs | candidates | both
 category_name_field: category_name_en  # category_name_en | category_name_ko | short_description_en
 category_name_root: ./analysis/category_names/gemini

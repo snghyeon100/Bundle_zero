@@ -1,0 +1,7 @@
+﻿dataset,method,input_count,n,hit,hit_rate,source_file
+pog_dense_old_base,old_base,overall,250,84,0.336,results\\pog_dense\\results_pog_dense_HN_C10_T5_20260430_172343.csv
+pog_dense_old_base,old_base,2,245,83,0.33877551020408164,results\\pog_dense\\results_pog_dense_HN_C10_T5_20260430_172343.csv
+pog_dense_old_base,old_base,3,5,1,0.2,results\\pog_dense\\results_pog_dense_HN_C10_T5_20260430_172343.csv
+pog_old_base,old_base,overall,250,82,0.328,results\\pog\\results_pog_20260416_142034.csv
+pog_old_base,old_base,1,115,33,0.28695652173913044,results\\pog\\results_pog_20260416_142034.csv
+pog_old_base,old_base,2,135,49,0.362962962962963,results\\pog\\results_pog_20260416_142034.csv

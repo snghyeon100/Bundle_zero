@@ -1,0 +1,12 @@
+﻿dataset,method,input_count,n,hit,hit_rate,source_file
+pog_dense,BGRAPH,overall,250,127,0.508,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260526_173132.csv
+pog_dense,BGRAPH,1,1,0,0.0,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260526_173132.csv
+pog_dense,BGRAPH,2,150,67,0.44666666666666666,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260526_173132.csv
+pog_dense,BGRAPH,3,69,43,0.6231884057971014,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260526_173132.csv
+pog_dense,BGRAPH,4,29,16,0.5517241379310345,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260526_173132.csv
+pog_dense,BGRAPH,5,1,1,1.0,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260526_173132.csv
+pog,BGRAPH,overall,250,130,0.52,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260526_173230.csv
+pog,BGRAPH,1,7,3,0.42857142857142855,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260526_173230.csv
+pog,BGRAPH,2,110,52,0.4727272727272727,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260526_173230.csv
+pog,BGRAPH,3,95,50,0.5263157894736842,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260526_173230.csv
+pog,BGRAPH,4,38,25,0.6578947368421053,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260526_173230.csv

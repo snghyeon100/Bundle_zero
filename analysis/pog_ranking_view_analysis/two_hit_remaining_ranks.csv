@@ -1,0 +1,4 @@
+﻿hit_view_pair,remaining_view,count,avg_rank_remaining_view,median_rank_remaining_view
+IBxBI|IUxUI,BIxIB,5,3.2,2.0
+IBxBI|BIxIB,IUxUI,19,3.473684210526316,3.0
+IUxUI|BIxIB,IBxBI,15,2.533333333333333,2.0

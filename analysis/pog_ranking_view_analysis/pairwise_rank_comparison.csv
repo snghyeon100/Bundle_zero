@@ -1,0 +1,4 @@
+﻿view_a,view_b,a_better_count,b_better_count,tie_count,mean_rank_delta_a_minus_b,mean_abs_rank_delta
+IBxBI,IUxUI,80,78,92,-0.136,1.448
+IBxBI,BIxIB,62,85,103,0.208,1.304
+IUxUI,BIxIB,49,81,120,0.344,1.144

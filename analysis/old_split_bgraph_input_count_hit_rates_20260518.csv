@@ -1,0 +1,7 @@
+﻿dataset,method,input_count,n,hit,hit_rate,source_file
+pog_old_bgraph,old_BGRAPH,overall,250,80,0.32,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260518_122018.csv
+pog_old_bgraph,old_BGRAPH,1,115,42,0.3652173913043478,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260518_122018.csv
+pog_old_bgraph,old_BGRAPH,2,135,38,0.2814814814814815,results\\pog\\results_pog_BGRAPH_HN_C10_T5_20260518_122018.csv
+pog_dense_old_bgraph,old_BGRAPH,overall,250,105,0.42,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260518_122059.csv
+pog_dense_old_bgraph,old_BGRAPH,2,245,103,0.4204081632653061,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260518_122059.csv
+pog_dense_old_bgraph,old_BGRAPH,3,5,2,0.4,results\\pog_dense\\results_pog_dense_BGRAPH_HN_C10_T5_20260518_122059.csv

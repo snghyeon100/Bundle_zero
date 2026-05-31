@@ -1,0 +1,5 @@
+﻿dataset,embedding_space,source,num_items,dim
+pog,text,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\openai_embedding_cache\text-embedding-3-large\all_items\pog\embeddings_text-embedding-3-large_float16.npz,48676,3072
+pog,bi,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\datasets\pog\pog_LightGCN_bi_feature.pt,48676,64
+pog_dense,text,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\analysis\openai_embedding_cache\text-embedding-3-large\all_items\pog_dense\embeddings_text-embedding-3-large_float16.npz,31217,3072
+pog_dense,bi,C:\Users\wotjs\Desktop\bundle\LLM-ZeroShot\datasets\pog_dense\pog_dense_LightGCN_bi_feature.pt,31217,64

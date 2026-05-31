@@ -1,0 +1,13 @@
+﻿view,outcome,count,ratio
+BIxIB,both_fail,141,0.564
+BIxIB,both_hit,67,0.268
+BIxIB,choice_only,14,0.056
+BIxIB,ranking_only,28,0.112
+IBxBI,both_fail,152,0.608
+IBxBI,both_hit,57,0.228
+IBxBI,choice_only,17,0.068
+IBxBI,ranking_only,24,0.096
+IUxUI,both_fail,167,0.668
+IUxUI,both_hit,54,0.216
+IUxUI,choice_only,9,0.036
+IUxUI,ranking_only,20,0.08
